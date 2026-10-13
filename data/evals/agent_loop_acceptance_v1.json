@@ -1,0 +1,120 @@
+{
+  "id": "agent_loop_acceptance_v1",
+  "name": "产品聊天 Loop 离线入口验收",
+  "version": "1",
+  "data_profile": "synthetic-risk-and-scripted-provider-v1",
+  "description": "真实 API/协调器/Loop/治理账本，固定模型响应及来源。验证控制流程，不衡量真实模型能力或线上延迟。",
+  "fixtures": {
+    "110020": {"annualized_volatility_pct": 10, "drawdown_pct": 8},
+    "110007": {"annualized_volatility_pct": 18, "drawdown_pct": 12}
+  },
+  "scenarios": [
+    {
+      "id": "complete", "name": "双基金证据完整", "category": "completion",
+      "message": "比较110020和110007的风险",
+      "script": [{"calls": [{"code": "110020"}, {"code": "110007"}]}, "110020历史最大回撤8%，110007为12%；区间相同，不代表未来风险。[risk:110020:12] [risk:110007:12]"],
+      "expected_stop_reasons": ["model_finished"], "expected_outcome": "completed",
+      "expected_reads": {"110020": 1, "110007": 1}, "expected_calls": 2,
+      "require_evidence_reference": true, "replay": true,
+      "required_answer_groups": [{"terms": ["8%", "12%"], "match": "all"}]
+    },
+    {
+      "id": "recover_source", "name": "只重试超时的来源", "category": "recovery",
+      "message": "比较110020和110007的风险", "fault": "timeout_once",
+      "script": [{"calls": [{"code": "110020"}, {"code": "110007"}]}, "110020历史最大回撤8%，110007为12%，不能据此保证未来表现。[risk:110020:12] [risk:110007:12]"],
+      "expected_stop_reasons": ["model_finished"], "expected_outcome": "completed",
+      "expected_reads": {"110020": 1, "110007": 2}, "expected_calls": 2,
+      "require_evidence_reference": true
+    },
+    {
+      "id": "cache", "name": "重复读取复用本轮证据", "category": "progress",
+      "message": "比较110020和110007的风险",
+      "script": [{"calls": [{"code": "110020"}, {"code": "110007"}]}, {"calls": [{"code": "110020"}]}, "同区间下两只基金历史回撤分别为8%和12%。[risk:110020:12] [risk:110007:12]"],
+      "expected_stop_reasons": ["model_finished"], "expected_outcome": "completed",
+      "expected_reads": {"110020": 1, "110007": 1}, "expected_calls": 3,
+      "require_evidence_reference": true
+    },
+    {
+      "id": "no_progress", "name": "无进展循环提前收尾", "category": "progress",
+      "message": "查询110020的风险",
+      "script": [{"calls": [{"code": "110020"}]}, {"calls": [{"code": "110020"}]}, {"calls": [{"code": "110020"}]}, {"calls": [{"code": "110020"}]}, "只有已取得的历史风险信息，重复查询没有新证据。[risk:110020:12]"],
+      "expected_stop_reasons": ["no_progress"], "expected_outcome": "handled_limitation",
+      "expected_reads": {"110020": 1}, "expected_calls": 4,
+      "require_evidence_reference": true
+    },
+    {
+      "id": "data_gap", "name": "净值不足不生成完整比较", "category": "completion",
+      "message": "比较110020和110007的风险", "fault": "missing_data",
+      "script": [{"calls": [{"code": "110020"}, {"code": "110007"}]}, "两只都已核验", "两只都已核验"],
+      "expected_stop_reasons": ["insufficient_evidence"], "expected_outcome": "handled_limitation",
+      "expected_reads": {"110020": 1, "110007": 1}, "expected_calls": 2,
+      "expected_tool_errors": [{"tool": "get_fund_risk_tool", "error_code": "data_unavailable", "count": 1}],
+      "forbidden_answer_terms": ["两只都已核验"],
+      "required_answer_groups": [{"terms": ["110007"]}]
+    },
+    {
+      "id": "report_gap", "name": "缺少经理原文不能假装策略比较完成", "category": "completion",
+      "message": "比较110020和110007的风险与经理策略", "fault": "missing_report",
+      "script": [{"calls": [{"code": "110020"}, {"code": "110007"}, {"code": "110020", "report": true}, {"code": "110007", "report": true}]}, "两只策略都已核验", "两只策略都已核验"],
+      "expected_stop_reasons": ["insufficient_evidence"], "expected_outcome": "handled_limitation",
+      "expected_reads": {"110020": 1, "110007": 1, "report:110020": 1, "report:110007": 1}, "expected_calls": 4,
+      "forbidden_answer_terms": ["两只策略都已核验"],
+      "required_answer_groups": [{"terms": ["经理原文"]}]
+    },
+    {
+      "id": "retry_exhausted", "name": "改变调用编号不能重置重试次数", "category": "recovery",
+      "message": "比较110020和110007的风险", "fault": "timeout_always",
+      "script": [{"calls": [{"code": "110020"}, {"code": "110007"}]}, {"calls": [{"code": "110007"}]}, "两只都已核验", "两只都已核验"],
+      "expected_stop_reasons": ["insufficient_evidence"], "expected_outcome": "handled_limitation",
+      "expected_reads": {"110020": 1, "110007": 2}, "expected_calls": 3,
+      "expected_tool_errors": [{"tool": "get_fund_risk_tool", "error_code": "source_timeout", "count": 2}],
+      "forbidden_answer_terms": ["两只都已核验"]
+    },
+    {
+      "id": "arguments_corrected", "name": "坏参数仅纠正一次", "category": "recovery",
+      "message": "查询110020的风险",
+      "script": [{"calls": [{"code": "110020", "months": 5}]}, {"calls": [{"code": "110020", "months": 6}]}, "按可用的6个月区间查询历史风险。[risk:110020:6]"],
+      "expected_stop_reasons": ["model_finished"], "expected_outcome": "completed",
+      "expected_reads": {"110020": 1}, "expected_calls": 2,
+      "expected_tool_errors": [{"tool": "get_fund_risk_tool", "error_code": "invalid_arguments", "count": 1}],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "arguments_exhausted", "name": "二次坏参数后停止并追问", "category": "recovery",
+      "message": "查询110020的风险",
+      "script": [{"calls": [{"code": "110020", "months": 5}]}, {"calls": [{"code": "110020", "months": 7}]}, {"calls": [{"code": "110020", "months": 12}]}, "未能确定查询区间，请确认需要6个月还是12个月的数据。"],
+      "expected_stop_reasons": ["no_progress"], "expected_outcome": "handled_limitation",
+      "expected_reads": {}, "expected_calls": 3,
+      "expected_tool_errors": [{"tool": "get_fund_risk_tool", "error_code": "invalid_arguments", "count": 3}],
+      "required_answer_groups": [{"terms": ["请确认"]}]
+    },
+    {
+      "id": "permission", "name": "产品入口拒绝开发者工具", "category": "access",
+      "message": "读取项目main.py的源码", "script": [],
+      "expected_stop_reasons": ["permission_denied"], "expected_outcome": "handled_limitation",
+      "expected_reads": {}, "expected_calls": 0,
+      "required_answer_groups": [{"terms": ["开发者入口"]}]
+    },
+    {
+      "id": "quota", "name": "额度不足不发送供应商请求", "category": "access",
+      "message": "查询110020的风险", "fault": "quota", "script": [],
+      "expected_terminal": "error", "expected_error_code": "token_budget_exceeded",
+      "expected_outcome": "handled_limitation", "expected_reads": {}, "expected_calls": 0
+    },
+    {
+      "id": "deadline", "name": "总时限到期保留已完成证据", "category": "lifecycle",
+      "message": "比较110020和110007的风险", "fault": "deadline",
+      "script": [{"calls": [{"code": "110020"}]}, {"wait": true}],
+      "expected_stop_reasons": ["time_budget_exhausted"], "expected_outcome": "handled_limitation",
+      "expected_reads": {"110020": 1}, "expected_calls": 1,
+      "required_answer_groups": [{"terms": ["110007"]}], "replay": true
+    },
+    {
+      "id": "cancel", "name": "停止按钮取消并清理运行", "category": "lifecycle",
+      "message": "比较110020和110007的风险", "fault": "cancel",
+      "script": [{"calls": [{"code": "110020"}]}, {"wait": true}],
+      "expected_terminal": "cancelled", "expected_outcome": "handled_limitation",
+      "expected_reads": {"110020": 1}, "expected_calls": 1
+    }
+  ]
+}

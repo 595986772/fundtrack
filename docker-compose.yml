@@ -1,0 +1,187 @@
+name: fastapi-agent-demo
+
+services:
+  # OpenFGA 单独数据库、账号、卷和内部网络，不在业务库中建表。
+  # 显式启动: docker compose --profile openfga up -d --wait openfga
+  # 先安全注入 OPENFGA_POSTGRES_PASSWORD（URL-safe）和 OPENFGA_TOKEN。
+  # 空密码/密钥不会回退为匿名访问；profile 避免影响只启动原有基础设施的命令。
+  openfga-postgres:
+    profiles: ["openfga"]
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: openfga
+      POSTGRES_USER: openfga
+      POSTGRES_PASSWORD: ${OPENFGA_POSTGRES_PASSWORD:-}
+    volumes:
+      - openfga_postgres_data:/var/lib/postgresql/data
+    networks: ["openfga-storage"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openfga -d openfga"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  openfga-migrate:
+    profiles: ["openfga"]
+    image: openfga/openfga:v1.20.0
+    command: migrate
+    restart: "no"
+    environment:
+      OPENFGA_DATASTORE_ENGINE: postgres
+      OPENFGA_DATASTORE_URI: postgres://openfga:${OPENFGA_POSTGRES_PASSWORD:-}@openfga-postgres:5432/openfga?sslmode=disable
+    networks: ["openfga-storage"]
+    depends_on:
+      openfga-postgres:
+        condition: service_healthy
+
+  openfga:
+    profiles: ["openfga"]
+    image: openfga/openfga:v1.20.0
+    command: run
+    restart: unless-stopped
+    environment:
+      OPENFGA_DATASTORE_ENGINE: postgres
+      OPENFGA_DATASTORE_URI: postgres://openfga:${OPENFGA_POSTGRES_PASSWORD:-}@openfga-postgres:5432/openfga?sslmode=disable
+      OPENFGA_AUTHN_METHOD: preshared
+      OPENFGA_AUTHN_PRESHARED_KEYS: ${OPENFGA_TOKEN:-}
+      OPENFGA_PLAYGROUND_ENABLED: "false"
+      OPENFGA_METRICS_ENABLED: "false"
+      OPENFGA_LOG_FORMAT: json
+      OPENFGA_LOG_LEVEL: warn
+    networks: ["default", "openfga-storage"]
+    ports:
+      - "127.0.0.1:${OPENFGA_PORT:-8091}:8080"
+    depends_on:
+      openfga-migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=127.0.0.1:8081"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # PostgreSQL 保存 Job、Teammate 和 Team Message，是 API/Worker 共享的权威状态源。
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: agent_runtime
+      POSTGRES_USER: agent
+      POSTGRES_PASSWORD: agent
+    ports:
+      # 使用 5433，避免和 macOS 上已有 PostgreSQL 的默认 5432 冲突。
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent -d agent_runtime"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Redis 负责 Celery 与共享限流/槽位；持久化费用账本仍由 PostgreSQL 保存。
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      # 本机 API 使用 6380；不把未配置公网认证的开发 Redis 暴露到其他网卡。
+      # 容器之间仍通过 redis:6379 通信。
+      - "127.0.0.1:6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # API 接收 HTTP、创建数据库记录、投递 Job，并通过 SSE 查询最新状态。
+  api:
+    build: .
+    env_file:
+      - .env
+    # YAML anchor 让 API 和 Worker 使用完全相同的数据库/队列连接配置。
+    environment: &runtime_environment
+      # 让 API 中的 Cron 和 Worker 日志统一使用中国标准时间。
+      TZ: Asia/Shanghai
+      DATABASE_URL: postgresql+psycopg://agent:agent@postgres:5432/agent_runtime
+      DATABASE_AUTO_CREATE_SCHEMA: "false"
+      AUTH_REQUIRED: "true"
+      JOB_EXECUTION_MODE: celery
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      AI_CONTROL_BACKEND: redis
+      AI_REDIS_URL: redis://redis:6379/2
+      # 两个进程从共享 data 读取固定 ID；生产也可直接注入环境变量。
+      AGENT_TASK_AUTHORIZATION_ENABLED: "true"
+      OPENFGA_URL: http://openfga:8080
+      OPENFGA_CONFIG_PATH: ${OPENFGA_CONFIG_PATH:-/app/data/openfga.json}
+      OPENFGA_STORE_ID: ${OPENFGA_STORE_ID:-}
+      OPENFGA_MODEL_ID: ${OPENFGA_MODEL_ID:-}
+      OPENFGA_TOKEN: ${OPENFGA_TOKEN:-}
+    ports:
+      - "8000:8000"
+    # 先执行版本化迁移，再启动 API；Worker 等 API 健康后才会开始消费任务。
+    command:
+      [
+        "sh",
+        "-c",
+        "alembic upgrade head && fastapi run main.py --host 0.0.0.0 --port 8000",
+      ]
+    volumes:
+      # API 和 Worker 共享 Agent 生成的 notes、memory、tasks、schedules 与 Chroma 数据。
+      - ./data:/app/data
+      - ./skills:/app/skills:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')",
+        ]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+
+  # Worker 使用同一镜像，但覆盖启动命令，只运行 Celery 消费者而不暴露 HTTP。
+  worker:
+    build: .
+    env_file:
+      - .env
+    environment: *runtime_environment
+    command:
+      [
+        "celery",
+        "-A",
+        "app.celery_app.celery_app",
+        "worker",
+        "--loglevel=INFO",
+        "--concurrency=2",
+      ]
+    volumes:
+      - ./data:/app/data
+      - ./skills:/app/skills:ro
+    depends_on:
+      # 先等 API 健康可以确保数据库建表和基础配置已经成功。
+      api:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  # named volumes 让 docker compose 重建容器后数据库和 Redis 数据仍然存在。
+  postgres_data:
+  redis_data:
+  openfga_postgres_data:
+
+networks:
+  default:
+  openfga-storage:
+    # 只有 OpenFGA/migrate 能访问此数据库，且不发布数据库端口。
+    internal: true

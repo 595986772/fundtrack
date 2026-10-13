@@ -1,0 +1,43 @@
+/* 沿用金融终端的平面分区。空缺指标保持紧凑，走势图有稳定尺寸。 */
+.retail-indices-section { min-width: 0; }
+.retail-indices-header, .retail-index-heading {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.retail-indices-header { padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.retail-indices-header h2 { font-size: 19px; margin: 0; }
+.retail-indices-header p, .retail-index-heading p, .retail-index-dates {
+  color: var(--muted); font-size: 12px; margin: 4px 0 0; line-height: 1.8;
+}
+.retail-index { padding: 20px 0; border-bottom: 1px solid var(--border); min-width: 0; }
+.retail-index-heading { align-items: flex-start; }
+.retail-index-heading h3 { margin: 0; font-size: 17px; color: var(--ink); }
+.retail-index-status { font-size: 12px; color: var(--muted); text-align: right; }
+.retail-index-status:not([data-status="available"]), .retail-index-error { color: var(--accent); }
+.retail-index-summary { margin: 12px 0; font-size: 14px; line-height: 1.8; max-width: 75ch; }
+.retail-index-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 20px 0 12px; gap: 16px; }
+.retail-index-metrics dt, .retail-index-metrics span { color: var(--muted); font-size: 12px; }
+.retail-index-metrics dd { margin: 6px 0; font-size: 20px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.retail-index-metrics dd small { font-size: 12px; margin-left: 4px; }
+.retail-index-metrics [data-return-tone="up"] { color: #fa828c !important; }
+.retail-index-metrics [data-return-tone="down"] { color: #69cbb0 !important; }
+.retail-index-chart { width: 100%; height: 260px; margin-top: 16px; }
+.retail-index-method, .retail-index-history { margin-top: 12px; font-size: 12px; line-height: 1.9; }
+.retail-index-method summary, .retail-index-history summary { cursor: pointer; color: var(--muted); padding: 6px 0; }
+.retail-index-method summary:hover, .retail-index-history summary:hover { color: var(--ink); }
+.retail-index-method a { color: #8ab5f5; text-underline-offset: 3px; }
+.retail-index-method p, .retail-index-method li { max-width: 75ch; overflow-wrap: anywhere; }
+.retail-evidence-id { color: var(--muted); font-variant-numeric: tabular-nums; }
+.retail-history-scroll { max-height: 240px; overflow: auto; }
+.retail-history-scroll table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.retail-history-scroll th, .retail-history-scroll td { padding: 6px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+.retail-history-scroll th:first-child, .retail-history-scroll td:first-child { text-align: left; }
+.retail-index-error { font-size: 12px; }
+@media (max-width: 1100px) { .retail-index-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 480px) {
+  .retail-index-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .retail-index-metrics dd { font-size: 18px; }
+  .retail-index-heading { gap: 12px; }
+  .retail-index-status { max-width: 130px; }
+  .retail-index-chart { height: 230px; }
+  .retail-indices-header .icon-button { min-width: 44px; min-height: 44px; }
+}

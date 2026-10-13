@@ -1,0 +1,86 @@
+/* 盘中快照是独立的平面数据区；继承石墨灰/信号黄，不改变其他工作区。 */
+.market-intraday { min-width: 0; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.intraday-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.intraday-heading h2 { margin: 0; font-size: 18px; line-height: 1.5; }
+.intraday-heading p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+.intraday-heading button { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
+.intraday-heading button svg { width: 16px; height: 16px; }
+.intraday-table-scroll { overflow-x: auto; }
+.intraday-table { width: 100%; min-width: 650px; table-layout: fixed; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.intraday-table th, .intraday-table td { padding: 12px 14px; text-align: right; border-bottom: 1px solid var(--border); font-size: 14px; }
+.intraday-table thead th { color: var(--muted); font-size: 12px; font-weight: 500; }
+.intraday-table th:first-child { width: 22%; padding-left: 0; text-align: left; }
+.intraday-table th:last-child { width: 29%; }
+.intraday-table tbody th strong { font-size: 14px; font-weight: 550; }
+.intraday-table small { margin-left: 5px; color: var(--muted); font-size: 11px; font-weight: 400; }
+.intraday-table tbody th small, .intraday-time small { display: block; margin: 4px 0 0; }
+.intraday-table .intraday-amount { font-weight: 600; font-size: 17px; }
+.intraday-table .intraday-time { font-size: 12px; }
+.intraday-time small[data-warning="true"] { color: var(--amber); }
+.intraday-footer { display: flex; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap; margin-top: 12px; color: var(--muted); font-size: 11px; }
+.intraday-error, .intraday-notice { color: var(--amber); font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+.intraday-muted { color: var(--muted); font-size: 13px; }
+/* 全市场合计先于指数明细，采用平面统计行而非嵌套卡片。 */
+.turnover-totals, .turnover-exchanges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; margin: 20px 0; font-variant-numeric: tabular-nums; }
+.turnover-totals dt { color: var(--muted); font-size: 13px; }
+.turnover-totals dd { margin: 6px 0 0; font-size: 24px; font-weight: 600; line-height: 1.5; }
+.turnover-totals small, .turnover-exchanges small { color: var(--muted); font-size: 11px; font-weight: 400; margin-left: 6px; }
+.turnover-exchanges { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 13px; }
+.turnover-exchanges dd { margin: 8px 0 0; font-size: 16px; }
+.turnover-status { display: flex; flex-wrap: wrap; gap: 6px 24px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.turnover-method { margin-top: 12px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.turnover-method summary { cursor: pointer; }
+.turnover-method p { margin: 8px 0; }
+/* 曲线是独立平面区域；固定高度避免空态、切换市场和加载时页面跳动。 */
+.turnover-chart-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.turnover-chart-heading h2 { margin: 0; font-size: 18px; line-height: 1.5; }
+.turnover-chart-heading p, .turnover-chart-caption { color: var(--muted); font-size: 12px; line-height: 1.8; margin: 6px 0; }
+.turnover-chart-controls { display: flex; align-items: end; gap: 10px; max-width: 100%; }
+.turnover-chart-controls label { display: flex; flex-direction: column; gap: 5px; color: var(--muted); font-size: 11px; min-width: 0; }
+.turnover-chart-controls select { width: 155px; max-width: 100%; height: 36px; padding: 0 28px 0 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--ink); font: inherit; font-size: 12px; }
+.turnover-chart-controls select:focus-visible, .turnover-chart-reload:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.turnover-chart-periods { display: flex; height: 36px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.turnover-chart-periods button { flex: 1; padding: 0 10px; border: 0; background: var(--surface); color: var(--muted); font: inherit; font-size: 12px; white-space: nowrap; cursor: pointer; }
+.turnover-chart-periods button[aria-pressed="true"] { color: var(--ink); background: var(--accent-soft); box-shadow: inset 0 -2px 0 var(--accent); }
+.turnover-chart-periods button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.turnover-chart-reload { display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; min-height: 36px; padding: 0; }
+.turnover-chart-reload svg { width: 16px; height: 16px; }
+.turnover-chart-canvas, .turnover-chart-empty { width: 100%; height: 260px; min-width: 0; }
+.turnover-chart-empty { display: grid; place-content: center; text-align: center; color: var(--muted); font-size: 13px; margin: 0; }
+.turnover-chart-note, .turnover-chart-records { color: var(--muted); font-size: 11px; line-height: 1.8; }
+.turnover-chart-note { margin-bottom: 0; }
+.turnover-chart-records summary { cursor: pointer; }
+.turnover-chart-records > div { max-height: 240px; overflow: auto; }
+.turnover-chart-records table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.turnover-chart-records th, .turnover-chart-records td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+.turnover-chart-records th:first-child, .turnover-chart-records td:first-child { text-align: left; padding-left: 0; }
+@media (max-width: 600px) {
+  .turnover-chart-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px; width: 100%; gap: 8px; }
+  .turnover-chart-controls select { width: 100%; }
+  .turnover-chart-canvas, .turnover-chart-empty { height: 230px; }
+  .turnover-chart-records td { overflow-wrap: anywhere; }
+  .turnover-totals { gap: 12px; }
+  .turnover-totals dd { font-size: 19px; overflow-wrap: anywhere; }
+  .turnover-totals small { display: block; margin-left: 0; }
+  .turnover-exchanges { grid-template-columns: 1fr; gap: 12px; }
+  .turnover-exchanges > div { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .turnover-exchanges dd { margin: 0; }
+  .intraday-heading { align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+  .intraday-heading h2 { font-size: 17px; }
+  /* 手机每个指数占两行，金额/时间保持同屏，不让用户横滑寻找日期。 */
+  .intraday-table { min-width: 0; }
+  .intraday-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .intraday-table tbody { display: block; }
+  .intraday-table tbody tr { display: grid; grid-template-columns: minmax(104px, 0.8fr) minmax(0, 1.2fr); gap: 8px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+  .intraday-table th, .intraday-table td { width: auto; padding: 0; border: 0; }
+  .intraday-table th:first-child { width: auto; }
+  .intraday-table tbody td:nth-child(3) { text-align: left; align-self: end; font-size: 13px; }
+  .intraday-table tbody td:nth-child(3)::before { content: "成交量"; display: block; color: var(--muted); font-size: 11px; margin-bottom: 3px; }
+  .intraday-table .intraday-time { font-size: 11px; line-height: 1.6; }
+  .intraday-table .intraday-amount { font-size: 16px; }
+}
+@media (max-width: 420px) {
+  /* 小屏把市场选项独占一行，周期和刷新独占第二行。 */
+  .turnover-chart-controls { grid-template-columns: minmax(0, 1fr) 36px; }
+  .turnover-chart-controls label:first-child { grid-column: 1 / -1; }
+}

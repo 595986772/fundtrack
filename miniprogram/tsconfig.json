@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["miniprogram-api-typings"],
+    "rootDir": "src",
+    "outDir": "dist",
+    "lib": ["ES2019"]
+  },
+  "include": ["src/**/*.ts"]
+}

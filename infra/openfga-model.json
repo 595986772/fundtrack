@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.1",
+  "type_definitions": [
+    {
+      "type": "grant"
+    },
+    {
+      "type": "portfolio",
+      "relations": {
+        "reader": {"this": {}},
+        "researcher": {"this": {}}
+      },
+      "metadata": {
+        "relations": {
+          "reader": {
+            "directly_related_user_types": [{"type": "grant"}]
+          },
+          "researcher": {
+            "directly_related_user_types": [{"type": "grant"}]
+          }
+        }
+      }
+    }
+  ]
+}

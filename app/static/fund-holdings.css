@@ -1,0 +1,53 @@
+/* 单基金页面沿用终端令牌；披露表格、行业条形图是数据内容，不增加装饰卡片。 */
+.fund-holdings-page { max-width: 1280px; margin: 0 auto; padding: 24px; color: var(--ink); }
+.fund-holdings-heading, .fund-holdings-actions, .fund-holdings-meta { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.fund-holdings-heading { justify-content:space-between; margin-bottom:16px; }
+.fund-holdings-heading h2 { font-size:20px; margin:0 0 6px; overflow-wrap:anywhere; }
+.fund-holdings-page p { font-size:14px; color:var(--muted); line-height:1.7; margin:6px 0 12px; }
+.fund-holdings-meta { font-size:12px; color:var(--muted); gap:8px 20px; overflow-wrap:anywhere; }
+.fund-holdings-page h3 { font-size:14px; margin:0 0 6px; }
+.fund-holdings-note { padding:12px 0; border-bottom:1px solid var(--border); }
+.fund-holdings-page .fund-holdings-etf-note { color:var(--accent); max-width:75ch; }
+.fund-holdings-switch { display:flex; gap:8px; margin:16px 0 24px; }
+.fund-holdings-switch button { padding:9px 14px; min-height:40px; border:1px solid var(--border); border-radius:4px; background:transparent; color:var(--muted); }
+.fund-holdings-switch button[aria-pressed="true"] { background:var(--accent-soft); color:var(--accent); border-color:var(--accent); }
+.fund-holdings-page button:focus-visible, .fund-holdings-page a:focus-visible, .fund-holdings-page summary:focus-visible, .fund-holdings-table-scroll:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.fund-holdings-page a { color:var(--ink); text-underline-offset:3px; }
+.fund-holdings-page a:hover { color:var(--accent); }
+.fund-holdings-page a svg { width:12px; height:12px; margin-left:4px; }
+.fund-holdings-page button:disabled { opacity:.5; cursor:wait; }
+.fund-holdings-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; margin:0 0 28px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+.fund-holdings-metrics dt { font-size:14px; color:var(--muted); }
+.fund-holdings-metrics dd { font-size:20px; font-variant-numeric:tabular-nums; margin:8px 0 0; }
+.fund-holdings-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:40px; }
+.fund-holdings-assets { margin:0; }
+.fund-holdings-assets > div { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid var(--border); padding:12px 0; font-size:14px; }
+.fund-holdings-assets dd { margin:0; font-variant-numeric:tabular-nums; }
+.fund-holdings-page small { display:block; margin-top:5px; font-size:12px; color:var(--muted); font-weight:400; }
+.fund-holdings-industries { list-style:none; padding:0; margin:0; }
+.fund-holdings-industries li { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px 16px; padding:10px 0; font-size:14px; }
+.fund-holdings-industries strong { font-variant-numeric:tabular-nums; }
+.holdings-bar { grid-column:1/-1; display:block; height:4px; background:var(--border); }
+.holdings-bar > span { display:block; height:100%; background:var(--accent); }
+.fund-holdings-securities, .fund-holdings-changes section + section { margin-top:32px; }
+.fund-holdings-table-scroll { overflow-x:auto; max-width:100%; }
+.fund-holdings-page table { width:100%; border-collapse:collapse; font-size:14px; min-width:550px; }
+.fund-holdings-page th, .fund-holdings-page td { text-align:left; padding:12px 10px; border-bottom:1px solid var(--border); font-variant-numeric:tabular-nums; }
+.fund-holdings-page th:first-child, .fund-holdings-page td:first-child { padding-left:0; }
+.fund-holdings-page thead th { font-size:12px; color:var(--muted); font-weight:500; }
+.fund-holdings-page tbody th { max-width:260px; overflow-wrap:anywhere; }
+.fund-holdings-boundary { margin-top:28px; padding-top:16px; border-top:1px solid var(--border); font-size:14px; }
+.fund-holdings-boundary summary { cursor:pointer; }
+.fund-holdings-boundary li { margin:8px 0; color:var(--muted); line-height:1.7; }
+.fund-holdings-error { display:flex; align-items:center; gap:12px; flex-wrap:wrap; color:var(--danger); margin:16px 0; }
+.fund-holdings-empty { padding:16px 0; }
+@media (max-width:700px) {
+  .fund-holdings-page { padding:16px 4px; }
+  .fund-holdings-heading h2 { font-size:20px; }
+  .fund-holdings-heading { align-items:flex-start; }
+  .fund-holdings-grid { grid-template-columns:minmax(0,1fr); gap:28px; }
+  .fund-holdings-metrics { gap:12px; }
+  .fund-holdings-metrics dd { font-size:20px; }
+  .fund-holdings-metrics dt { line-height:1.5; min-height:40px; }
+  .fund-holdings-switch button { min-height:44px; }
+}

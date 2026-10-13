@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="FundScope - 基金风险与市场信号研究工作台"
+    />
+    <title>FundScope</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css?v=product23" />
+    <!--
+      新版视觉规则单独维护：历史 styles.css 继续承载业务组件，
+      design-system.css 只负责产品外壳、设计令牌和关键组件的统一外观。
+    -->
+    <link rel="stylesheet" href="/static/design-system.css?v=product17" />
+    <link rel="stylesheet" href="/static/terminal.css?v=product1" />
+    <link rel="stylesheet" href="/static/social-evidence.css?v=1" />
+    <link rel="stylesheet" href="/static/workspace-pages.css?v=2" />
+    <link rel="stylesheet" href="/static/product-workspaces.css?v=4" />
+    <link rel="stylesheet" href="/static/market-intraday.css?v=5" />
+    <link rel="stylesheet" href="/static/fund-holdings.css?v=1" />
+    <link rel="stylesheet" href="/static/fund-reports.css?v=1" />
+    <link rel="stylesheet" href="/static/fund-report-evals.css?v=1" />
+    <link rel="stylesheet" href="/static/portfolio-stress.css?v=1" />
+    <link rel="stylesheet" href="/static/portfolio-allocation.css?v=1" />
+    <link rel="stylesheet" href="/static/capital-sectors.css?v=2" />
+    <link rel="stylesheet" href="/static/retail-indices.css?v=1" />
+    <link rel="stylesheet" href="/static/mobile-input.css?v=1" />
+    <script
+      src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"
+      defer
+    ></script>
+    <!-- 固定版本并本地托管图表引擎，页面不依赖图表 CDN 是否可访问。 -->
+    <script src="/static/vendor/echarts-6.0.0.min.js" defer></script>
+    <script src="/static/terminal-data.js?v=product1" defer></script>
+    <script src="/static/terminal.js?v=product7" defer></script>
+    <script src="/static/workspace-pages.js?v=11" defer></script>
+    <script src="/static/data-visuals.js?v=3" defer></script>
+    <script src="/static/research-lists.js?v=2" defer></script>
+    <script src="/static/holdings-quotes.js?v=2" defer></script>
+    <script src="/static/market-intraday.js?v=3" defer></script>
+    <script src="/static/market-turnover-chart.js?v=2" defer></script>
+    <script src="/static/research-workspaces.js?v=2" defer></script>
+    <script src="/static/fund-holdings.js?v=1" defer></script>
+    <script src="/static/fund-reports.js?v=1" defer></script>
+    <script src="/static/workspace-page-host.js?v=1" defer></script>
+    <script src="/static/portfolio-stress.js?v=1" defer></script>
+    <script src="/static/portfolio-allocation.js?v=1" defer></script>
+    <script src="/static/retail-indices.js?v=1" defer></script>
+    <script src="/static/investment-context.js?v=2" defer></script>
+    <script src="/static/research-repair.js?v=2" defer></script>
+    <script src="/static/fund-answer.js?v=3" defer></script>
+    <link rel="stylesheet" href="/static/portfolio-review.css?v=1" />
+    <script src="/static/portfolio-review.js?v=4" defer></script>
+    <link rel="stylesheet" href="/static/portfolio-diagnosis.css?v=3" />
+    <script src="/static/portfolio-diagnosis.js?v=5" defer></script>
+    <script src="/static/fund-report-evals.js?v=1" defer></script>
+    <link rel="stylesheet" href="/static/data-workspaces.css?v=4" />
+    <link rel="stylesheet" href="/static/daily-briefings.css?v=1" />
+    <script src="/static/daily-briefings.js?v=2" defer></script>
+    <link rel="stylesheet" href="/static/research-committee.css?v=3" />
+    <script src="/static/research-committee.js?v=3" defer></script>
+    <link rel="stylesheet" href="/static/portfolio-bookkeeping.css?v=1" />
+    <script src="/static/portfolio-bookkeeping.js?v=1" defer></script>
+    <link rel="stylesheet" href="/static/agent-authorizations.css?v=1" />
+    <script src="/static/agent-authorizations.js?v=1" defer></script>
+    <script src="/static/app.js?v=product59" defer></script>
+  </head>
+  <body class="terminal-experience">
+    <div class="app-layout">
+      <aside id="sidebar" class="sidebar" aria-label="工作区导航">
+        <header class="brand-bar">
+          <div class="brand-mark" aria-hidden="true">
+            <i data-lucide="chart-no-axes-combined"></i>
+          </div>
+          <div class="brand-copy">
+            <strong>FundScope</strong>
+            <span>Fund Risk Research</span>
+          </div>
+          <span class="developer-mode-badge" data-developer-only hidden>DEV</span>
+          <button
+            id="close-sidebar"
+            class="icon-button mobile-only"
+            type="button"
+            title="关闭导航"
+            aria-label="关闭导航"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </header>
+
+        <nav class="product-switcher" aria-label="主要工作区">
+          <button
+            class="product-tab active"
+            type="button"
+            aria-current="page"
+            data-product-view="assets"
+          >
+            <i data-lucide="wallet-cards"></i>
+            <span>我的资产</span>
+          </button>
+          <button
+            class="product-tab"
+            type="button"
+            data-product-view="intelligence"
+          >
+            <i data-lucide="newspaper"></i>
+            <span>事件情报</span>
+          </button>
+          <button
+            class="product-tab"
+            type="button"
+            data-product-view="community"
+          >
+            <i data-lucide="messages-square"></i>
+            <span>社区热点</span>
+          </button>
+          <button
+            class="product-tab"
+            type="button"
+            data-product-view="sectors"
+          >
+            <i data-lucide="radar"></i>
+            <span>板块雷达</span>
+          </button>
+          <button class="product-tab" type="button" data-product-view="research"><i data-lucide="sparkles"></i><span>AI 投研</span></button>
+        </nav>
+
+        <div id="agent-sidebar-content" class="sidebar-context view-hidden">
+          <button id="new-chat" class="new-chat-button" type="button">
+            <i data-lucide="square-pen"></i>
+            <span>新建对话</span>
+          </button>
+
+          <div class="section-label">
+            <span>最近对话</span>
+            <button
+              id="refresh-conversations"
+              class="icon-button subtle"
+              type="button"
+              title="刷新会话"
+              aria-label="刷新会话"
+            >
+              <i data-lucide="refresh-cw"></i>
+            </button>
+          </div>
+          <nav id="conversation-list" class="conversation-list"></nav>
+        </div>
+
+        <div id="fund-sidebar-content" class="sidebar-context">
+          <div class="fund-search-shell">
+            <label class="fund-search" for="fund-search-input">
+              <i data-lucide="search"></i>
+              <input
+                id="fund-search-input"
+                type="search"
+                placeholder="搜索全量基金名称或代码"
+                aria-label="搜索基金名称或代码"
+                autocomplete="off"
+                aria-controls="fund-search-results"
+              />
+            </label>
+            <div
+              id="fund-search-results"
+              class="fund-search-results"
+              aria-live="polite"
+              hidden
+            ></div>
+          </div>
+          <div class="section-label">
+            <span>自选基金</span>
+            <button
+              id="refresh-fund-sidebar"
+              class="icon-button subtle"
+              type="button"
+              title="刷新基金"
+              aria-label="刷新基金"
+            >
+              <i data-lucide="refresh-cw"></i>
+            </button>
+          </div>
+          <nav id="fund-nav-list" class="fund-nav-list" aria-label="已关注基金"></nav>
+          <div class="fund-source-note">
+            <i data-lucide="database"></i>
+            <div>
+              <strong id="fund-source-mode">数据快照</strong>
+              <span id="fund-sidebar-range">正在读取</span>
+            </div>
+          </div>
+        </div>
+
+        <footer class="sidebar-footer">
+          <label class="user-control" for="user-id">
+            <span id="user-avatar" class="user-avatar">CH</span>
+            <span class="user-fields">
+              <span>工作空间</span>
+              <input
+                id="user-id"
+                name="user_id"
+                value="chen"
+                maxlength="50"
+                autocomplete="off"
+                aria-label="用户 ID"
+                data-developer-only
+              />
+              <strong id="user-display" data-business-only>个人工作区</strong>
+            </span>
+          </label>
+          <a
+            class="icon-button"
+            href="/docs"
+            target="_blank"
+            rel="noreferrer"
+            title="API 文档"
+            aria-label="API 文档"
+            data-developer-only
+            hidden
+          >
+            <i data-lucide="book-open"></i>
+          </a>
+          <button
+            id="account-button"
+            class="icon-button"
+            type="button"
+            title="设置与账户"
+            aria-label="设置与账户"
+          >
+            <i data-lucide="settings-2"></i>
+          </button>
+        </footer>
+      </aside>
+
+      <main id="chat-shell" class="chat-shell view-hidden">
+        <header class="chat-header">
+          <div class="header-leading">
+            <button
+              id="open-sidebar"
+              class="icon-button mobile-only"
+              type="button"
+              title="打开会话栏"
+              aria-label="打开会话栏"
+            >
+              <i data-lucide="panel-left"></i>
+            </button>
+            <div class="conversation-heading">
+              <h1 id="conversation-title">新对话</h1>
+              <span id="conversation-meta">准备就绪</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button id="open-agent-authorizations" class="action-button agent-auth-trigger" type="button"
+              aria-haspopup="dialog" aria-controls="agent-authorizations-dialog" aria-expanded="false">
+              <i data-lucide="shield-check" aria-hidden="true"></i><span>任务授权</span>
+            </button>
+            <span id="connection-status" class="connection-status pending">
+              <span class="status-dot"></span>
+              <span id="connection-label">连接中</span>
+            </span>
+            <button
+              id="open-inspector"
+              class="icon-button inspector-toggle"
+              type="button"
+              title="运行详情"
+              aria-label="运行详情"
+              data-developer-only
+              hidden
+            >
+              <i data-lucide="panel-right"></i>
+            </button>
+          </div>
+        </header>
+
+        <nav id="research-navigation" class="product-local-nav" aria-label="AI 投研视图"></nav>
+        <label class="product-research-scope">研究对象<select id="research-subject" aria-label="选择研究对象"></select></label>
+        <section
+          id="message-list"
+          class="message-list"
+          aria-live="polite"
+          aria-label="聊天消息"
+        ></section>
+
+        <div id="chat-error" class="chat-error" role="alert" hidden>
+          <i data-lucide="circle-alert"></i>
+          <span id="chat-error-text"></span>
+          <button id="retry-message" class="chat-retry-button" type="button" hidden>
+            <i data-lucide="rotate-ccw"></i>
+            <span>重试</span>
+          </button>
+          <button
+            id="dismiss-error"
+            class="icon-button"
+            type="button"
+            title="关闭错误"
+            aria-label="关闭错误"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <footer class="composer-area">
+          <form id="composer" class="composer">
+            <textarea
+              id="message-input"
+              name="message"
+              rows="1"
+              maxlength="800"
+              placeholder="向 Agent 发起任务..."
+              data-business-placeholder="询问基金风险、市场情绪或组合情况..."
+              aria-label="消息"
+            ></textarea>
+            <div class="composer-toolbar">
+              <div id="agent-fund-context" class="composer-context" title="当前基金上下文">
+                <i data-lucide="chart-no-axes-combined"></i>
+                <span id="agent-fund-context-label">未选择基金</span>
+              </div>
+              <div class="composer-actions">
+                <button
+                  id="attach-document"
+                  class="icon-button"
+                  type="button"
+                  title="上传知识文档"
+                  aria-label="上传知识文档"
+                >
+                  <i data-lucide="paperclip"></i>
+                </button>
+                <button
+                  id="send-message"
+                  class="send-button"
+                  type="submit"
+                  title="发送"
+                  aria-label="发送"
+                >
+                  <i data-lucide="arrow-up"></i>
+                </button>
+              </div>
+            </div>
+            <label class="research-refresh-option" title="仅本次发送：缺失或过旧时检查公开持仓披露，最多两轮；不抓取社区帖子">
+              <input id="research-refresh" type="checkbox">
+              <span>本轮补查公开持仓披露</span>
+            </label>
+          </form>
+        </footer>
+      </main>
+
+      <main id="fund-shell" class="fund-shell">
+        <header class="fund-header">
+          <div class="header-leading">
+            <button
+              id="open-fund-sidebar"
+              class="icon-button mobile-only"
+              type="button"
+              title="打开导航"
+              aria-label="打开导航"
+            >
+              <i data-lucide="panel-left"></i>
+            </button>
+            <div class="conversation-heading">
+              <h1 id="workspace-title">研究终端</h1>
+              <span id="fund-header-meta">正在汇总最新研究数据</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <span id="fund-connection-status" class="connection-status pending">
+              <span class="status-dot"></span>
+              <span id="fund-connection-label">连接中</span>
+            </span>
+            <button
+              id="sync-fund-data"
+              class="icon-button"
+              type="button"
+              title="同步全部已关注基金净值与持仓披露"
+              aria-label="同步全部已关注基金净值与持仓披露"
+            >
+              <i data-lucide="cloud-download"></i>
+            </button>
+            <button
+              id="refresh-funds"
+              class="icon-button"
+              type="button"
+              title="重新读取已保存的研究快照"
+              aria-label="重新读取已保存的研究快照"
+            >
+              <i data-lucide="refresh-cw"></i>
+            </button>
+          </div>
+        </header>
+
+        <div id="fund-error" class="fund-page-error" role="alert" hidden>
+          <i data-lucide="circle-alert"></i>
+          <span id="fund-error-text"></span>
+        </div>
+
+        <!-- 工作区内只留两三个主要视图；高级工具通过所在业务页进入。 -->
+        <nav id="workspace-outline" class="product-local-nav" aria-label="当前工作区视图" hidden>
+          <strong id="workspace-outline-title" class="visually-hidden">功能</strong>
+          <div id="workspace-outline-items"></div>
+        </nav>
+        <label id="workspace-mobile-picker" class="workspace-mobile-picker" hidden>
+          <span>功能</span>
+          <select id="workspace-mobile-page" aria-label="选择功能页面"></select>
+        </label>
+
+        <div class="fund-content">
+
+          <!-- 总览把原本分散在各区的数据压缩成一眼可读的每日研究摘要。 -->
+          <section
+            id="workspace-overview"
+            class="workspace-view"
+            data-workspace-view="overview"
+            aria-label="投研总览"
+          >
+            <nav class="product-detail-back" aria-label="基金详情导航">
+              <a href="#assets/holdings"><i data-lucide="arrow-left"></i>我的资产</a>
+              <a href="#assets/fund">行情</a><a href="#assets/fund/holdings">持仓分析</a>
+              <a href="#assets/fund/reports">季度报告</a>
+            </nav>
+            <section id="overview-dashboard" class="terminal-dashboard" aria-label="行情与研究终端">
+              <p class="terminal-empty" role="status">正在读取研究数据...</p>
+            </section>
+
+            <details id="fund-report" class="terminal-report">
+              <summary><i data-lucide="file-chart-column-increasing"></i>基金完整档案与研判</summary>
+            <section class="fund-overview-band" aria-labelledby="fund-overview-title">
+              <div class="fund-overview-copy">
+                <h2 id="fund-overview-title">研究数据覆盖</h2>
+                <p id="fund-overview-meta">正在读取基金数据</p>
+              </div>
+              <dl class="fund-overview-stats">
+                <div>
+                  <dt>已关注基金</dt>
+                  <dd id="fund-count">-</dd>
+                </div>
+                <div>
+                  <dt>净值记录</dt>
+                  <dd id="fund-record-count">-</dd>
+                </div>
+                <div>
+                  <dt>数据截止</dt>
+                  <dd id="fund-snapshot-end">-</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="watchlist-section" aria-labelledby="watchlist-title">
+              <header class="workspace-section-heading">
+                <div>
+                  <h2 id="watchlist-title">关注基金</h2>
+                </div>
+                <span>选择基金查看净值、风险与证据</span>
+              </header>
+              <div id="fund-card-grid" class="fund-card-grid"></div>
+            </section>
+
+            <section id="fund-detail" class="fund-detail" aria-live="polite">
+              <div class="fund-loading">
+                <i data-lucide="loader-circle" class="spinning"></i>
+                <span>正在读取基金详情</span>
+              </div>
+            </section>
+            </details>
+            <!-- 持仓分析是单基金独立页面，不与终端图表和完整报告堆叠。 -->
+            <section id="fund-holdings-page" class="fund-holdings-page" aria-label="单基金持仓分析" hidden></section>
+            <section id="fund-reports-page" class="fund-reports-page" aria-label="季度报告与两期比较" hidden></section>
+          </section>
+
+          <!-- 组合工作区保留真实持仓、风险研判、监控与 LangGraph 工作流。 -->
+          <section
+            id="workspace-portfolio"
+            class="workspace-view view-hidden"
+            data-workspace-view="portfolio"
+            aria-label="基金组合"
+          >
+            <section
+              id="portfolio-workbench"
+              class="portfolio-workbench"
+              aria-label="我的基金组合"
+              aria-live="polite"
+            >
+              <div class="workspace-skeleton portfolio-skeleton" aria-hidden="true">
+                <span class="skeleton-line skeleton-line-short"></span>
+                <span class="skeleton-line skeleton-line-title"></span>
+                <span class="skeleton-line"></span>
+                <div class="skeleton-grid">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+              <span class="visually-hidden">正在读取基金组合</span>
+            </section>
+          </section>
+
+          <!-- 市场工作区将量化状态和可追溯消息放在同一上下文中。 -->
+          <section
+            id="workspace-market"
+            class="workspace-view view-hidden"
+            data-workspace-view="market"
+            aria-label="市场研判"
+          >
+            <section id="sector-radar" data-workspace-page="radar" aria-label="板块观察" hidden>
+              <header class="product-section-heading"><h2>板块观察</h2>
+                <div><a href="#sectors/capital">资金证据</a><a href="#sectors/sentiment">情绪参考</a></div>
+              </header>
+              <div id="sector-radar-content" aria-live="polite"></div>
+            </section>
+            <label id="market-fund-context" class="market-fund-context" hidden>
+              <span>关联基金</span>
+              <select id="market-context-fund" aria-label="市场关联基金"></select>
+            </label>
+            <section id="market-page-status" data-workspace-page="status" role="tabpanel" aria-label="市场环境">
+            <section id="market-turnover" class="market-intraday"
+              aria-labelledby="market-turnover-title" aria-live="polite"></section>
+
+            <section id="market-turnover-history" class="market-intraday"
+              aria-labelledby="market-turnover-history-title"></section>
+            <!-- 盘中与日线分别加载：一方请求失败不会隐藏另一方的数据。 -->
+            <section id="market-intraday" class="market-intraday"
+              aria-labelledby="market-intraday-title" aria-live="polite"></section>
+            <section
+              id="market-sentiment"
+              class="market-sentiment"
+              tabindex="0"
+              aria-label="日线市场环境"
+              aria-live="polite"
+            >
+              <div class="workspace-skeleton market-skeleton" aria-hidden="true">
+                <span class="skeleton-line skeleton-line-short"></span>
+                <span class="skeleton-line skeleton-line-title"></span>
+                <span class="skeleton-line"></span>
+                <div class="skeleton-grid">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+              <span class="visually-hidden">正在读取市场环境</span>
+            </section>
+            </section>
+
+            <!--
+              热点追踪复用事件聚类结果，并比较每次手动刷新留下的历史快照。
+              它展示的是关注度变化，不把“热门”直接解释成涨跌或交易信号。
+            -->
+            <section
+              id="market-page-hotspots"
+              class="market-hotspots-section"
+              data-workspace-page="hotspots"
+              role="tabpanel"
+              tabindex="0"
+              hidden
+              aria-labelledby="market-hotspots-title"
+            >
+              <header class="market-hotspots-header">
+                <div>
+                  <h2 id="market-hotspots-title">事件热度变化</h2>
+                  <p id="market-hotspots-meta">正在读取热点历史</p>
+                </div>
+                <div class="market-hotspot-controls">
+                  <select id="market-hotspot-lifecycle" aria-label="热点阶段">
+                    <option value="">全部阶段</option>
+                    <option value="emerging">新出现</option>
+                    <option value="rising">正在升温</option>
+                    <option value="peaking">高位持续</option>
+                    <option value="steady">平稳关注</option>
+                    <option value="cooling">正在降温</option>
+                    <option value="faded">影响消退</option>
+                  </select>
+                  <label class="market-hotspot-fund-toggle">
+                    <input id="market-hotspot-fund-only" type="checkbox" />
+                    <span>当前基金</span>
+                  </label>
+                  <button
+                    id="refresh-market-hotspots"
+                    class="icon-button"
+                    type="button"
+                    title="重新读取已保存的热点历史"
+                    aria-label="重新读取已保存的热点历史"
+                  >
+                    <i data-lucide="refresh-cw"></i>
+                  </button>
+                </div>
+              </header>
+              <div id="market-hotspots" class="market-hotspots" aria-live="polite">
+                <div class="market-hotspot-status">
+                  <i data-lucide="loader-circle" class="spinning"></i>
+                  <span>正在比较热点热度变化</span>
+                </div>
+              </div>
+            </section>
+
+            <!--
+              资金行为和新闻情绪是两类证据：这里展示 ETF 份额、龙虎榜机构席位，
+              并明确标注匿名资金不能直接认定为国家队。
+            -->
+            <section
+              id="market-page-capital"
+              class="large-capital-section"
+              data-workspace-page="capital"
+              role="tabpanel"
+              tabindex="0"
+              hidden
+              aria-labelledby="large-capital-title"
+            >
+              <header class="large-capital-header">
+                <div>
+                  <h2 id="large-capital-title">大资金行为线索</h2>
+                  <p id="large-capital-meta">正在读取 ETF 份额与机构席位</p>
+                </div>
+                <button
+                  id="sync-large-capital"
+                  class="icon-button"
+                  type="button"
+                  title="同步 ETF 份额与龙虎榜机构席位"
+                  aria-label="同步 ETF 份额与龙虎榜机构席位"
+                >
+                  <i data-lucide="cloud-download"></i>
+                </button>
+              </header>
+              <div
+                id="large-capital-signals"
+                class="large-capital-signals"
+                aria-live="polite"
+              >
+                <div class="large-capital-status">
+                  <i data-lucide="loader-circle" class="spinning"></i>
+                  <span>正在整理宽基、行业与机构席位线索</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 只展示两个民间指数；独立于社区抓取和机构资金分析。 -->
+            <section id="market-page-retail" class="retail-indices-section"
+              data-workspace-page="retail" role="tabpanel" tabindex="0" hidden
+              aria-labelledby="retail-indices-title">
+              <header class="retail-indices-header">
+                <div><h2 id="retail-indices-title">宝妈与韭菜指数</h2>
+                  <p>社区情绪与交易拥挤观察 · 非官方指数</p></div>
+                <button id="refresh-retail-indices" class="icon-button" type="button"
+                  title="更新可用的公开指数" aria-label="更新可用的公开指数">
+                  <i data-lucide="cloud-download"></i>
+                </button>
+              </header>
+              <div id="retail-indices" aria-live="polite"><p>正在读取已保存的指数</p></div>
+            </section>
+
+            <section
+              id="market-page-community"
+              class="social-signals-section"
+              data-workspace-page="community"
+              role="tabpanel"
+              tabindex="0"
+              hidden
+              aria-labelledby="social-signals-title"
+            >
+              <header class="social-signals-header">
+                <div>
+                  <h2 id="social-signals-title">社区话题</h2>
+                  <p id="social-signals-meta">正在计算当前基金操作窗口</p>
+                </div>
+                <div class="social-signals-actions">
+                  <a class="icon-button" href="#community/settings" title="采集设置" aria-label="采集设置"><i data-lucide="settings-2"></i></a>
+                </div>
+              </header>
+              <div id="social-signals" class="social-signals" aria-live="polite"></div>
+            </section>
+            <section data-workspace-page="social-review" hidden aria-label="观点复核">
+              <header class="product-section-heading"><h2>观点复核</h2>
+                  <button id="analyze-social-signals" class="icon-button" type="button"
+                    title="分析已有数据（当前操作窗口）" aria-label="分析已有数据">
+                    <i data-lucide="scan-text"></i>
+                  </button>
+              </header>
+              <div id="social-review" class="social-review" aria-live="polite"></div>
+            </section>
+            <section data-workspace-page="social-settings" hidden aria-label="采集设置">
+              <header class="product-section-heading"><h2>采集设置</h2><a href="#community/topics">返回话题</a></header>
+              <p id="social-collection-status" class="product-provenance"></p>
+              <div class="product-toolbar">
+                  <button
+                    id="connect-xhs-session"
+                    class="icon-button"
+                    type="button"
+                    title="连接小红书"
+                    aria-label="连接小红书"
+                  >
+                    <i data-lucide="log-in"></i>
+                  </button>
+                  <button
+                    id="sync-social-signals"
+                    class="icon-button"
+                    type="button"
+                    title="单独刷新社交观点"
+                    aria-label="单独刷新社交观点"
+                  >
+                    <i data-lucide="messages-square"></i>
+                  </button>
+              </div>
+            </section>
+            <section data-workspace-page="social-posts" hidden aria-label="原始样本">
+              <div id="social-posts" class="social-posts" aria-live="polite"></div>
+            </section>
+              <dialog id="social-post-detail" class="social-detail" aria-labelledby="social-detail-title">
+                <header><h2 id="social-detail-title">帖子证据</h2>
+                  <button class="icon-button" type="button" data-social-close title="关闭详情" aria-label="关闭详情"><i data-lucide="x"></i></button>
+                </header>
+                <div id="social-detail-body"></div>
+              </dialog>
+            <section id="market-page-news" class="market-events-section" data-workspace-page="news" role="tabpanel" tabindex="0" hidden aria-labelledby="market-events-title">
+              <header class="market-events-header">
+                <div>
+                  <h2 id="market-events-title">事件列表</h2>
+                  <p id="market-events-meta">正在读取可追溯事件</p>
+                </div>
+                <form id="market-event-filters" class="market-event-filters">
+                  <label class="market-event-search" for="market-event-query">
+                    <i data-lucide="search"></i>
+                    <input
+                      id="market-event-query"
+                      type="search"
+                      maxlength="100"
+                      placeholder="搜索政策、白酒、国债"
+                      aria-label="搜索已保存的事件"
+                      autocomplete="off"
+                    />
+                  </label>
+                  <select id="market-event-type" aria-label="事件类型">
+                    <option value="">全部类型</option>
+                    <option value="policy">政策</option>
+                    <option value="economic_data">经济数据</option>
+                    <option value="regulation">监管</option>
+                    <option value="fund_announcement">基金公告</option>
+                    <option value="market_notice">市场公告</option>
+                    <option value="social_positioning">社交仓位观点</option>
+                  </select>
+                  <select id="market-event-window" aria-label="事件时间范围"><option value="">全部时间</option><option value="1">近1日</option><option value="7">近7日</option><option value="30">近30日</option></select>
+                  <label class="market-event-fund-toggle">
+                    <input id="market-event-fund-only" type="checkbox" />
+                    <span>当前基金</span>
+                  </label>
+                  <button
+                    id="market-topic-config"
+                    class="market-topic-trigger"
+                    type="button"
+                    popovertarget="market-topic-popover"
+                    aria-label="设置新闻采集板块"
+                    title="设置新闻采集板块"
+                  >
+                    <i data-lucide="tags"></i>
+                    <span id="market-topic-trigger-label">全市场</span>
+                  </button>
+                  <button
+                    id="sync-market-events"
+                    class="icon-button"
+                    type="button"
+                    title="获取最新市场情报"
+                    aria-label="获取最新市场情报"
+                  >
+                    <i data-lucide="cloud-download"></i>
+                  </button>
+                  <button
+                    id="analyze-market-events"
+                    class="icon-button"
+                    type="button"
+                    title="使用 DeepSeek 分析待处理事件"
+                    aria-label="使用 DeepSeek 分析待处理事件"
+                    data-developer-only
+                    hidden
+                  >
+                    <i data-lucide="sparkles"></i>
+                  </button>
+                  <button
+                    id="cluster-market-events"
+                    class="icon-button"
+                    type="button"
+                    title="使用 Embedding 聚合相似报道"
+                    aria-label="使用 Embedding 聚合相似报道"
+                    data-developer-only
+                    hidden
+                  >
+                    <i data-lucide="git-merge"></i>
+                  </button>
+                  <button
+                    id="refresh-market-events"
+                    class="icon-button"
+                    type="button"
+                    title="重新读取已保存的市场事件"
+                    aria-label="重新读取已保存的市场事件"
+                  >
+                    <i data-lucide="refresh-cw"></i>
+                  </button>
+                </form>
+              </header>
+              <div
+                id="market-pipeline-status"
+                class="market-pipeline-status"
+                aria-live="polite"
+                hidden
+              ></div>
+              <div id="market-events" class="market-events" aria-live="polite">
+                <div class="market-event-status">
+                  <i data-lucide="loader-circle" class="spinning"></i>
+                  <span>正在读取市场事件</span>
+                </div>
+              </div>
+            </section>
+          </section>
+          <!-- 普通详情使用独立页面，不以模态框承载长篇阅读。返回时原列表 DOM 不变。 -->
+          <section id="research-detail-page" class="product-detail-page" hidden aria-label="研究详情" tabindex="-1"></section>
+        </div>
+      </main>
+
+      <aside id="inspector" class="inspector view-hidden" aria-label="Agent 运行详情" data-developer-only hidden>
+        <header class="inspector-header">
+          <div>
+            <h2>运行详情</h2>
+            <span id="inspector-subtitle">等待下一次执行</span>
+          </div>
+          <button
+            id="close-inspector"
+            class="icon-button inspector-close"
+            type="button"
+            title="关闭详情"
+            aria-label="关闭详情"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </header>
+
+        <div class="inspector-tabs" role="tablist" aria-label="详情视图">
+          <button class="tab-button active" type="button" data-tab="run" role="tab">
+            本轮运行
+          </button>
+          <button class="tab-button" type="button" data-tab="workspace" role="tab">
+            工作区
+          </button>
+          <button class="tab-button" type="button" data-tab="knowledge" role="tab">
+            知识库
+          </button>
+          <button class="tab-button" type="button" data-tab="evals" role="tab">
+            评测
+          </button>
+        </div>
+
+        <div id="run-panel" class="inspector-panel active" role="tabpanel"></div>
+        <div id="workspace-panel" class="inspector-panel" role="tabpanel"></div>
+        <div id="knowledge-panel" class="inspector-panel" role="tabpanel"></div>
+        <div id="evals-panel" class="inspector-panel" role="tabpanel"></div>
+      </aside>
+
+      <!-- 手机与桌面使用相同的五个入口和顺序。 -->
+      <nav class="mobile-product-nav" aria-label="主要工作区">
+        <button class="mobile-product-tab" type="button" data-product-view="assets"><i data-lucide="wallet-cards"></i><span>我的资产</span></button>
+        <button class="mobile-product-tab" type="button" data-product-view="intelligence"><i data-lucide="newspaper"></i><span>事件情报</span></button>
+        <button class="mobile-product-tab" type="button" data-product-view="community"><i data-lucide="messages-square"></i><span>社区热点</span></button>
+        <button class="mobile-product-tab" type="button" data-product-view="sectors"><i data-lucide="radar"></i><span>板块雷达</span></button>
+        <button class="mobile-product-tab" type="button" data-product-view="research"><i data-lucide="sparkles"></i><span>AI 投研</span></button>
+      </nav>
+
+      <button id="page-overlay" class="page-overlay" type="button" aria-label="关闭面板"></button>
+      <input
+        id="document-input"
+        type="file"
+        accept=".md,.txt,.pdf"
+        hidden
+      />
+      <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+      <!-- 原生 dialog 负责焦点约束，授权内容不进入聊天或触发模型。 -->
+      <dialog id="agent-authorizations-dialog" class="agent-authorizations-dialog"
+        aria-labelledby="agent-authorizations-title" aria-describedby="agent-authorizations-description">
+        <header class="agent-auth-header">
+          <div><h2 id="agent-authorizations-title">任务授权</h2><p id="agent-authorizations-description">最近任务 · 时间为北京时间</p></div>
+          <div class="agent-auth-header-actions">
+            <button class="icon-button" type="button" data-auth-refresh data-auth-focus="refresh" title="刷新任务授权" aria-label="刷新任务授权"><i data-lucide="refresh-cw" aria-hidden="true"></i></button>
+            <button class="icon-button" type="button" data-auth-close data-auth-focus="close" title="关闭任务授权" aria-label="关闭任务授权" autofocus><i data-lucide="x" aria-hidden="true"></i></button>
+          </div>
+        </header>
+        <p class="agent-auth-message" data-auth-message role="status" aria-live="polite"></p>
+        <div class="agent-auth-content" data-auth-content aria-busy="false"></div>
+      </dialog>
+
+      <!-- 原生 Popover 会进入浏览器顶层，不会被市场时间线或移动端滚动容器裁切。 -->
+      <section
+        id="market-topic-popover"
+        class="market-topic-popover"
+        popover
+        aria-labelledby="market-topic-title"
+      >
+        <header class="market-topic-popover-header">
+          <div>
+            <h2 id="market-topic-title">采集关注板块</h2>
+            <p id="market-topic-limit">最多选择 3 个板块</p>
+          </div>
+          <button
+            class="icon-button subtle"
+            type="button"
+            popovertarget="market-topic-popover"
+            popovertargetaction="hide"
+            title="关闭"
+            aria-label="关闭板块设置"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </header>
+
+        <form id="market-topic-form" class="market-topic-form">
+          <fieldset>
+            <legend>预设板块</legend>
+            <div id="market-topic-options" class="market-topic-options" aria-live="polite">
+              <span class="market-topic-loading">正在读取板块词典</span>
+            </div>
+          </fieldset>
+
+          <label class="market-topic-custom" for="market-topic-custom-input">
+            <span>自定义板块</span>
+            <input
+              id="market-topic-custom-input"
+              type="text"
+              maxlength="64"
+              placeholder="例如：低空经济、机器人"
+              autocomplete="off"
+            />
+          </label>
+
+          <label class="market-topic-model-toggle">
+            <span>
+              <strong>DeepSeek 补充关联词</strong>
+              <small>命中缓存时不会重复调用</small>
+            </span>
+            <input id="market-topic-use-model" type="checkbox" checked />
+          </label>
+
+          <footer>
+            <button id="clear-market-topics" class="action-button" type="button">
+              全市场
+            </button>
+            <button class="action-button primary" type="submit">应用范围</button>
+          </footer>
+        </form>
+      </section>
+    </div>
+
+    <dialog id="auth-dialog" class="auth-dialog" aria-labelledby="auth-title">
+      <div class="auth-dialog-header">
+        <div class="auth-dialog-brand" aria-hidden="true">
+          <i data-lucide="chart-no-axes-combined"></i>
+        </div>
+        <div>
+          <span>FundScope Account</span>
+          <h2 id="auth-title">登录研究工作区</h2>
+        </div>
+        <button
+          id="close-auth-dialog"
+          class="icon-button"
+          type="button"
+          title="关闭"
+          aria-label="关闭账户窗口"
+        >
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div id="auth-mode-switch" class="auth-mode-switch" role="tablist" aria-label="账户操作">
+        <button class="active" type="button" role="tab" data-auth-mode="login">登录</button>
+        <button type="button" role="tab" data-auth-mode="register">注册</button>
+      </div>
+
+      <form id="auth-form" class="auth-form">
+        <label id="auth-display-name-field" hidden>
+          <span>显示名称</span>
+          <input id="auth-display-name" maxlength="80" autocomplete="name" />
+        </label>
+        <label>
+          <span>账号</span>
+          <input
+            id="auth-user-id"
+            minlength="3"
+            maxlength="32"
+            pattern="[A-Za-z0-9_-]+"
+            autocomplete="username"
+            required
+          />
+        </label>
+        <label>
+          <span>密码</span>
+          <input
+            id="auth-password"
+            type="password"
+            minlength="8"
+            maxlength="128"
+            autocomplete="current-password"
+            required
+          />
+        </label>
+        <p id="auth-error" class="auth-error" role="alert" hidden></p>
+        <button id="auth-submit" class="auth-submit" type="submit">登录</button>
+      </form>
+
+      <div id="auth-session-panel" class="auth-session-panel" hidden>
+        <div class="auth-session-user">
+          <span id="auth-session-avatar" class="user-avatar">CH</span>
+          <div>
+            <strong id="auth-session-name">个人工作区</strong>
+            <span id="auth-session-role">已登录</span>
+          </div>
+        </div>
+        <button id="logout-button" class="auth-logout" type="button">
+          <i data-lucide="log-out"></i>
+          <span>退出登录</span>
+        </button>
+      </div>
+    </dialog>
+  </body>
+</html>

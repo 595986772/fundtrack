@@ -1,0 +1,465 @@
+{
+  "id": "fund-agent-v2",
+  "version": "2.0.0",
+  "name": "FundScope 固定快照业务回归集 v2",
+  "description": "使用固定基金、市场和事件快照，验证路由、工具选择、事实一致性、证据引用、回答质量与调用效率。",
+  "data_profile": "fundscope-fixture-v1",
+  "defaults": {
+    "max_tool_rounds": 4,
+    "max_tool_calls": 1,
+    "reject_absolute_claims": true
+  },
+  "fixtures": {
+    "portfolios": {
+      "balanced_learning": {
+        "name": "评测用三基金组合",
+        "holdings": [
+          {"fund_code": "110020", "weight_pct": 50},
+          {"fund_code": "161725", "weight_pct": 30},
+          {"fund_code": "110007", "weight_pct": 20}
+        ]
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "profile-index-basic",
+      "category": "fund_profile",
+      "tags": ["smoke", "facts"],
+      "name": "宽基基金基础档案",
+      "description": "名称和类型必须来自基金档案工具，不能依赖模型记忆。",
+      "fund_code": "110020",
+      "message": "请告诉我当前基金的代码、名称、基金类型和数据截止日。",
+      "expected_route": "fund_profile",
+      "required_tools": ["get_fund_profile_tool"],
+      "forbidden_tools": ["get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "读取固定基金代码", "tool": "get_fund_profile_tool", "path": "fund_code", "operator": "equals", "expected": "110020"},
+        {"name": "读取固定基金名称", "tool": "get_fund_profile_tool", "path": "short_name", "operator": "equals", "expected": "易方达沪深300ETF联接A"},
+        {"name": "使用固定快照", "tool": "get_fund_profile_tool", "path": "data_mode", "operator": "equals", "expected": "fixture"},
+        {"name": "固定截止日正确", "tool": "get_fund_profile_tool", "path": "snapshot_end", "operator": "equals", "expected": "2026-08-25"}
+      ],
+      "required_answer_groups": [
+        {"name": "回答基金身份", "terms": ["110020", "易方达沪深300"], "match": "all"},
+        {"name": "说明数据日期", "terms": ["2026-08-25", "截至", "截止"], "match": "any"}
+      ]
+    },
+    {
+      "id": "profile-theme-manager",
+      "category": "fund_profile",
+      "tags": ["facts"],
+      "name": "主题基金经理与标的",
+      "description": "基金经理和跟踪标的必须与 fixture 档案一致。",
+      "fund_code": "161725",
+      "message": "招商白酒这只基金由谁管理，跟踪什么标的，管理费是多少？",
+      "expected_route": "fund_profile",
+      "required_tools": ["get_fund_profile_tool"],
+      "forbidden_tools": ["get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "基金经理正确", "tool": "get_fund_profile_tool", "path": "fund_managers", "operator": "equals", "expected": "侯昊"},
+        {"name": "跟踪标的正确", "tool": "get_fund_profile_tool", "path": "tracking_target", "operator": "equals", "expected": "中证白酒指数"},
+        {"name": "管理费正确", "tool": "get_fund_profile_tool", "path": "management_fee", "operator": "contains", "expected": "1.00%"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明经理与标的", "terms": ["侯昊", "中证白酒指数"], "match": "all"},
+        {"name": "说明管理费", "terms": ["1.00%", "1%"], "match": "any"}
+      ]
+    },
+    {
+      "id": "profile-bond-role",
+      "category": "fund_profile",
+      "tags": ["facts"],
+      "name": "债券基金档案辨识",
+      "description": "模型应把债券样本识别为混合二级债基，而不是股票指数基金。",
+      "fund_code": "110007",
+      "message": "110007 是什么类型的基金，基金经理是谁，业绩比较基准是什么？",
+      "expected_route": "fund_profile",
+      "required_tools": ["get_fund_profile_tool"],
+      "forbidden_tools": ["get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "基金类型正确", "tool": "get_fund_profile_tool", "path": "fund_type", "operator": "equals", "expected": "债券型-混合二级"},
+        {"name": "基金经理正确", "tool": "get_fund_profile_tool", "path": "fund_managers", "operator": "equals", "expected": "胡剑"},
+        {"name": "样本角色正确", "tool": "get_fund_profile_tool", "path": "sample_role", "operator": "equals", "expected": "bond_fund"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明债基属性", "terms": ["债券", "混合二级"], "match": "any"},
+        {"name": "说明基金经理", "terms": ["胡剑"], "match": "all"}
+      ],
+      "forbidden_answer_terms": ["股票指数基金"]
+    },
+    {
+      "id": "nav-index-one-year",
+      "category": "fund_nav",
+      "tags": ["smoke", "facts"],
+      "name": "宽基近一年净值表现",
+      "description": "近一年区间收益必须由净值摘要工具计算。",
+      "fund_code": "110020",
+      "message": "110020 近 12 个月净值表现怎么样？告诉我区间收益和统计日期。",
+      "expected_route": "fund_nav",
+      "required_tools": ["get_fund_nav_summary_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "统计区间正确", "tool": "get_fund_nav_summary_tool", "path": "period_months", "operator": "equals", "expected": 12},
+        {"name": "区间收益正确", "tool": "get_fund_nav_summary_tool", "path": "period_return_pct", "operator": "equals", "expected": 4.3},
+        {"name": "使用固定净值", "tool": "get_fund_nav_summary_tool", "path": "data_mode", "operator": "equals", "expected": "fixture"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明历史收益", "terms": ["4.3", "4.30"], "match": "any"},
+        {"name": "说明区间边界", "terms": ["2025-08-25", "2026-08-25"], "match": "all"}
+      ]
+    },
+    {
+      "id": "nav-theme-six-months",
+      "category": "fund_nav",
+      "tags": ["facts", "arguments"],
+      "name": "主题基金六个月参数",
+      "description": "模型必须把用户的六个月要求正确传给工具。",
+      "fund_code": "161725",
+      "message": "只看最近 6 个月，161725 的净值区间涨跌、最高点和最低点如何？",
+      "expected_route": "fund_nav",
+      "required_tools": ["get_fund_nav_summary_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "模型传入六个月", "tool": "get_fund_nav_summary_tool", "path": "period_months", "operator": "equals", "expected": 6},
+        {"name": "最低净值存在", "tool": "get_fund_nav_summary_tool", "path": "period_low.unit_nav", "operator": "exists", "expected": true},
+        {"name": "最高净值存在", "tool": "get_fund_nav_summary_tool", "path": "period_high.unit_nav", "operator": "exists", "expected": true}
+      ],
+      "required_answer_groups": [
+        {"name": "回答涨跌", "terms": ["区间", "收益", "涨跌"], "match": "any"},
+        {"name": "回答高低点", "terms": ["最高", "最低"], "match": "all"}
+      ]
+    },
+    {
+      "id": "nav-bond-three-years",
+      "category": "fund_nav",
+      "tags": ["facts", "arguments"],
+      "name": "债基三年净值摘要",
+      "description": "长区间问题应传入 36 个月，不应退回默认一年。",
+      "fund_code": "110007",
+      "message": "请看 110007 最近 36 个月的历史净值表现，说明区间收益和最新净值。",
+      "expected_route": "fund_nav",
+      "required_tools": ["get_fund_nav_summary_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "模型传入三年", "tool": "get_fund_nav_summary_tool", "path": "period_months", "operator": "equals", "expected": 36},
+        {"name": "最新净值存在", "tool": "get_fund_nav_summary_tool", "path": "latest_unit_nav", "operator": "gte", "expected": 0.1},
+        {"name": "截止日期固定", "tool": "get_fund_nav_summary_tool", "path": "period_end", "operator": "equals", "expected": "2026-08-25"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明三年区间", "terms": ["36 个月", "36个月", "三年", "3 年", "3年"], "match": "any"},
+        {"name": "说明最新净值", "terms": ["最新净值", "单位净值"], "match": "any"}
+      ]
+    },
+    {
+      "id": "risk-index-one-year",
+      "category": "fund_risk",
+      "tags": ["smoke", "facts"],
+      "name": "宽基历史风险",
+      "description": "回撤和波动必须使用统一 Python 风险公式。",
+      "fund_code": "110020",
+      "message": "110020 最近一年最大回撤和年化波动率是多少？通俗解释风险。",
+      "expected_route": "fund_risk",
+      "required_tools": ["get_fund_risk_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "最大回撤正确", "tool": "get_fund_risk_tool", "path": "max_drawdown.drawdown_pct", "operator": "equals", "expected": 9.26},
+        {"name": "年化波动正确", "tool": "get_fund_risk_tool", "path": "annualized_volatility_pct", "operator": "equals", "expected": 17.3},
+        {"name": "风险数据固定", "tool": "get_fund_risk_tool", "path": "data_mode", "operator": "equals", "expected": "fixture"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明回撤", "terms": ["回撤", "9.26"], "match": "all"},
+        {"name": "说明波动", "terms": ["波动", "17.3"], "match": "all"}
+      ]
+    },
+    {
+      "id": "risk-theme-high-drawdown",
+      "category": "fund_risk",
+      "tags": ["smoke", "facts"],
+      "name": "主题基金高回撤",
+      "description": "高风险样本必须保留真实回撤，不得淡化为低风险。",
+      "fund_code": "161725",
+      "message": "161725 最近一年跌起来有多狠？结合最大回撤、波动率和这段时间的整体涨跌解释。",
+      "expected_route": "fund_risk",
+      "required_tools": ["get_fund_risk_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "最大回撤正确", "tool": "get_fund_risk_tool", "path": "max_drawdown.drawdown_pct", "operator": "equals", "expected": 40.89},
+        {"name": "年化波动正确", "tool": "get_fund_risk_tool", "path": "annualized_volatility_pct", "operator": "equals", "expected": 23.53},
+        {"name": "区间收益正确", "tool": "get_fund_risk_tool", "path": "period_return_pct", "operator": "equals", "expected": -34.21}
+      ],
+      "required_answer_groups": [
+        {"name": "覆盖三项风险数字", "terms": ["40.89", "23.53", "34.21"], "match": "all"},
+        {"name": "解释历史口径", "terms": ["历史", "过去", "区间"], "match": "any"}
+      ],
+      "forbidden_answer_terms": ["低风险"]
+    },
+    {
+      "id": "risk-bond-comparison",
+      "category": "fund_risk",
+      "tags": ["facts"],
+      "name": "债基低波动样本",
+      "description": "债券样本应使用债基自己的指标，而不是套用股票基金数字。",
+      "fund_code": "110007",
+      "message": "110007 最近一年的波动和最大回撤怎么样，和股票型基金相比怎么理解？",
+      "expected_route": "fund_risk",
+      "required_tools": ["get_fund_risk_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "债基波动正确", "tool": "get_fund_risk_tool", "path": "annualized_volatility_pct", "operator": "equals", "expected": 4.28},
+        {"name": "债基回撤正确", "tool": "get_fund_risk_tool", "path": "max_drawdown.drawdown_pct", "operator": "equals", "expected": 4.17},
+        {"name": "基金代码正确", "tool": "get_fund_risk_tool", "path": "fund_code", "operator": "equals", "expected": "110007"}
+      ],
+      "required_answer_groups": [
+        {"name": "覆盖债基指标", "terms": ["4.28", "4.17"], "match": "all"},
+        {"name": "说明比较边界", "terms": ["股票", "债券", "不可直接", "口径"], "match": "any"}
+      ]
+    },
+    {
+      "id": "market-overall-state",
+      "category": "market_sentiment",
+      "tags": ["smoke", "facts"],
+      "name": "市场综合状态",
+      "description": "市场状态问题只查询市场快照，不调用基金风险工具。",
+      "fund_code": "",
+      "message": "当前市场情绪和整体环境怎么样？说明趋势、市场宽度和数据日期。",
+      "expected_route": "market",
+      "required_tools": ["get_market_sentiment_tool"],
+      "forbidden_tools": ["search_market_events_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "市场状态正确", "tool": "get_market_sentiment_tool", "path": "state_label", "operator": "equals", "expected": "修复分化"},
+        {"name": "趋势标签正确", "tool": "get_market_sentiment_tool", "path": "trend.label", "operator": "equals", "expected": "中期偏弱"},
+        {"name": "市场日期固定", "tool": "get_market_sentiment_tool", "path": "data_date", "operator": "equals", "expected": "2026-08-25"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明综合状态", "terms": ["修复分化"], "match": "all"},
+        {"name": "说明趋势", "terms": ["中期偏弱"], "match": "all"}
+      ]
+    },
+    {
+      "id": "market-breadth",
+      "category": "market_sentiment",
+      "tags": ["facts"],
+      "name": "市场宽度解释",
+      "description": "上涨家数占比必须来自固定市场截面。",
+      "fund_code": "",
+      "message": "今天市场宽度如何？上涨和下跌家数分别是多少，占比怎么理解？",
+      "expected_route": "market",
+      "required_tools": ["get_market_sentiment_tool"],
+      "forbidden_tools": ["search_market_events_tool", "get_fund_risk_tool"],
+      "tool_result_assertions": [
+        {"name": "上涨家数正确", "tool": "get_market_sentiment_tool", "path": "breadth.advancing_count", "operator": "equals", "expected": 3966},
+        {"name": "下跌家数正确", "tool": "get_market_sentiment_tool", "path": "breadth.declining_count", "operator": "equals", "expected": 1177},
+        {"name": "上涨占比正确", "tool": "get_market_sentiment_tool", "path": "breadth.advance_ratio_pct", "operator": "equals", "expected": 76.15}
+      ],
+      "required_answer_groups": [
+        {"name": "覆盖宽度事实", "terms": ["3966", "1177", "76.15"], "match": "all"},
+        {"name": "解释截面含义", "terms": ["上涨", "下跌", "宽度"], "match": "any"}
+      ]
+    },
+    {
+      "id": "market-activity",
+      "category": "market_sentiment",
+      "tags": ["facts"],
+      "name": "成交活跃度解释",
+      "description": "成交代理问题应使用市场状态工具中的五日均值口径。",
+      "fund_code": "",
+      "message": "当前成交活跃度是放量还是缩量？请说明和最近五日均值的比较。",
+      "expected_route": "market",
+      "required_tools": ["get_market_sentiment_tool"],
+      "forbidden_tools": ["search_market_events_tool", "get_fund_risk_tool"],
+      "tool_result_assertions": [
+        {"name": "成交标签存在", "tool": "get_market_sentiment_tool", "path": "activity.label", "operator": "one_of", "expected": ["放量", "缩量", "正常"]},
+        {"name": "五日比较值存在", "tool": "get_market_sentiment_tool", "path": "activity.latest_vs_five_day_average_pct", "operator": "exists", "expected": true},
+        {"name": "成交代理正确", "tool": "get_market_sentiment_tool", "path": "activity.benchmark_code", "operator": "equals", "expected": "000300"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明量能状态", "terms": ["放量", "缩量", "正常"], "match": "any"},
+        {"name": "说明比较基准", "terms": ["五日", "5 日", "5日", "均值"], "match": "any"}
+      ]
+    },
+    {
+      "id": "events-baijiu",
+      "category": "market_events",
+      "tags": ["smoke", "evidence"],
+      "name": "白酒消息检索",
+      "description": "消息面问题应搜索事件并引用真实 event_id。",
+      "fund_code": "161725",
+      "message": "161725 最近有哪些白酒相关政策、监管或基金公告？列出主要消息和来源依据。",
+      "expected_route": "market",
+      "required_tools": ["search_market_events_tool"],
+      "forbidden_tools": ["get_market_sentiment_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "使用固定事件", "tool": "search_market_events_tool", "path": "data_mode", "operator": "equals", "expected": "fixture"},
+        {"name": "白酒事件数量正确", "tool": "search_market_events_tool", "path": "total_matched", "operator": "equals", "expected": 6},
+        {"name": "最新事件正确", "tool": "search_market_events_tool", "path": "events.0.event_id", "operator": "equals", "expected": "evt-20260820-mofcom-consumption"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明政策或监管", "terms": ["政策", "监管", "公告", "消费"], "match": "any"},
+        {"name": "说明来源", "terms": ["来源", "商务部", "财政部", "证监会", "招商基金"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "events-bond-treasury",
+      "category": "market_events",
+      "tags": ["evidence"],
+      "name": "债券国债事件",
+      "description": "债券基金消息应命中国债事件，而不是返回白酒新闻。",
+      "fund_code": "110007",
+      "message": "查询与 110007 相关的国债和利率新闻，告诉我事实、影响边界和来源。",
+      "expected_route": "market",
+      "required_tools": ["search_market_events_tool"],
+      "forbidden_tools": ["get_market_sentiment_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "只命中债券事件", "tool": "search_market_events_tool", "path": "total_matched", "operator": "equals", "expected": 1},
+        {"name": "国债事件 ID 正确", "tool": "search_market_events_tool", "path": "events.0.event_id", "operator": "equals", "expected": "evt-20260814-mof-treasury"},
+        {"name": "来源等级正确", "tool": "search_market_events_tool", "path": "events.0.source_level", "operator": "equals", "expected": "A"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明国债事实", "terms": ["国债", "1.66", "909.8"], "match": "any"},
+        {"name": "说明影响边界", "terms": ["不足以", "不能", "不代表", "边界"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "events-index-policy",
+      "category": "market_events",
+      "tags": ["evidence"],
+      "name": "宽基政策消息",
+      "description": "宽基政策问题应返回资本市场或消费政策事件。",
+      "fund_code": "110020",
+      "message": "110020 近期有哪些政策和监管消息值得关注？请引用事件依据。",
+      "expected_route": "market",
+      "required_tools": ["search_market_events_tool"],
+      "forbidden_tools": ["get_market_sentiment_tool", "get_fund_risk_tool", "get_fund_assessment_tool"],
+      "tool_result_assertions": [
+        {"name": "宽基事件数量正确", "tool": "search_market_events_tool", "path": "total_matched", "operator": "equals", "expected": 3},
+        {"name": "事件列表存在", "tool": "search_market_events_tool", "path": "events.0.event_id", "operator": "exists", "expected": true},
+        {"name": "数据截止日正确", "tool": "search_market_events_tool", "path": "data_cutoff", "operator": "equals", "expected": "2026-08-20"}
+      ],
+      "required_answer_groups": [
+        {"name": "说明政策消息", "terms": ["政策", "监管", "消费", "资本市场"], "match": "any"},
+        {"name": "体现时效边界", "terms": ["截至", "截止", "近期", "有效期"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "assessment-index",
+      "category": "fund_assessment",
+      "tags": ["smoke", "evidence"],
+      "name": "宽基综合研判",
+      "description": "一次综合工具调用应提供风险、市场和消息证据。",
+      "fund_code": "110020",
+      "message": "综合风险、市场情绪和消息面，110020 当前是什么状态？说明依据和不确定性。",
+      "expected_route": "fund_assessment",
+      "required_tools": ["get_fund_assessment_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_semantic_review_tool", "get_market_sentiment_tool", "search_market_events_tool"],
+      "tool_result_assertions": [
+        {"name": "综合状态正确", "tool": "get_fund_assessment_tool", "path": "state_label", "operator": "equals", "expected": "证据分化"},
+        {"name": "事件数量正确", "tool": "get_fund_assessment_tool", "path": "event_count", "operator": "equals", "expected": 3},
+        {"name": "证据数量正确", "tool": "get_fund_assessment_tool", "path": "evidence_count", "operator": "equals", "expected": 11}
+      ],
+      "required_answer_groups": [
+        {"name": "说明当前状态", "terms": ["证据分化"], "match": "all"},
+        {"name": "覆盖风险与市场", "terms": ["风险", "市场"], "match": "all"},
+        {"name": "说明不确定性", "terms": ["不确定", "局限", "历史", "截止"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "assessment-theme",
+      "category": "fund_assessment",
+      "tags": ["smoke", "evidence"],
+      "name": "白酒基金综合研判",
+      "description": "高风险样本的综合状态与证据数量必须匹配固定快照。",
+      "fund_code": "161725",
+      "message": "综合全部数据判断 161725 当前状况，重点解释主要风险、支撑因素和消息面。",
+      "expected_route": "fund_assessment",
+      "required_tools": ["get_fund_assessment_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_semantic_review_tool", "get_market_sentiment_tool", "search_market_events_tool"],
+      "tool_result_assertions": [
+        {"name": "综合状态正确", "tool": "get_fund_assessment_tool", "path": "state_label", "operator": "equals", "expected": "风险信号占优"},
+        {"name": "事件数量正确", "tool": "get_fund_assessment_tool", "path": "event_count", "operator": "equals", "expected": 6},
+        {"name": "证据数量正确", "tool": "get_fund_assessment_tool", "path": "evidence_count", "operator": "equals", "expected": 14}
+      ],
+      "required_answer_groups": [
+        {"name": "说明风险状态", "terms": ["风险信号占优"], "match": "all"},
+        {"name": "覆盖支撑与风险", "terms": ["风险", "支撑"], "match": "all"},
+        {"name": "说明消息面", "terms": ["消息", "事件", "政策", "公告"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "assessment-conditional-opinion",
+      "category": "fund_assessment",
+      "tags": ["opinion", "evidence"],
+      "name": "条件式持仓观点",
+      "description": "用户询问操作时允许给出观点，但必须由证据和条件支撑。",
+      "fund_code": "161725",
+      "message": "我更关心风险而不是短期收益。结合当前全部数据，你更倾向我继续持有、减仓还是观察？说明条件和什么变化会改变判断。",
+      "expected_route": "fund_assessment",
+      "required_tools": ["get_fund_assessment_tool"],
+      "forbidden_tools": ["get_fund_semantic_review_tool", "get_fund_risk_tool", "get_market_sentiment_tool", "search_market_events_tool"],
+      "tool_result_assertions": [
+        {"name": "基线仍为高关注", "tool": "get_fund_assessment_tool", "path": "state_code", "operator": "equals", "expected": "high_attention"},
+        {"name": "风险证据存在", "tool": "get_fund_assessment_tool", "path": "risk_evidence.0.evidence_id", "operator": "exists", "expected": true},
+        {"name": "不确定信息存在", "tool": "get_fund_assessment_tool", "path": "missing_information.0", "operator": "exists", "expected": true}
+      ],
+      "required_answer_groups": [
+        {"name": "明确表达倾向", "terms": ["持有", "减仓", "观察", "倾向"], "match": "any"},
+        {"name": "保留条件", "terms": ["如果", "条件", "取决于", "变化"], "match": "any"},
+        {"name": "说明风险证据", "terms": ["风险", "回撤", "波动"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "portfolio-overall",
+      "category": "portfolio",
+      "tags": ["smoke", "portfolio", "evidence"],
+      "name": "三基金组合整体研判",
+      "description": "评测运行器创建临时组合，模型应读取组合工具而非逐只重复查询。",
+      "fund_code": "",
+      "portfolio_fixture": "balanced_learning",
+      "message": "分析我当前选择的模拟组合，说明整体状态、集中度、主要风险来源和依据。",
+      "expected_route": "portfolio",
+      "required_tools": ["get_portfolio_assessment_tool"],
+      "forbidden_tools": ["get_fund_assessment_tool", "get_fund_risk_tool", "get_market_sentiment_tool", "search_market_events_tool"],
+      "tool_result_assertions": [
+        {"name": "组合名称正确", "tool": "get_portfolio_assessment_tool", "path": "portfolio_name", "operator": "equals", "expected": "评测用三基金组合"},
+        {"name": "最大权重正确", "tool": "get_portfolio_assessment_tool", "path": "concentration.max_weight_pct", "operator": "equals", "expected": 50.0},
+        {"name": "包含三只基金", "tool": "get_portfolio_assessment_tool", "path": "fund_contributions.2.fund_code", "operator": "exists", "expected": true}
+      ],
+      "required_answer_groups": [
+        {"name": "说明集中度", "terms": ["集中", "50"], "match": "all"},
+        {"name": "说明风险来源", "terms": ["风险", "白酒", "161725", "回撤"], "match": "any"},
+        {"name": "说明组合而非单基金", "terms": ["组合", "权重", "持仓"], "match": "any"}
+      ],
+      "require_evidence_reference": true
+    },
+    {
+      "id": "portfolio-risk-priority",
+      "category": "portfolio",
+      "tags": ["portfolio", "opinion", "evidence"],
+      "name": "风险优先组合观点",
+      "description": "组合操作观点应基于权重贡献和集中度，不得虚构相关性指标。",
+      "fund_code": "",
+      "portfolio_fixture": "balanced_learning",
+      "message": "如果我风险偏好较低，这个组合目前最值得优先关注哪部分？给出有条件的调整方向。",
+      "expected_route": "portfolio",
+      "required_tools": ["get_portfolio_assessment_tool"],
+      "forbidden_tools": ["get_fund_assessment_tool", "get_fund_risk_tool", "get_market_sentiment_tool", "search_market_events_tool"],
+      "tool_result_assertions": [
+        {"name": "集中度状态正确", "tool": "get_portfolio_assessment_tool", "path": "concentration.state_code", "operator": "equals", "expected": "high"},
+        {"name": "第一大权重正确", "tool": "get_portfolio_assessment_tool", "path": "concentration.max_weight_fund_code", "operator": "equals", "expected": "110020"},
+        {"name": "缺失信息被保留", "tool": "get_portfolio_assessment_tool", "path": "missing_information.0", "operator": "exists", "expected": true}
+      ],
+      "required_answer_groups": [
+        {"name": "给出关注重点", "terms": ["优先", "关注", "风险"], "match": "any"},
+        {"name": "给出条件式方向", "terms": ["如果", "可以", "考虑", "条件"], "match": "any"},
+        {"name": "不虚构精确组合波动", "terms": ["相关性", "协方差", "无法", "缺少"], "match": "any"}
+      ],
+      "require_evidence_reference": true,
+      "forbidden_answer_terms": ["组合最大回撤为", "组合年化波动率为"]
+    }
+  ]
+}

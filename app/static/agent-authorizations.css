@@ -1,0 +1,125 @@
+/* 沿用研究工作台的石墨、黄色与系统字体；样式仅作用于授权入口和弹窗。 */
+.agent-auth-trigger {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.agent-authorizations-dialog {
+  width: min(680px, calc(100% - 24px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  color-scheme: dark;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.agent-authorizations-dialog::backdrop { background: color-mix(in srgb, var(--canvas) 80%, transparent); }
+.agent-authorizations-dialog[open] { display: flex; flex-direction: column; }
+.agent-authorizations-dialog [hidden] { display: none !important; }
+
+.agent-auth-header,
+.agent-auth-grant-heading,
+.agent-auth-row,
+.agent-auth-audit-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.agent-auth-header {
+  flex: 0 0 auto;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.agent-auth-header h2 { margin: 0; font-size: 19px; font-weight: 650; }
+.agent-auth-header p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+.agent-auth-header-actions,
+.agent-auth-row-actions,
+.agent-auth-confirm-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.agent-auth-content { min-height: 0; padding: 0 18px 16px; overflow-y: auto; overscroll-behavior: contain; }
+.agent-auth-message { flex: 0 0 auto; margin: 0; padding: 10px 18px; color: var(--accent); font-size: 12px; }
+.agent-auth-message:empty { display: none; }
+.agent-auth-count { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
+.agent-auth-list,
+.agent-auth-audit-list { margin: 0; padding: 0; list-style: none; }
+.agent-auth-grant { padding: 14px 0; }
+.agent-auth-grant + .agent-auth-grant { border-top: 1px solid var(--border); }
+.agent-auth-grant-heading { align-items: flex-start; }
+.agent-auth-grant h3 { min-width: 0; margin: 0; font-size: 14px; font-weight: 650; }
+.agent-auth-status { flex: 0 0 auto; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.agent-auth-status[data-tone="active"],
+.agent-auth-status[data-tone="warning"] { color: var(--accent); }
+.agent-auth-status[data-tone="danger"] { color: var(--danger); }
+.agent-auth-scope { margin: 6px 0; color: var(--muted); font-size: 12px; }
+.agent-auth-row { flex-wrap: wrap; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.agent-auth-row-actions { margin-left: auto; }
+.agent-auth-inactive { margin: 6px 0 0; color: var(--accent); font-size: 12px; }
+.agent-auth-warning { margin: 12px 0; color: var(--accent); font-size: 12px; }
+.agent-auth-error { margin: 12px 0; color: var(--danger); font-size: 12px; }
+.agent-auth-state { padding: 16px 0; color: var(--muted); }
+.agent-auth-state h3 { margin: 0; color: var(--ink); font-size: 14px; }
+.agent-auth-state p { margin: 4px 0 0; font-size: 12px; }
+
+.agent-authorizations-dialog .action-button,
+.agent-auth-disclosure { min-height: 32px; font-size: 12px; white-space: nowrap; }
+.agent-auth-disclosure {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.agent-auth-disclosure svg { width: 14px; height: 14px; flex: 0 0 14px; }
+.agent-auth-disclosure:hover { background: var(--surface-muted); color: var(--ink); }
+.agent-authorizations-dialog .agent-auth-revoke { color: var(--danger); }
+.agent-authorizations-dialog .agent-auth-danger { background: var(--danger); border-color: var(--danger); color: var(--canvas); }
+.agent-authorizations-dialog .agent-auth-danger:hover:not(:disabled) { filter: brightness(1.08); }
+.agent-authorizations-dialog button:disabled { opacity: 0.55; cursor: not-allowed; }
+.agent-authorizations-dialog button:active:not(:disabled),
+.agent-auth-trigger:active { transform: translateY(1px); }
+.agent-authorizations-dialog button:focus-visible,
+.agent-auth-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.agent-auth-audit { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+.agent-auth-metadata { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 4px 10px; margin: 0; font-size: 12px; }
+.agent-auth-metadata dt { color: var(--muted); }
+.agent-auth-metadata dd { margin: 0; min-width: 0; font-variant-numeric: tabular-nums; }
+.agent-auth-audit-list { margin-top: 12px; }
+.agent-auth-audit-list li { padding: 10px 0; border-top: 1px solid var(--border); font-size: 12px; }
+.agent-auth-audit-list p { margin: 4px 0; color: var(--muted); }
+.agent-auth-audit-list time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.agent-auth-confirm { padding-top: 16px; }
+.agent-auth-confirm h3 { margin: 0 0 12px; font-size: 16px; }
+.agent-auth-confirm p { margin: 8px 0; }
+.agent-auth-task { color: var(--muted); font-size: 12px; }
+.agent-auth-confirm .agent-auth-warning { margin: 16px 0; font-size: 14px; }
+.agent-auth-confirm-actions { justify-content: flex-end; margin-top: 18px; }
+.agent-auth-skeleton { display: grid; gap: 10px; min-height: 110px; padding: 20px 0; }
+.agent-auth-skeleton span { width: 85%; height: 12px; border-radius: 3px; background: var(--surface-muted); }
+.agent-auth-skeleton span:first-child { width: 50%; }
+.agent-auth-skeleton span:last-child { width: 65%; }
+
+@media (max-width: 760px) {
+  .agent-auth-trigger,
+  .agent-authorizations-dialog .action-button,
+  .agent-auth-disclosure { min-height: 36px; }
+  .agent-auth-header { padding: 12px; }
+  .agent-auth-content { padding-right: 12px; padding-left: 12px; }
+  .agent-auth-message { padding-right: 12px; padding-left: 12px; }
+  .agent-auth-row { gap: 6px; }
+}

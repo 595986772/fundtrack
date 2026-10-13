@@ -1,0 +1,17 @@
+{
+  "name": "fundscope-miniprogram",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc && node scripts/build.mjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "morphdom": "2.7.8",
+    "jsdom": "26.1.0",
+    "typescript": "5.9.3",
+    "miniprogram-api-typings": "4.1.0",
+    "lucide": "0.468.0",
+    "sharp": "0.34.5"
+  }
+}

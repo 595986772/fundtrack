@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FundScope 隔离记账验收</title>
+  <link rel="stylesheet" href="/static/styles.css"><link rel="stylesheet" href="/static/design-system.css">
+  <link rel="stylesheet" href="/static/terminal.css"><link rel="stylesheet" href="/static/portfolio-bookkeeping.css">
+  <script src="/static/portfolio-bookkeeping.js" defer></script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <style>body {margin:0;padding:24px;font-family:system-ui,sans-serif;} main {max-width:1100px;margin:auto;} h1 {font-size:20px;} #message {min-height:24px;color:var(--accent);}</style>
+</head>
+<body class="terminal-experience"><main><h1>隔离测试账本</h1><p id="message" role="status"></p><div id="bookkeeping"></div></main>
+<script>
+  // 测试入口只使用启动脚本生成的临时组合，无权覆盖正式页面的当前账户。
+  window.addEventListener('DOMContentLoaded',async()=>{
+    const fixture=await (await fetch('/fixture')).json();
+    const host=document.querySelector('#bookkeeping'); let portfolio,transactions=[],orders=[],error='';
+    async function request(url,options) {const response=await fetch(url,options);const value=await response.json();if(!response.ok)throw Error(typeof value.detail==='string'?value.detail:JSON.stringify(value.detail));return value;}
+    function context(){return {portfolio,transactions,orders,error,loading:false,userId:fixture.user_id,
+      funds:[{fund_code:'110020',short_name:'易方达沪深300ETF联接A'}],request,render,refresh:load,current:()=>true,
+      createKey:()=>crypto.randomUUID(),notify:message=>document.querySelector('#message').textContent=message};}
+    function render(){host.innerHTML=FundScopeBookkeeping.render(context());window.lucide?.createIcons();}
+    async function load(){const base=`/api/v1/portfolios/${fixture.portfolio_id}`,query=`?user_id=${fixture.user_id}`;
+      [portfolio,transactions,orders]=await Promise.all([request(base+query),request(base+'/transactions'+query).then(r=>r.transactions),request(base+'/trade-orders'+query).then(r=>r.orders)]);render();}
+    host.addEventListener('input',event=>FundScopeBookkeeping.capture(event,context()));
+    host.addEventListener('change',event=>FundScopeBookkeeping.change(event,context()));
+    host.addEventListener('click',event=>FundScopeBookkeeping.click(event,context()));
+    host.addEventListener('submit',event=>FundScopeBookkeeping.submit(event,context()));
+    await load();
+  });
+</script></body></html>

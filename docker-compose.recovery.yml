@@ -1,0 +1,41 @@
+# 只用于隔离演练：不包含 API、Worker、Cron、Redis，也不暴露主机端口。
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fundscope
+      POSTGRES_DB: fundscope
+      POSTGRES_PASSWORD: ${RECOVERY_DB_PASSWORD:?temporary password required}
+    volumes: ["business:/var/lib/postgresql/data"]
+    networks: [isolated]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fundscope -d fundscope"]
+      interval: 1s
+      timeout: 3s
+      retries: 60
+  openfga-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: openfga
+      POSTGRES_DB: openfga
+      POSTGRES_PASSWORD: ${RECOVERY_DB_PASSWORD:?temporary password required}
+    volumes: ["authorization:/var/lib/postgresql/data"]
+    networks: [isolated]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openfga -d openfga"]
+      interval: 1s
+      timeout: 3s
+      retries: 60
+  files:
+    image: postgres:16-alpine
+    entrypoint: ["true"]
+    network_mode: none
+    volumes: ["documents:/restore-data"]
+    profiles: [tools]
+volumes:
+  business:
+  authorization:
+  documents:
+networks:
+  isolated:
+    internal: true

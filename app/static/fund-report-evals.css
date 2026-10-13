@@ -1,0 +1,25 @@
+/* 评测是现有开发者侧栏中的工具，沿用金融工作台色板，不增加产品页面。 */
+.developer-mode #inspector,
+.developer-mode #inspector .inspector-header { background: #191a1e; color: #e9e9ee; }
+.report-eval-field { display: grid; gap: 6px; min-width: 0; margin: 0 0 14px; color: #b0b1bb; font-size: 14px; }
+.report-eval-field select,
+.report-eval-field textarea { box-sizing: border-box; min-width: 0; width: 100%; padding: 10px; background: #111215; color: #e9e9ee; border: 1px solid #484a55; border-radius: 6px; font: inherit; font-size: 16px; }
+.report-eval-field :focus-visible { outline: 2px solid #edc85b; outline-offset: 2px; }
+.report-eval-metrics { margin: 14px 0; border-block: 1px solid #303138; padding: 12px 0; font-size: 14px; }
+.report-eval-metrics > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 4px 0; }
+.report-eval-metrics p, .report-eval-quality .resource-detail { color: #b0b1bb; font-size: 12px; line-height: 1.7; }
+.report-eval-quality { min-width: 0; padding-top: 16px; border-top: 1px solid #303138; font-size: 14px; line-height: 1.7; overflow-wrap: anywhere; }
+.report-eval-quality h4 { font-size: 14px; margin: 0 0 10px; }
+.report-eval-quality details { border-block: 1px solid #303138; margin: 12px 0; padding: 10px 0; }
+.report-eval-quality summary { cursor: pointer; color: #edc85b; }
+.report-eval-source { padding: 10px 0; border-bottom: 1px solid #303138; }
+.report-eval-source a { color: #8ab5f5; text-underline-offset: 3px; }
+.report-eval-source span { margin-left: 10px; color: #b0b1bb; }
+.report-eval-source p { margin: 6px 0 0; }
+.report-eval-answer { font: inherit; font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 60vh; overflow: auto; color: #e9e9ee; }
+.report-eval-fingerprint { display: block; white-space: normal; overflow-wrap: anywhere; font-size: 12px; }
+.report-eval-quality form { margin-top: 18px; }
+#report-eval-progress { color: #b0b1bb; overflow-wrap: anywhere; font-size: 14px; line-height: 1.6; }
+.report-eval-badges { display: grid; justify-items: end; gap: 6px; flex-shrink: 0; }
+.report-eval-task { padding: 10px 0; }
+.report-eval-task .eval-actions { display: flex; flex-wrap: wrap; gap: 8px; }

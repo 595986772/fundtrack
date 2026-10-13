@@ -1,0 +1,48 @@
+/* 与投研工作区共用颜色和按钮；内容用平面分区，记录才使用重复条目。 */
+.briefing-page { max-width: 1120px; margin: 0 auto; }
+.briefing-heading, .briefing-actions, .briefing-schedule, .briefing-history-heading,
+.briefing-run > header, .briefing-run > header > div, .briefing-run-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.briefing-heading, .briefing-history-heading, .briefing-run > header { justify-content: space-between; }
+.briefing-heading { padding: 8px 0 24px; }
+.briefing-heading h2 { font-size: 22px; margin: 0 0 8px; }
+.briefing-heading p, .briefing-caption, .briefing-run-meta, .briefing-boundaries { color: var(--muted); font-size: 13px; }
+.briefing-heading p { margin: 0; }
+.briefing-heading strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.briefing-schedule { border-block: 1px solid var(--border); padding: 18px 0; justify-content: space-between; }
+.briefing-switch { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; }
+.briefing-switch input { appearance: none; width: 38px; height: 22px; min-height: 22px; flex: 0 0 38px; border: 1px solid var(--faint); border-radius: 11px; background: var(--surface-muted); margin: 0; padding: 0; cursor: pointer; }
+#portfolio-workbench .briefing-switch input { min-height: 22px; }
+.briefing-switch input::before { content: ""; display: block; width: 14px; height: 14px; margin: 3px; border-radius: 50%; background: var(--ink); }
+.briefing-switch input:checked { background: var(--accent); border-color: var(--accent); }
+.briefing-switch input:checked::before { transform: translateX(16px); background: var(--canvas); }
+.briefing-switch input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.briefing-switch input:disabled { cursor: wait; opacity: .6; }
+.briefing-caption { margin: 12px 0 32px; line-height: 1.7; }
+.briefing-history-heading { margin: 28px 0 12px; }
+.briefing-history h3 { font-size: 16px; margin: 0; }
+.briefing-history-heading a { display: inline-flex; gap: 5px; align-items: center; font-size: 13px; }
+.briefing-history-heading svg, .briefing-actions svg { width: 16px; height: 16px; }
+.briefing-run { padding: 20px 0; border-bottom: 1px solid var(--border); }
+.briefing-run time { font-variant-numeric: tabular-nums; }
+.briefing-run h4 { font-size: 16px; margin: 16px 0 8px; }
+.briefing-run > p { line-height: 1.7; max-width: 75ch; overflow-wrap: anywhere; }
+.briefing-status { font-size: 12px; color: var(--muted); }
+.briefing-status[data-status="running"], .briefing-status[data-status="queued"], .briefing-notice { color: var(--accent); }
+.briefing-warning, .briefing-status[data-status="failed"] { color: var(--danger); line-height: 1.65; overflow-wrap: anywhere; }
+.briefing-sources { margin-top: 16px; font-size: 13px; }
+.briefing-sources summary, .briefing-boundaries summary { cursor: pointer; min-height: 32px; }
+.briefing-sources ul { list-style: none; padding: 0; margin: 8px 0 16px; }
+.briefing-sources li { display: grid; grid-template-columns: minmax(100px, 1fr) 90px 130px; gap: 8px; padding: 8px 0; }
+.briefing-sources strong { font-weight: 500; }
+.briefing-sources [data-source-status="failed"], .briefing-sources [data-source-status="partial"] { color: var(--danger); }
+.briefing-sources p { color: var(--muted); line-height: 1.7; margin: 8px 0; }
+.briefing-empty { padding: 44px 0; color: var(--muted); }
+.briefing-boundaries { margin-top: 32px; line-height: 1.7; }
+@media (max-width: 600px) {
+  .briefing-switch { min-height: 44px; }
+  .briefing-heading { gap: 20px; }
+  .briefing-actions { width: 100%; justify-content: flex-end; }
+  .briefing-sources li { grid-template-columns: 1fr 72px; }
+  .briefing-sources li time { grid-column: 1 / -1; color: var(--muted); }
+  .briefing-run-meta { gap: 6px 16px; }
+}

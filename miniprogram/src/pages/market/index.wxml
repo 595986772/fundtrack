@@ -1,0 +1,16 @@
+<view class="page"><view class="row"><view class="heading">市场环境</view><button class="icon-button" bindtap="refresh" disabled="{{loading}}" aria-label="更新市场行情"><image class="icon" src="/assets/refresh.png" /></button></view><view class="toolbar"><button bindtap="turnoverChart">日成交额曲线</button><button bindtap="sentiment">市场状态</button></view>
+  <view wx:if="{{loading}}" class="footnote">正在读取行情…</view><view wx:if="{{error}}" class="notice error">{{error}}</view>
+  <view class="section"><view class="muted small">全 A 股成交额 · 沪深北</view><view class="hero-value numeric">{{turnover}}</view><view class="row"><text class="muted">其中沪深</text><text class="numeric">{{shsz}}</text></view><view class="footnote">{{asof || '尚无快照'}} · {{limitation}}</view></view>
+  <view class="section">
+    <view class="section-title">主要指数</view>
+    <view wx:for="{{quotes}}" wx:key="index_code" class="item">
+      <view class="row"><view><view class="item-title">{{item.index_name}}</view><view class="small muted">{{item.index_code}}</view></view><view class="right numeric"><view class="value">{{item.price}}</view><text class="{{item.tone}}">{{item.change}}</text></view></view>
+      <view class="fund-meta"><text>成交额 {{item.amount}}</text><text>成交量 {{item.volume}} 万手</text></view>
+      <view class="footnote">{{item.time}} · {{item.freshnessText}}</view>
+      <view class="fund-meta"><text>近30日 {{item.month}}</text><text>近3月 {{item.quarter}}</text></view>
+      <view class="footnote">日线截至 {{item.dailyDate}}</view>
+      <view wx:if="{{item.error}}" class="notice error">{{item.error}}</view>
+    </view>
+  </view>
+  <view class="footnote">{{source}} · 各指数成交范围有重叠，不相加为全市场成交额。公开行情可能延迟，区间涨跌以标注日线日期为准。</view>
+</view>

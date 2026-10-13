@@ -1,0 +1,62 @@
+/* 与现有深色工作台共用令牌。表单和历史是平铺工作区，不再套多层卡片。 */
+.bk-workspace { min-width: 0; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bk-summary { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid var(--border); padding: 8px 0 18px; }
+.bk-summary dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); flex: 1; gap: 24px; margin: 0; }
+.bk-summary dt { color: var(--muted); font-size: 12px; }
+#portfolio-workbench .bk-summary dd, .terminal-experience .bk-summary dd { font-size: 20px; margin: 6px 0 0; overflow-wrap: anywhere; }
+.bk-summary dd small { font-size: 12px; color: var(--muted); margin-left: 6px; }
+.bk-boundary { color: var(--muted); font-size: 12px; margin: 12px 0 24px; }
+.bk-layout { display: grid; grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr); gap: 32px; align-items: start; }
+.bk-entry > header,.bk-history > header { display: flex; align-items: center; justify-content: space-between; min-height: 40px; margin-bottom: 12px; }
+.bk-entry h3 { font-size: 16px; font-weight: 650; margin: 0; }
+.bk-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); border: 0; padding: 0; margin: 16px 0 0; gap: 14px 12px; min-width: 0; }
+.bk-fields > label { display: grid; gap: 7px; min-width: 0; font-size: 12px; color: var(--muted); }
+.bk-workspace :is(input,select,textarea) { width: 100%; min-width: 0; min-height: 40px; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 4px; background: var(--surface); color: var(--ink); font: inherit; color-scheme: dark; }
+.bk-workspace textarea { resize: vertical; }
+.bk-workspace :is(input,select,textarea,button,summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.bk-wide { grid-column: 1 / -1; }
+.bk-segment { display: flex; border: 1px solid var(--border-strong); border-radius: 4px; padding: 0; margin: 0; overflow: hidden; min-width: 0; }
+.bk-segment :is(button,label) { flex: 1; text-align: center; min-height: 38px; cursor: pointer; }
+.bk-segment button { background: none; border: 0; color: var(--muted); font: inherit; font-size: 14px; padding: 8px; }
+.bk-segment button[aria-pressed="true"],.bk-segment label:has(input:checked) { color: var(--accent); background: var(--accent-soft); }
+.bk-segment label { position: relative; display: grid; place-items: center; font-size: 14px; }
+.bk-segment input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.bk-segment label:focus-within { outline: 2px solid var(--accent); outline-offset: -3px; }
+.bk-submit { justify-self: start; grid-column: 1 / -1; min-height: 40px; }
+.bk-tabs { display: flex; gap: 20px; width: 100%; border-bottom: 1px solid var(--border); }
+.bk-tabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); padding: 10px 0 12px; font: inherit; font-size: 14px; }
+.bk-tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.bk-tabs small { margin-left: 8px; color: var(--muted); }
+.bk-row { padding: 16px 0; border-bottom: 1px solid var(--border); min-width: 0; }
+.bk-row-heading,.bk-row-meta,.bk-row-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.bk-row-heading strong { font-size: 14px; overflow-wrap: anywhere; }
+.bk-status { flex-shrink: 0; font-size: 12px; color: var(--muted); }
+.bk-status[data-status="pending"],.bk-status[data-status="cancel_requested"] { color: var(--accent); }
+.bk-status[data-status="settled"],.bk-status[data-status="confirmed"] { color: var(--blue); }
+.bk-row-meta { font-size: 12px; color: var(--muted); margin-top: 10px; }
+.bk-row-meta strong { color: var(--ink); }
+.bk-row-bottom { margin-top: 12px; align-items: start; }
+.bk-row-bottom > small { color: var(--muted); overflow-wrap: anywhere; }
+.bk-result-action { margin-left: auto; min-width: 145px; }
+.bk-result-action select { font-size: 12px; }
+.bk-note,.bk-amount,.bk-availability { font-size: 12px; color: var(--muted); line-height: 1.65; margin: 8px 0 0; overflow-wrap: anywhere; }
+.bk-availability strong { color: var(--ink); }
+.bk-subject { margin: 0; font-size: 14px; }
+.bk-subject small { display: block; color: var(--muted); margin-top: 6px; overflow-wrap: anywhere; }
+.bk-warning { color: var(--accent-strong); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; margin: 8px 0; }
+.bk-error { color: var(--danger); font-size: 14px; line-height: 1.6; margin: 0 0 16px; overflow-wrap: anywhere; }
+.bk-events { flex: 1; min-width: 140px; font-size: 12px; color: var(--muted); }
+.bk-events summary { cursor: pointer; padding: 10px 0; }
+.bk-events ol { margin: 4px 0; padding-left: 16px; }
+.bk-events li { margin-bottom: 12px; overflow-wrap: anywhere; }
+.bk-events li :is(strong,span,small) { display: block; margin-bottom: 4px; }
+.bk-events strong { color: var(--ink); }
+.bk-empty { color: var(--muted); padding: 28px 0; font-size: 14px; }
+.bk-row[data-effective="false"] .bk-row-heading strong { color: var(--muted); }
+#portfolio-workbench .bk-workspace :is(input,select,textarea,button), #portfolio-workbench .bk-row-heading strong { font-size: 14px; }
+@media (max-width: 1040px) { .bk-layout { grid-template-columns: minmax(0,1fr); gap: 28px; } }
+@media (max-width: 600px) {
+  .bk-summary { gap: 8px; } .bk-summary dl { gap: 8px; } #portfolio-workbench .bk-summary dd, .terminal-experience .bk-summary dd { font-size: 16px; }
+  #portfolio-workbench .bk-workspace :is(input,select,textarea), .bk-workspace :is(input,select,textarea) { font-size: 16px; }
+  .bk-tabs button { min-height: 44px; }
+}

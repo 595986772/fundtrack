@@ -1,0 +1,63 @@
+/* 继承金融工作台的石墨色系。页面使用完整分区，不把表格和图表再套进浮动卡片。 */
+.stress-workbench { min-width: 0; color: #e9e9ee; font-size: 14px; letter-spacing: 0; }
+.stress-heading, .stress-section-heading, .stress-period, .stress-compare-actions { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.stress-heading { padding: 8px 0 18px; }
+.stress-heading h2 { font-size: 19px; margin: 0; }
+.stress-workbench h3 { font-size: 14px; margin: 0; }
+.stress-workbench p { line-height: 1.7; }
+.stress-heading > span, .stress-period > span, .stress-section-heading > span, .stress-method { font-size: 12px; color: #b0b1bb; }
+.stress-controls, .stress-history { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.stress-controls { padding-bottom: 16px; }
+.stress-controls label { display: grid; gap: 6px; font-size: 12px; color: #b0b1bb; }
+.stress-workbench select, .stress-workbench input { min-height: 36px; color: #e9e9ee; background: #191a1e; border: 1px solid #464751; border-radius: 4px; padding: 6px 10px; font: inherit; }
+.stress-controls select { min-width: 112px; }
+.stress-history { border-block: 1px solid #303138; padding: 12px 0; align-items: center; }
+.stress-history select { flex: 1 1 220px; min-width: 0; max-width: 100%; }
+.stress-workbench button { min-height: 36px; }
+.stress-workbench button:disabled { opacity: .5; cursor: not-allowed; }
+.stress-workbench :focus-visible { outline: 2px solid #edc85b; outline-offset: 3px; }
+.stress-workbench ::selection { background: #edc85b; color: #111215; }
+.stress-workbench input { caret-color: #edc85b; }
+.stress-workbench .stress-error { color: #fa828c; }
+.stress-notice { color: #b0b1bb; font-size: 12px; min-height: 20px; margin: 8px 0; }
+.stress-period { padding: 12px 0 16px; }
+.stress-period h3 { font-variant-numeric: tabular-nums; }
+.stress-period h3 span { color: #b0b1bb; font-weight: 400; }
+.stress-table-scroll { overflow-x: auto; scrollbar-color: #62636f #191a1e; }
+.stress-workbench table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+.stress-workbench caption { text-align: left; font-size: 12px; color: #b0b1bb; padding-bottom: 8px; }
+.stress-workbench th, .stress-workbench td { border-bottom: 1px solid #303138; text-align: right; padding: 12px 10px; white-space: nowrap; }
+.stress-workbench th:first-child, .stress-workbench td:first-child { text-align: left; padding-left: 0; }
+.stress-workbench thead th { color: #b0b1bb; font-weight: 400; font-size: 12px; }
+.stress-workbench tbody th { font-weight: 500; }
+.stress-workbench tbody th strong { display: block; max-width: 220px; white-space: normal; overflow-wrap: anywhere; font-weight: 500; }
+.stress-workbench small { color: #b0b1bb; display: block; margin-top: 4px; }
+.stress-workbench .positive { color: #fa828c; }
+.stress-workbench .negative { color: #69cbb0; }
+.stress-key { display: inline-block; width: 8px; height: 8px; background: #edc85b; margin-right: 8px; }
+.stress-key.candidate { background: #79aefa; }
+.stress-delta { font-size: 12px; color: #b0b1bb; }
+.stress-delta strong { font-weight: 500; color: #e9e9ee; }
+.stress-chart { height: 300px; width: 100%; min-width: 0; margin-block: 12px 20px; }
+.stress-section-heading { margin-bottom: 8px; }
+.stress-comparison { border-top: 1px solid #303138; padding-top: 20px; }
+.stress-comparison input { width: 90px; text-align: right; }
+.stress-compare-actions { padding-top: 16px; align-items: center; }
+.stress-compare-actions output { font-variant-numeric: tabular-nums; }
+.stress-audit { border-top: 1px solid #303138; margin-top: 24px; padding: 16px 0; color: #b0b1bb; font-size: 12px; }
+.stress-audit summary { cursor: pointer; color: #e9e9ee; }
+.stress-audit dl { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px; }
+.stress-audit dd { margin: 0; overflow-wrap: anywhere; }
+.stress-audit li { margin-bottom: 8px; line-height: 1.6; }
+.stress-audit pre { max-height: 260px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.stress-empty { padding: 44px 0; border-bottom: 1px solid #303138; }
+.stress-empty p { color: #b0b1bb; max-width: 65ch; }
+@media (max-width: 600px) {
+  .stress-controls label { flex: 1 1 110px; }
+  .stress-controls button { flex-basis: 100%; justify-content: center; }
+  .stress-history select { flex-basis: 100%; order: 2; }
+  .stress-chart { height: 260px; }
+  .stress-summary { min-width: 400px; }
+  .stress-comparison table { min-width: 570px; }
+  .stress-audit dl { grid-template-columns: 80px minmax(0, 1fr); }
+}

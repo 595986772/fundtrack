@@ -1,0 +1,79 @@
+/* 板块资金是一张研究表，保留现有终端色彩；不把九个板块拆成装饰卡片。 */
+.capital-sector-section {
+  min-width: 0;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.capital-sector-section > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.capital-sector-section h3 { margin: 0; font-size: 17px; }
+.capital-sector-section header p,
+.capital-sector-note,
+.capital-sector-methodology p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+  margin: 8px 0 0;
+}
+
+.capital-sector-leaders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.capital-sector-leaders dt { color: var(--muted); font-size: 12px; }
+.capital-sector-leaders dd { margin: 8px 0 0; font-size: 14px; }
+.capital-sector-leaders strong { margin-left: 8px; font-variant-numeric: tabular-nums; }
+.capital-sector-leaders small,
+.capital-sector-table small { display: block; color: var(--muted); font-size: 12px; line-height: 1.9; }
+
+/* 手机只让表格自身横向滚动，板块名固定，外层页面保持不溢出。 */
+.capital-sector-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.capital-sector-table { width: 100%; min-width: 820px; border-collapse: collapse; font-size: 12px; }
+.capital-sector-table th,
+.capital-sector-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.capital-sector-table th { text-align: left; }
+.capital-sector-table thead th { color: var(--muted); font-weight: 500; white-space: nowrap; }
+.capital-sector-table tbody th { min-width: 128px; }
+.capital-sector-table thead th:nth-child(n+2):nth-child(-n+4) { text-align: right; }
+.capital-sector-numeric { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.capital-sector-observation { width: 38%; min-width: 256px; }
+.capital-sector-observation p { margin: 0; line-height: 1.9; overflow-wrap: anywhere; }
+.capital-sector-table .capital-sector-link { color: var(--info); margin-top: 4px; }
+.capital-sector-table tbody tr:hover { background: var(--surface-soft); }
+/* 旧 styles.css 的 data-tone 带 important，这里限定到资金数值覆盖它。 */
+.capital-sector-section [data-tone="positive"] { color: var(--market-up, #fa828c) !important; }
+.capital-sector-section [data-tone="negative"] { color: var(--market-down, #69cbb0) !important; }
+.capital-sector-methodology { margin-top: 16px; color: var(--muted); font-size: 12px; }
+.capital-sector-methodology summary { width: fit-content; cursor: pointer; padding: 8px 0; }
+.capital-sector-section :is(button, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.capital-sector-section .capital-topic-tabs button { min-height: 38px; font-size: 12px; }
+
+@media (max-width: 760px) {
+  .capital-sector-leaders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .capital-sector-leaders > div:last-child { grid-column: 1 / -1; }
+  .capital-sector-section .capital-topic-tabs button { min-height: 44px; }
+  .capital-sector-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--canvas, #111215);
+    border-right: 1px solid var(--border);
+  }
+}

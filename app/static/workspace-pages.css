@@ -1,0 +1,188 @@
+/* 功能分页沿用终端的颜色和组件，只调整页面层级，不覆盖业务图表或风险配色。 */
+[data-workspace-page][hidden],
+[data-portfolio-page-period][hidden] {
+  display: none !important;
+}
+
+.sidebar .product-switcher {
+  grid-template-columns: minmax(0, 1fr);
+  flex-shrink: 0;
+  margin: 0;
+  padding: 8px 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+.sidebar .product-tab { justify-content: flex-start; min-height: 38px; padding: 8px 12px; font-size: 13px; }
+
+/* 左侧只呈现当前工作区的功能目录。导航本身滚动，不挤压底部账户入口。 */
+#sidebar > .workspace-outline {
+  position: static;
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: 16px 12px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+#workspace-outline-items { display: flex; flex-direction: column; align-items: stretch; gap: 24px; overflow: visible; padding: 0; }
+.workspace-nav-group { display: flex; flex-direction: column; gap: 4px; }
+.workspace-nav-group h2 { margin: 0 12px 4px; color: var(--faint); font-size: 12px; font-weight: 500; }
+.workspace-nav-group a {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 36px; padding: 8px 12px; border-radius: 4px;
+  color: var(--muted); text-decoration: none; font-size: 13px; line-height: 1.4;
+}
+.workspace-nav-group a svg { width: 16px; height: 16px; flex-shrink: 0; }
+.workspace-nav-group a:hover { background: var(--surface-muted); color: var(--ink); }
+.workspace-nav-group a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.workspace-mobile-picker { display: none; }
+.workspace-mobile-picker select, .market-fund-context select {
+  min-width: 0; min-height: 38px; border: 1px solid var(--border);
+  border-radius: 4px; padding: 6px 12px; background: var(--surface); color: var(--ink); font: inherit;
+}
+.market-fund-context { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+.market-fund-context select { flex: 0 1 400px; }
+.market-fund-context > span { flex-shrink: 0; }
+
+.workspace-nav-group a:focus-visible,
+[data-workspace-page]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* 市场每个页面独立铺开，不再保留用于分隔长页面的大段上边距。 */
+#workspace-market > [data-workspace-page] {
+  margin: 0;
+  padding: 22px 0 32px;
+  border: 0;
+}
+
+#portfolio-workbench {
+  padding-top: 18px;
+}
+
+#portfolio-workbench [data-workspace-header] > .portfolio-header {
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px 24px;
+  margin-bottom: 0;
+  padding: 0 0 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.portfolio-header-actions {
+  min-width: 0;
+}
+.portfolio-header .portfolio-select-label { width: 360px; max-width: 100%; min-width: 0; }
+.portfolio-header .portfolio-select-label select { width: 100%; }
+
+.portfolio-page-period {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.portfolio-page-period > span {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.portfolio-page-period .period-control {
+  min-width: 0;
+}
+
+/* 证据 ID 含基金代码和日期，必须可换行，不能把手机页面撑宽。 */
+.portfolio-function-page code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.portfolio-decision-form footer > span { min-width: 0; overflow-wrap: anywhere; }
+
+.portfolio-function-page .portfolio-evidence-item > div {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.portfolio-function-page .portfolio-evidence-item code {
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+
+.portfolio-function-page .portfolio-evidence-item > div strong {
+  white-space: normal;
+}
+
+.portfolio-function-page {
+  min-width: 0;
+  padding: 22px 0 32px;
+}
+
+/* 独立页面不再嵌套在“左侧编辑 + 右侧长报告”的浮动容器中。 */
+.portfolio-function-page > :is(.portfolio-editor, .portfolio-assessment,
+  .portfolio-performance, .portfolio-exposure, .portfolio-event-impact,
+  .portfolio-monitoring, .portfolio-research, .portfolio-decisions) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.portfolio-function-page > .portfolio-editor {
+  position: static;
+}
+
+.portfolio-page-empty {
+  padding: 32px 0;
+}
+
+.portfolio-page-empty h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.portfolio-page-empty p {
+  margin: 0 0 20px;
+  color: var(--muted);
+}
+
+@media (min-width: 1000px) {
+  /* 账本内部的持仓与录入仍是一个完整任务，充分利用宽屏而不夹带研究报告。 */
+  #portfolio-page-holdings .actual-portfolio-ledger {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+    column-gap: 28px;
+    align-items: start;
+  }
+  #portfolio-page-holdings .actual-portfolio-ledger > :not(.actual-position-section):not(.transaction-entry-section) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1080px) {
+  .workspace-mobile-picker { display: flex; align-items: center; gap: 16px; flex-shrink: 0; padding: 12px 20px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+  .workspace-mobile-picker select { flex: 1; min-height: 44px; font-size: 16px; }
+  .workspace-nav-group a { min-height: 44px; }
+  body:not(.sidebar-open) .sidebar { visibility: hidden; }
+  body.sidebar-open .sidebar { visibility: visible; }
+}
+
+@media (max-width: 760px) {
+  #workspace-title { font-size: 17px; overflow-wrap: anywhere; }
+  #portfolio-workbench [data-workspace-header] > .portfolio-header { align-items: stretch; }
+  .portfolio-header-actions { flex: 1 1 100%; }
+  .portfolio-select-label { min-width: 0; flex: 1; }
+  .portfolio-select-label select { width: 100%; }
+  .portfolio-page-period { justify-content: space-between; }
+  .market-fund-context { flex-wrap: wrap; gap: 8px; }
+  .market-fund-context select { flex-basis: 100%; width: 100%; font-size: 16px; }
+}

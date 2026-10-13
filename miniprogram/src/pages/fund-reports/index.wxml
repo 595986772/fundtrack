@@ -1,0 +1,29 @@
+<view class="page reports-page">
+  <view class="heading">基金季报</view><view class="muted small">{{code}} · 历史披露，不代表实时持仓</view>
+  <view wx:if="{{error || job.error}}" class="notice error">{{error || job.error}}<button class="link" bindtap="load">重新读取</button></view>
+  <view wx:if="{{loading}}" class="empty">正在读取…</view>
+  <block wx:if="{{view === 'compare'}}">
+    <view class="toolbar wrap"><button bindtap="sync" disabled="{{loading || job.busy}}">同步最近两期</button><button class="primary" bindtap="ask" disabled="{{loading || !comparison || job.busy}}">AI 对比分析</button></view>
+    <view wx:if="{{job.message}}" class="notice" aria-role="status">{{job.message}}<button wx:if="{{job.busy}}" class="link" bindtap="progress">检查进度</button></view>
+    <view wx:for="{{warnings}}" wx:key="*this" class="footnote">{{item}}</view>
+    <view wx:if="{{!loading && !documents.length}}" class="empty">尚未保存季报</view>
+    <view class="footnote">来源：东方财富公开公告。同步与分析可能产生模型 API 费用。</view>
+    <view wx:if="{{documents.length}}" class="report-selectors">
+      <view><text class="small muted">报告一</text><picker range="{{labels}}" value="{{left}}" data-field="left" bindchange="select" disabled="{{loading || job.busy}}"><view class="picker-field">{{labels[left]}}</view></picker></view>
+      <view><text class="small muted">报告二</text><picker range="{{labels}}" value="{{right}}" data-field="right" bindchange="select" disabled="{{loading || job.busy}}"><view class="picker-field">{{labels[right]}}</view></picker></view>
+    </view>
+    <block wx:if="{{comparison}}">
+      <view class="section"><view class="section-title">资产配置变化</view><view class="small muted">{{comparison.documents[0].period}} → {{comparison.documents[1].period}} · 占基金总资产</view>
+        <view wx:for="{{changes}}" wx:key="label" class="allocation-row"><view class="row"><text>{{item.label}}</text><text class="numeric">{{item.changeText}}</text></view><view class="row small muted"><text>{{item.beforeText}} → {{item.afterText}}</text><view class="inline-actions"><button wx:if="{{item.before}}" class="link" data-document="0" data-page="{{item.before.page}}" bindtap="openPage">前期原文</button><button wx:if="{{item.after}}" class="link" data-document="1" data-page="{{item.after.page}}" bindtap="openPage">本期原文</button></view></view></view>
+        <view wx:if="{{!changes.length}}" class="empty">未可靠提取到可比表格，可查看原文并分析经理观点。</view>
+      </view>
+      <view class="section"><view class="section-title">原始报告</view><view wx:for="{{comparison.documents}}" wx:key="id" class="document-row"><view>{{item.title}}</view><view class="small muted">披露 {{item.published_at}} · {{item.page_count}} 页 · {{item.semantic_ready ? '语义索引就绪' : '关键词检索'}}</view><button class="link" data-document="{{index}}" bindtap="openPage">查看原文</button></view></view>
+      <view class="footnote" wx:for="{{comparison.limitations}}" wx:key="*this">{{item}}</view>
+    </block>
+  </block>
+  <block wx:else>
+    <view class="toolbar wrap"><button class="link" bindtap="back">返回比较</button><button class="link" bindtap="source" disabled="{{!page}}">复制 PDF 来源</button></view>
+    <view wx:if="{{page}}"><view class="section-title">{{page.period}} · 第 {{pageNumber}} / {{page.page_count}} 页</view><view class="source-text" user-select="true">{{page.text || '本页没有可提取文字'}}</view></view>
+    <view class="toolbar"><button data-step="-1" bindtap="turn" disabled="{{loading || pageNumber <= 1}}">上一页</button><button data-step="1" bindtap="turn" disabled="{{loading || !page || pageNumber >= page.page_count}}">下一页</button></view>
+  </block>
+</view>

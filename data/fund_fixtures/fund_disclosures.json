@@ -1,0 +1,1028 @@
+{
+  "fixture_version": 1,
+  "purpose": "FundScope offline fund disclosure and look-through tests",
+  "generated_at": "2026-08-30T04:58:26.404674+00:00",
+  "source": "AKShare / Eastmoney Fund Disclosures",
+  "funds": [
+    {
+      "fund_code": "110020",
+      "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html",
+      "report_dates": {
+        "stock": "2026-06-30",
+        "bond": "2026-06-30",
+        "industry": "2026-06-30"
+      },
+      "warnings": [],
+      "security_holdings": [
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "300308",
+          "security_name": "中际旭创",
+          "weight_pct": 0.04,
+          "market_value_10k": 787.4,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "300750",
+          "security_name": "宁德时代",
+          "weight_pct": 0.03,
+          "market_value_10k": 668.12,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "300502",
+          "security_name": "新易盛",
+          "weight_pct": 0.02,
+          "market_value_10k": 535.37,
+          "rank": 3,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "688256",
+          "security_name": "寒武纪",
+          "weight_pct": 0.02,
+          "market_value_10k": 368.09,
+          "rank": 4,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600519",
+          "security_name": "贵州茅台",
+          "weight_pct": 0.02,
+          "market_value_10k": 343.79,
+          "rank": 5,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "688802",
+          "security_name": "沐曦股份",
+          "weight_pct": 0.01,
+          "market_value_10k": 307.09,
+          "rank": 6,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "603986",
+          "security_name": "兆易创新",
+          "weight_pct": 0.01,
+          "market_value_10k": 260.8,
+          "rank": 7,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "688783",
+          "security_name": "西安奕材",
+          "weight_pct": 0.01,
+          "market_value_10k": 254.77,
+          "rank": 8,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "002371",
+          "security_name": "北方华创",
+          "weight_pct": 0.01,
+          "market_value_10k": 243.25,
+          "rank": 9,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000333",
+          "security_name": "美的集团",
+          "weight_pct": 0.01,
+          "market_value_10k": 237.92,
+          "rank": 10,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "210208",
+          "security_name": "21国开08",
+          "weight_pct": 2.31,
+          "market_value_10k": 51289.75,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110020.html"
+        }
+      ],
+      "industry_allocations": [
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "制造业",
+          "weight_pct": 0.47,
+          "market_value_10k": 10470.409997,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "金融业",
+          "weight_pct": 0.1,
+          "market_value_10k": 2211.038828,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "信息传输、软件和信息技术服务业",
+          "weight_pct": 0.04,
+          "market_value_10k": 890.498457,
+          "rank": 3,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "采矿业",
+          "weight_pct": 0.02,
+          "market_value_10k": 545.759662,
+          "rank": 4,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "电力、热力、燃气及水生产和供应业",
+          "weight_pct": 0.02,
+          "market_value_10k": 391.688679,
+          "rank": 5,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "交通运输、仓储和邮政业",
+          "weight_pct": 0.01,
+          "market_value_10k": 303.810526,
+          "rank": 6,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "科学研究和技术服务业",
+          "weight_pct": 0.01,
+          "market_value_10k": 139.4512,
+          "rank": 7,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "建筑业",
+          "weight_pct": 0.01,
+          "market_value_10k": 133.912628,
+          "rank": 8,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110020.html"
+        }
+      ]
+    },
+    {
+      "fund_code": "161725",
+      "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html",
+      "report_dates": {
+        "stock": "2026-06-30",
+        "bond": "2026-06-30",
+        "industry": "2026-06-30"
+      },
+      "warnings": [],
+      "security_holdings": [
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600519",
+          "security_name": "贵州茅台",
+          "weight_pct": 17.28,
+          "market_value_10k": 540874.95,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600809",
+          "security_name": "山西汾酒",
+          "weight_pct": 15.19,
+          "market_value_10k": 475575.44,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000568",
+          "security_name": "泸州老窖",
+          "weight_pct": 15.03,
+          "market_value_10k": 470601.87,
+          "rank": 3,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000858",
+          "security_name": "五粮液",
+          "weight_pct": 14.22,
+          "market_value_10k": 445093.36,
+          "rank": 4,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "002304",
+          "security_name": "洋河股份",
+          "weight_pct": 7.88,
+          "market_value_10k": 246591.51,
+          "rank": 5,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000596",
+          "security_name": "古井贡酒",
+          "weight_pct": 4.86,
+          "market_value_10k": 152079.87,
+          "rank": 6,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "603369",
+          "security_name": "今世缘",
+          "weight_pct": 4.67,
+          "market_value_10k": 146324.56,
+          "rank": 7,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "603198",
+          "security_name": "迎驾贡酒",
+          "weight_pct": 2.72,
+          "market_value_10k": 85207.33,
+          "rank": 8,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000799",
+          "security_name": "酒鬼酒",
+          "weight_pct": 2.23,
+          "market_value_10k": 69690.37,
+          "rank": 9,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600702",
+          "security_name": "舍得酒业",
+          "weight_pct": 1.87,
+          "market_value_10k": 58493.1,
+          "rank": 10,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600779",
+          "security_name": "水井坊",
+          "weight_pct": 1.85,
+          "market_value_10k": 57775.87,
+          "rank": 11,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "603589",
+          "security_name": "口子窖",
+          "weight_pct": 1.77,
+          "market_value_10k": 55441.48,
+          "rank": 12,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600559",
+          "security_name": "老白干酒",
+          "weight_pct": 1.62,
+          "market_value_10k": 50701.25,
+          "rank": 13,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "603919",
+          "security_name": "金徽酒",
+          "weight_pct": 1.21,
+          "market_value_10k": 37721.99,
+          "rank": 14,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000860",
+          "security_name": "顺鑫农业",
+          "weight_pct": 1.15,
+          "market_value_10k": 35853.74,
+          "rank": 15,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600199",
+          "security_name": "金种子酒",
+          "weight_pct": 0.64,
+          "market_value_10k": 19888.32,
+          "rank": 16,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600197",
+          "security_name": "伊力特",
+          "weight_pct": 0.28,
+          "market_value_10k": 8864.41,
+          "rank": 17,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000995",
+          "security_name": "皇台酒业",
+          "weight_pct": 0.17,
+          "market_value_10k": 5383.35,
+          "rank": 18,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "688981",
+          "security_name": "中芯国际",
+          "weight_pct": 0.12,
+          "market_value_10k": 3687.4,
+          "rank": 19,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "601658",
+          "security_name": "邮储银行",
+          "weight_pct": 0.01,
+          "market_value_10k": 392.71,
+          "rank": 20,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_161725.html"
+        }
+      ],
+      "industry_allocations": [
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "制造业",
+          "weight_pct": 94.77,
+          "market_value_10k": 2966544.822525,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_161725.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "金融业",
+          "weight_pct": 0.02,
+          "market_value_10k": 517.832312,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_161725.html"
+        }
+      ]
+    },
+    {
+      "fund_code": "110007",
+      "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html",
+      "report_dates": {
+        "stock": "2026-06-30",
+        "bond": "2026-06-30",
+        "industry": "2026-06-30"
+      },
+      "warnings": [],
+      "security_holdings": [
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "603259",
+          "security_name": "药明康德",
+          "weight_pct": 1.62,
+          "market_value_10k": 45660.71,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "002352",
+          "security_name": "顺丰控股",
+          "weight_pct": 1.02,
+          "market_value_10k": 28830.09,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "601198",
+          "security_name": "东兴证券",
+          "weight_pct": 0.96,
+          "market_value_10k": 26958.68,
+          "rank": 3,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600030",
+          "security_name": "中信证券",
+          "weight_pct": 0.92,
+          "market_value_10k": 25779.75,
+          "rank": 4,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "601318",
+          "security_name": "中国平安",
+          "weight_pct": 0.85,
+          "market_value_10k": 24018.81,
+          "rank": 5,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600096",
+          "security_name": "云天化",
+          "weight_pct": 0.72,
+          "market_value_10k": 20299.9,
+          "rank": 6,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "601628",
+          "security_name": "中国人寿",
+          "weight_pct": 0.64,
+          "market_value_10k": 18117.94,
+          "rank": 7,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "601601",
+          "security_name": "中国太保",
+          "weight_pct": 0.61,
+          "market_value_10k": 17251.67,
+          "rank": 8,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "002472",
+          "security_name": "双环传动",
+          "weight_pct": 0.57,
+          "market_value_10k": 16177.23,
+          "rank": 9,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "000333",
+          "security_name": "美的集团",
+          "weight_pct": 0.57,
+          "market_value_10k": 16160.89,
+          "rank": 10,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "600507",
+          "security_name": "方大特钢",
+          "weight_pct": 0.36,
+          "market_value_10k": 10134.09,
+          "rank": 11,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "688007",
+          "security_name": "光峰科技",
+          "weight_pct": 0.32,
+          "market_value_10k": 8893.94,
+          "rank": 12,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "002375",
+          "security_name": "亚厦股份",
+          "weight_pct": 0.09,
+          "market_value_10k": 2417.13,
+          "rank": 13,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "stock",
+          "security_code": "688136",
+          "security_name": "科兴制药",
+          "weight_pct": 0.06,
+          "market_value_10k": 1733.0,
+          "rank": 14,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "250215",
+          "security_name": "25国开15",
+          "weight_pct": 8.58,
+          "market_value_10k": 241678.99,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "232580054",
+          "security_name": "25建行二级资本债03BC",
+          "weight_pct": 7.57,
+          "market_value_10k": 213161.28,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "232580046",
+          "security_name": "25农行二级资本债04A(BC)",
+          "weight_pct": 7.25,
+          "market_value_10k": 204165.96,
+          "rank": 3,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "2600001",
+          "security_name": "26超长特别国债01",
+          "weight_pct": 6.3,
+          "market_value_10k": 177429.64,
+          "rank": 4,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "230023",
+          "security_name": "23附息国债23",
+          "weight_pct": 4.71,
+          "market_value_10k": 132720.11,
+          "rank": 5,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113042",
+          "security_name": "上银转债",
+          "weight_pct": 1.42,
+          "market_value_10k": 40009.12,
+          "rank": 6,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113052",
+          "security_name": "兴业转债",
+          "weight_pct": 0.69,
+          "market_value_10k": 19544.3,
+          "rank": 7,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "118031",
+          "security_name": "天23转债",
+          "weight_pct": 0.22,
+          "market_value_10k": 6061.59,
+          "rank": 8,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113616",
+          "security_name": "韦尔转债",
+          "weight_pct": 0.2,
+          "market_value_10k": 5647.11,
+          "rank": 9,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "127027",
+          "security_name": "能化转债",
+          "weight_pct": 0.18,
+          "market_value_10k": 5139.35,
+          "rank": 10,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "127089",
+          "security_name": "晶澳转债",
+          "weight_pct": 0.17,
+          "market_value_10k": 4706.95,
+          "rank": 11,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113049",
+          "security_name": "长汽转债",
+          "weight_pct": 0.12,
+          "market_value_10k": 3323.35,
+          "rank": 12,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "127049",
+          "security_name": "希望转2",
+          "weight_pct": 0.12,
+          "market_value_10k": 3317.69,
+          "rank": 13,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "128142",
+          "security_name": "新乳转债",
+          "weight_pct": 0.11,
+          "market_value_10k": 3182.76,
+          "rank": 14,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113605",
+          "security_name": "大参转债",
+          "weight_pct": 0.08,
+          "market_value_10k": 2213.94,
+          "rank": 15,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113625",
+          "security_name": "江山转债",
+          "weight_pct": 0.07,
+          "market_value_10k": 1850.14,
+          "rank": 16,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "110076",
+          "security_name": "华海转债",
+          "weight_pct": 0.06,
+          "market_value_10k": 1625.86,
+          "rank": 17,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "123114",
+          "security_name": "三角转债",
+          "weight_pct": 0.06,
+          "market_value_10k": 1689.33,
+          "rank": 18,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "127045",
+          "security_name": "牧原转债",
+          "weight_pct": 0.06,
+          "market_value_10k": 1568.27,
+          "rank": 19,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "123113",
+          "security_name": "仙乐转债",
+          "weight_pct": 0.05,
+          "market_value_10k": 1404.27,
+          "rank": 20,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "110095",
+          "security_name": "双良转债",
+          "weight_pct": 0.04,
+          "market_value_10k": 1117.87,
+          "rank": 21,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "123104",
+          "security_name": "卫宁转债",
+          "weight_pct": 0.04,
+          "market_value_10k": 1109.42,
+          "rank": 22,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "113627",
+          "security_name": "太平转债",
+          "weight_pct": 0.04,
+          "market_value_10k": 1108.54,
+          "rank": 23,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "127031",
+          "security_name": "洋丰转债",
+          "weight_pct": 0.04,
+          "market_value_10k": 1114.33,
+          "rank": 24,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "123107",
+          "security_name": "温氏转债",
+          "weight_pct": 0.04,
+          "market_value_10k": 1109.22,
+          "rank": 25,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "128128",
+          "security_name": "齐翔转2",
+          "weight_pct": 0.04,
+          "market_value_10k": 1090.43,
+          "rank": 26,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "123119",
+          "security_name": "康泰转2",
+          "weight_pct": 0.03,
+          "market_value_10k": 715.18,
+          "rank": 27,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "127050",
+          "security_name": "麒麟转债",
+          "weight_pct": 0.03,
+          "market_value_10k": 869.46,
+          "rank": 28,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "128134",
+          "security_name": "鸿路转债",
+          "weight_pct": 0.02,
+          "market_value_10k": 501.96,
+          "rank": 29,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "asset_type": "bond",
+          "security_code": "128127",
+          "security_name": "文科转债",
+          "weight_pct": 0.02,
+          "market_value_10k": 666.29,
+          "rank": 30,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/ccmx1_110007.html"
+        }
+      ],
+      "industry_allocations": [
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "制造业",
+          "weight_pct": 10.67,
+          "market_value_10k": 300489.414519,
+          "rank": 1,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "金融业",
+          "weight_pct": 3.98,
+          "market_value_10k": 112126.888748,
+          "rank": 2,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "交通运输、仓储和邮政业",
+          "weight_pct": 2.18,
+          "market_value_10k": 61391.94452,
+          "rank": 3,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "科学研究和技术服务业",
+          "weight_pct": 2.05,
+          "market_value_10k": 57856.646432,
+          "rank": 4,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "采矿业",
+          "weight_pct": 0.4,
+          "market_value_10k": 11322.595724,
+          "rank": 5,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "农、林、牧、渔业",
+          "weight_pct": 0.35,
+          "market_value_10k": 9867.59988,
+          "rank": 6,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        },
+        {
+          "report_date": "2026-06-30",
+          "industry_name": "建筑业",
+          "weight_pct": 0.15,
+          "market_value_10k": 4361.00647,
+          "rank": 7,
+          "source": "AKShare / Eastmoney Fund Disclosures",
+          "source_url": "https://fundf10.eastmoney.com/hytz_110007.html"
+        }
+      ]
+    }
+  ]
+}

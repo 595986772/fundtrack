@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/assets/index", "pages/market/index", "pages/account/index",
+    "pages/fund/index", "pages/positions/index", "pages/transactions/index",
+    "pages/intelligence/index", "pages/community/index", "pages/sectors/index",
+    "pages/research/index", "pages/analysis/index", "pages/portfolio-review/index", "pages/portfolio-report/index", "pages/fund-reports/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "FundScope",
+    "navigationBarBackgroundColor": "#111215",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#111215",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#b0b1bb", "selectedColor": "#edc85b", "backgroundColor": "#15161a", "borderStyle": "black",
+    "list": [
+      {"pagePath":"pages/assets/index","text":"资产","iconPath":"assets/wallet.png","selectedIconPath":"assets/wallet-active.png"},
+      {"pagePath":"pages/intelligence/index","text":"事件情报","iconPath":"assets/news.png","selectedIconPath":"assets/news-active.png"},
+      {"pagePath":"pages/community/index","text":"社区热点","iconPath":"assets/community.png","selectedIconPath":"assets/community-active.png"},
+      {"pagePath":"pages/sectors/index","text":"板块雷达","iconPath":"assets/radar.png","selectedIconPath":"assets/radar-active.png"},
+      {"pagePath":"pages/research/index","text":"AI投研","iconPath":"assets/sparkles.png","selectedIconPath":"assets/sparkles-active.png"}
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,49 @@
+<view class="page">
+  <view class="row"><view class="heading grow">{{segment === 'funds' ? '基金库' : '我的资产'}}</view><button class="icon-button" bindtap="load" disabled="{{loading}}" aria-label="刷新已保存数据"><image class="icon" src="/assets/refresh.png" /></button><button class="icon-button" bindtap="account" aria-label="设置"><image class="icon" src="/assets/settings.png" /></button></view>
+  <view class="segments"><button class="segment {{segment === 'holdings' ? 'active' : ''}}" data-value="holdings" bindtap="segment">持仓明细</button><button class="segment {{segment === 'funds' ? 'active' : ''}}" data-value="funds" bindtap="segment">基金库</button></view>
+  <view wx:if="{{tradeSelection}}" class="notice"><view>选择买入基金 · {{tradeSelection.portfolioName}}</view><button class="link" bindtap="returnTrade">返回交易记账</button></view>
+  <view wx:if="{{segment === 'holdings'}}" class="toolbar"><picker range="{{portfolios}}" range-key="name" value="{{selected}}" bindchange="choose" disabled="{{!portfolios.length}}"><view class="select">{{current ? current.name : '尚无资产账本'}} ▾</view></picker><button class="icon-button" bindtap="create" aria-label="新建账本"><image class="icon" src="/assets/plus.png" /></button></view>
+  <view wx:if="{{error}}" class="notice error">{{error}}<button class="link" bindtap="account">查看连接与账号</button></view>
+  <view wx:if="{{message}}" class="notice">{{message}}</view>
+  <view wx:if="{{loading}}" class="footnote">正在读取资产…</view>
+  <view wx:if="{{current && segment === 'holdings'}}" class="section">
+    <view class="muted small">持仓市值 / 元</view><view class="hero-value numeric">{{total}}</view>
+    <view class="metrics"><view><view class="muted small">剩余持仓成本</view><view class="value numeric">{{cost}}</view></view><view><view class="muted small">累计盈亏</view><view class="value numeric {{pnlTone}}">{{pnl}}</view></view><view><view class="muted small">持仓浮动盈亏</view><view class="numeric">{{unrealized}}</view></view><view><view class="muted small">已实现盈亏</view><view class="numeric">{{realized}}</view></view></view>
+    <view wx:if="{{current.position_mode === 'allocation'}}" class="notice">这个组合目前只有目标权重，尚未录入真实份额和成本。<button class="link" bindtap="edit">补录实际持仓</button></view>
+    <view wx:else class="actions"><button class="primary" bindtap="transactions">交易记账</button><button bindtap="sync" disabled="{{syncing}}">{{syncing ? '正在提交…' : '更新净值'}}</button></view>
+    <button class="field" bindtap="review">查看收益与风险</button>
+  </view>
+  <view wx:elif="{{!current && !loading && !error && segment === 'holdings'}}" class="empty">还没有资产账本。<button class="link" bindtap="create">添加我的持仓</button></view>
+  <view wx:if="{{segment === 'holdings'}}">
+    <view wx:for="{{rows}}" wx:key="fund_code" class="item" data-code="{{item.fund_code}}" bindtap="fund" role="button" aria-label="查看基金详情">
+      <view class="row"><view class="fund-mark mark-{{item.mark}}"></view><view class="grow"><view class="item-title">{{item.short_name}}</view><view class="muted small">{{item.fund_code}} · {{item.unitsText}} 份</view></view><image class="icon" src="/assets/chevron.png" /></view>
+      <view class="holding-numbers"><view><view class="muted small">市值 / 成本</view><view class="numeric">{{item.value}} / {{item.costText}}</view></view><view class="right"><view class="muted small">累计盈亏</view><view class="numeric {{item.pnlTone}}">{{item.pnl}}</view></view></view>
+      <view class="fund-meta"><text>最新日涨跌 <text class="{{item.dayTone}}">{{item.day}}</text></text><text>近30日 {{item.month}}</text><text>近3月 {{item.quarter}}</text></view><view class="footnote">净值日期 {{item.latest_nav_date}}</view>
+    </view>
+    <view wx:if="{{!rows.length && !loading}}" class="empty">暂无持仓明细</view>
+  </view>
+  <view wx:else>
+    <view class="field"><text class="label">搜索公募基金</text><view class="row"><input class="grow" value="{{catalogQuery}}" bindinput="catalogField" maxlength="80" placeholder="基金名称或六位代码" aria-label="基金名称或代码" /><button class="icon-button" bindtap="searchCatalog" disabled="{{catalogLoading || !catalogQuery}}" aria-label="搜索基金"><image class="icon" src="/assets/search.png" /></button></view></view>
+    <view wx:if="{{catalogLoading}}" class="empty">正在搜索公募基金目录…</view>
+    <view wx:if="{{catalogError}}" class="notice error">{{catalogError}}</view>
+    <view wx:if="{{catalogInfo}}" class="footnote">{{catalogInfo}}</view>
+    <view wx:if="{{catalogSearched && !catalogFunds.length}}" class="empty">没有找到匹配基金，请核对名称或六位代码</view>
+    <view wx:if="{{importMessage}}" class="notice">{{importMessage}}</view>
+    <view wx:if="{{importError}}" class="notice error">{{importError}}</view>
+    <view wx:if="{{pendingImport}}" class="actions"><button bindtap="retryImport" disabled="{{importChecking || importBusy}}">{{pendingImport.job_id ? '检查导入进度' : '重试提交导入'}}</button></view>
+    <view wx:for="{{catalogFunds}}" wx:key="fund_code" class="item row">
+      <view class="grow"><view class="item-title">{{item.short_name}}</view><view class="muted small">{{item.fund_code}} · {{item.fund_type}}</view></view>
+      <button wx:if="{{item.is_imported}}" class="catalog-action" bindtap="libraryFund" data-code="{{item.fund_code}}">{{tradeSelection ? '选为买入' : '查看'}}</button>
+      <button wx:else class="catalog-action primary" bindtap="importFund" data-code="{{item.fund_code}}" disabled="{{importBusy || pendingImport}}">{{pendingImport && pendingImport.fund_code === item.fund_code ? '导入中' : '导入'}}</button>
+    </view>
+    <view class="section"><view class="section-title">已导入基金 · {{observed.length}}</view>
+      <view wx:for="{{observed}}" wx:key="fund_code" class="item" bindtap="libraryFund" data-code="{{item.fund_code}}" role="button" aria-label="{{tradeSelection ? '选为买入：' : '查看已导入基金：'}}{{item.short_name}}">
+        <view class="row"><view class="grow"><view class="item-title">{{item.short_name}}</view><view class="muted small">{{item.fund_code}} · {{item.fund_type}}</view></view><view class="right numeric"><view>{{item.nav}}</view><view class="{{item.dayTone}}">{{item.day}}</view></view></view><view class="fund-meta"><text>近30日 {{item.month}}</text><text>近3月 {{item.quarter}}</text></view><view class="footnote">{{item.latest_nav_date}}</view>
+        <view wx:if="{{tradeSelection}}" class="link">选为买入</view>
+      </view>
+      <view wx:if="{{!observed.length && !loading}}" class="empty">暂无已导入基金</view>
+    </view>
+  </view>
+  <view wx:if="{{segment === 'holdings'}}" class="footnote">{{source}} · 各基金以标注日期为准，非实时估值。累计盈亏为持仓浮盈亏与已记账卖出盈亏之和。</view>
+  <view wx:else class="footnote">公募目录覆盖以数据源为准。导入仅保存基金资料，不代表已买入；净值以披露日期为准。</view>
+</view>

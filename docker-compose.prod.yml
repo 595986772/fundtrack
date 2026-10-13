@@ -1,0 +1,212 @@
+# 单机正式运行：只让 Nginx 对外开放端口；不要与开发 Compose 叠加使用。
+name: fundscope-prod
+
+x-runtime-env: &runtime-env
+  TZ: Asia/Shanghai
+  DEPLOYMENT_MODE: production
+  PUBLIC_HOST: ${PUBLIC_HOST:?set PUBLIC_HOST}
+  PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN}
+  DATABASE_URL: postgresql+psycopg://fundscope:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/fundscope
+  DATABASE_AUTO_CREATE_SCHEMA: "false"
+  AUTH_REQUIRED: "true"
+  AUTH_COOKIE_SECURE: "true"
+  JOB_EXECUTION_MODE: celery
+  CELERY_BROKER_URL: redis://redis:6379/0
+  CELERY_RESULT_BACKEND: redis://redis:6379/1
+  AI_CONTROL_BACKEND: redis
+  AI_REDIS_URL: redis://redis:6379/2
+  AGENT_TASK_AUTHORIZATION_ENABLED: "true"
+  OPENFGA_URL: http://openfga:8080
+  OPENFGA_CONFIG_PATH: /app/data/openfga.json
+  CHROMA_PERSIST_DIR: /app/data/chroma
+  FUND_REPORT_STORAGE_DIR: /app/data/fund_reports
+  OPENFGA_TOKEN: ${OPENFGA_TOKEN:?set OPENFGA_TOKEN}
+  DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:?set DEEPSEEK_API_KEY}
+  DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:?set DASHSCOPE_API_KEY}
+  # API、Outbox、Worker 共用采样和出口；各进程拥有独立有界导出队列。
+  TRACE_ENABLED: ${TRACE_ENABLED:-true}
+  TRACE_LOCAL_ENABLED: ${TRACE_LOCAL_ENABLED:-true}
+  TRACE_LOCAL_DIR: /app/data/traces
+  TRACE_SAMPLE_RATE: ${TRACE_SAMPLE_RATE:-1.0}
+  TRACE_SERVICE_NAME: fundscope
+  TRACE_RELEASE: ${FUNDSCOPE_IMAGE_TAG}
+  TRACE_OTLP_ENDPOINT: ${TRACE_OTLP_ENDPOINT:-}
+  LANGFUSE_BASE_URL: ${LANGFUSE_BASE_URL:-}
+  LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+  LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+  # 服务器镜像不包含本机 Chrome Profile；社区采集仍由用户在本地手动运行。
+  XHS_SOCIAL_SIGNAL_ENABLED: "false"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fundscope
+      POSTGRES_USER: fundscope
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fundscope -d fundscope"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  openfga-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: openfga
+      POSTGRES_USER: openfga
+      POSTGRES_PASSWORD: ${OPENFGA_POSTGRES_PASSWORD:?set OPENFGA_POSTGRES_PASSWORD}
+    volumes:
+      - openfga_postgres_data:/var/lib/postgresql/data
+    networks: [authorization_store]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openfga -d openfga"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  openfga-migrate:
+    image: openfga/openfga:v1.20.0
+    command: migrate
+    restart: "no"
+    environment: &openfga-env
+      OPENFGA_DATASTORE_ENGINE: postgres
+      OPENFGA_DATASTORE_URI: postgres://openfga:${OPENFGA_POSTGRES_PASSWORD:?set OPENFGA_POSTGRES_PASSWORD}@openfga-postgres:5432/openfga?sslmode=disable
+    networks: [authorization_store]
+    depends_on:
+      openfga-postgres:
+        condition: service_healthy
+
+  openfga:
+    image: openfga/openfga:v1.20.0
+    command: run
+    restart: unless-stopped
+    environment:
+      <<: *openfga-env
+      OPENFGA_AUTHN_METHOD: preshared
+      OPENFGA_AUTHN_PRESHARED_KEYS: ${OPENFGA_TOKEN:?set OPENFGA_TOKEN}
+      OPENFGA_PLAYGROUND_ENABLED: "false"
+      OPENFGA_METRICS_ENABLED: "false"
+    networks: [backend, authorization_store]
+    depends_on:
+      openfga-migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=127.0.0.1:8081"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # 只构建一次带版本号的镜像，初始化、迁移、API 和 Worker 共用它。
+  openfga-init:
+    image: fundscope:${FUNDSCOPE_IMAGE_TAG:?set FUNDSCOPE_IMAGE_TAG}
+    command: ["python", "-m", "scripts.setup_openfga"]
+    restart: "no"
+    environment:
+      OPENFGA_URL: http://openfga:8080
+      OPENFGA_TOKEN: ${OPENFGA_TOKEN:?set OPENFGA_TOKEN}
+      OPENFGA_CONFIG_PATH: /app/data/openfga.json
+    volumes:
+      - app_data:/app/data
+    networks: [backend]
+    depends_on:
+      openfga:
+        condition: service_healthy
+
+  migrate:
+    build: .
+    image: fundscope:${FUNDSCOPE_IMAGE_TAG:?set FUNDSCOPE_IMAGE_TAG}
+    command: ["alembic", "upgrade", "head"]
+    restart: "no"
+    environment:
+      DATABASE_URL: postgresql+psycopg://fundscope:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/fundscope
+      DATABASE_AUTO_CREATE_SCHEMA: "false"
+    networks: [backend]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    image: fundscope:${FUNDSCOPE_IMAGE_TAG:?set FUNDSCOPE_IMAGE_TAG}
+    restart: unless-stopped
+    environment: *runtime-env
+    command: ["fastapi", "run", "main.py", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips", "*"]
+    volumes:
+      - app_data:/app/data
+    networks: [edge, backend]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      openfga-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=8)"]
+      interval: 10s
+      timeout: 9s
+      retries: 6
+
+  worker:
+    image: fundscope:${FUNDSCOPE_IMAGE_TAG:?set FUNDSCOPE_IMAGE_TAG}
+    restart: unless-stopped
+    environment: *runtime-env
+    command: ["celery", "-A", "app.celery_app.celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    volumes:
+      - app_data:/app/data
+    networks: [backend]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      openfga-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  proxy:
+    image: nginx:1.30.4-alpine3.24
+    restart: unless-stopped
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:?set PUBLIC_HOST}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN}
+      NGINX_ENVSUBST_FILTER: ^PUBLIC_(HOST|ORIGIN)$
+    ports:
+      - "${PUBLIC_HTTP_PORT:-80}:80"
+      - "${PUBLIC_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./infra/nginx/fundscope.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ${TLS_CERT_DIR:-./infra/tls}:/etc/nginx/tls:ro
+    networks: [edge]
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
+  openfga_postgres_data:
+  app_data:
+
+networks:
+  edge:
+  backend:
+  authorization_store:
+    internal: true

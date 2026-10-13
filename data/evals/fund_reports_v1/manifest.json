@@ -1,0 +1,285 @@
+{
+  "version": "1",
+  "frozen_at": "2026-09-14",
+  "source": "东方财富公开基金公告 PDF",
+  "documents": [
+    {
+      "id": "fr_12ccc7479d8b409e514cbc718899bec3",
+      "fund_code": "110020",
+      "fund_kind": "index",
+      "title": "易方达沪深300ETF联接A 2026-Q1 季度报告",
+      "period": "2026-Q1",
+      "published_at": "2026-04-22",
+      "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821399649_1.pdf",
+      "content_hash": "75d869b602079bc84d94f04f0f0de0285c7295303c97f10bac107aae8a5e5129",
+      "pdf_path": "pdfs/110020_2026-Q1.pdf",
+      "facts": [
+        {
+          "label": "权益投资",
+          "amount_yuan": "137989365.36",
+          "ratio_percent": "0.68",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "1 权益投资 137,989,365.36 0.68"
+        },
+        {
+          "label": "基金投资",
+          "amount_yuan": "18815536054.29",
+          "ratio_percent": "92.05",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "2 基金投资 18,815,536,054.29 92.05"
+        },
+        {
+          "label": "固定收益投资",
+          "amount_yuan": "511019726.03",
+          "ratio_percent": "2.50",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "3 固定收益投资 511,019,726.03 2.50"
+        },
+        {
+          "label": "银行存款和结算备付金合计",
+          "amount_yuan": "855398496.48",
+          "ratio_percent": "4.18",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "7 银行存款和结算备付金合计 855,398,496.48 4.18"
+        },
+        {
+          "label": "其他资产",
+          "amount_yuan": "119883520.88",
+          "ratio_percent": "0.59",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "8 其他资产 119,883,520.88 0.59"
+        }
+      ]
+    },
+    {
+      "id": "fr_b79fce5c4e5111f6fae4f6a0b19723da",
+      "fund_code": "110020",
+      "fund_kind": "index",
+      "title": "易方达沪深300ETF联接A 2026-Q2 季度报告",
+      "period": "2026-Q2",
+      "published_at": "2026-07-21",
+      "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827165072_1.pdf",
+      "content_hash": "845f06f67c78f72a255a7aa450fa24345bd81b2062e31bbc8619e5a26bf04d40",
+      "pdf_path": "pdfs/110020_2026-Q2.pdf",
+      "facts": [
+        {
+          "label": "权益投资",
+          "amount_yuan": "153175690.57",
+          "ratio_percent": "0.69",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "1 权益投资 153,175,690.57 0.69"
+        },
+        {
+          "label": "基金投资",
+          "amount_yuan": "20534910307.09",
+          "ratio_percent": "92.12",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "2 基金投资 20,534,910,307.09 92.12"
+        },
+        {
+          "label": "固定收益投资",
+          "amount_yuan": "512897534.25",
+          "ratio_percent": "2.30",
+          "denominator": "基金总资产",
+          "page": 12,
+          "quote": "3 固定收益投资 512,897,534.25 2.30"
+        },
+        {
+          "label": "银行存款和结算备付金合计",
+          "amount_yuan": "931320786.88",
+          "ratio_percent": "4.18",
+          "denominator": "基金总资产",
+          "page": 13,
+          "quote": "7 银行存款和结算备付金合计 931,320,786.88 4.18"
+        },
+        {
+          "label": "其他资产",
+          "amount_yuan": "160061790.47",
+          "ratio_percent": "0.72",
+          "denominator": "基金总资产",
+          "page": 13,
+          "quote": "8 其他资产 160,061,790.47 0.72"
+        }
+      ]
+    },
+    {
+      "id": "fr_2447061db17ab47c375431421452fbab",
+      "fund_code": "015789",
+      "fund_kind": "active_equity",
+      "title": "永赢高端装备智选混合发起A 2026-Q1 季度报告",
+      "period": "2026-Q1",
+      "published_at": "2026-04-22",
+      "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821418032_1.pdf",
+      "content_hash": "330c8cc575edfc6f0796ecb49b242d6310e660fdf2d55456e92113661ad42d82",
+      "pdf_path": "pdfs/015789_2026-Q1.pdf",
+      "facts": [
+        {
+          "label": "权益投资",
+          "amount_yuan": "16498259507.92",
+          "ratio_percent": "86.00",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "1 权益投资 16,498,259,507.92 86.00"
+        },
+        {
+          "label": "固定收益投资",
+          "amount_yuan": "132232324.93",
+          "ratio_percent": "0.69",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "3 固定收益投资 132,232,324.93 0.69"
+        },
+        {
+          "label": "银行存款和结算备付金合计",
+          "amount_yuan": "2291350931.34",
+          "ratio_percent": "11.94",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "7 银行存款和结算备付金合计 2,291,350,931.34 11.94"
+        },
+        {
+          "label": "其他资产",
+          "amount_yuan": "261207353.53",
+          "ratio_percent": "1.36",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "8 其他资产 261,207,353.53 1.36"
+        }
+      ]
+    },
+    {
+      "id": "fr_0ee842c64e35523fc705a79d997322bf",
+      "fund_code": "015789",
+      "fund_kind": "active_equity",
+      "title": "永赢高端装备智选混合发起A 2026-Q2 季度报告",
+      "period": "2026-Q2",
+      "published_at": "2026-07-21",
+      "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827192740_1.pdf",
+      "content_hash": "8e557ec77c4de014af70706e826b4c3bcff722875a6f6ab627ae5f8bd0dc5027",
+      "pdf_path": "pdfs/015789_2026-Q2.pdf",
+      "facts": [
+        {
+          "label": "权益投资",
+          "amount_yuan": "11580088645.99",
+          "ratio_percent": "88.19",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "1 权益投资 11,580,088,645.99 88.19"
+        },
+        {
+          "label": "银行存款和结算备付金合计",
+          "amount_yuan": "1285199570.17",
+          "ratio_percent": "9.79",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "7 银行存款和结算备付金合计 1,285,199,570.17 9.79"
+        },
+        {
+          "label": "其他资产",
+          "amount_yuan": "265691452.98",
+          "ratio_percent": "2.02",
+          "denominator": "基金总资产",
+          "page": 8,
+          "quote": "8 其他资产 265,691,452.98 2.02"
+        }
+      ]
+    },
+    {
+      "id": "fr_3cb2e951f54f7b259c5ac0ceda3e8de8",
+      "fund_code": "110007",
+      "fund_kind": "bond",
+      "title": "易方达稳健收益债券A 2026-Q1 季度报告",
+      "period": "2026-Q1",
+      "published_at": "2026-04-22",
+      "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821399699_1.pdf",
+      "content_hash": "e59e40060a26a3d3ecd41d112b10423f62085c57738078f2078fc558ce78ea4e",
+      "pdf_path": "pdfs/110007_2026-Q1.pdf",
+      "facts": [
+        {
+          "label": "权益投资",
+          "amount_yuan": "6731449740.21",
+          "ratio_percent": "14.36",
+          "denominator": "基金总资产",
+          "page": 10,
+          "quote": "1 权益投资 6,731,449,740.21 14.36"
+        },
+        {
+          "label": "固定收益投资",
+          "amount_yuan": "39988702948.81",
+          "ratio_percent": "85.30",
+          "denominator": "基金总资产",
+          "page": 10,
+          "quote": "2 固定收益投资 39,988,702,948.81 85.30"
+        },
+        {
+          "label": "银行存款和结算备付金合计",
+          "amount_yuan": "26882804.64",
+          "ratio_percent": "0.06",
+          "denominator": "基金总资产",
+          "page": 11,
+          "quote": "6 银行存款和结算备付金合计 26,882,804.64 0.06"
+        },
+        {
+          "label": "其他资产",
+          "amount_yuan": "133121527.72",
+          "ratio_percent": "0.28",
+          "denominator": "基金总资产",
+          "page": 11,
+          "quote": "7 其他资产 133,121,527.72 0.28"
+        }
+      ]
+    },
+    {
+      "id": "fr_5394b1f7a5b97b7d0d76ef10e2f98d28",
+      "fund_code": "110007",
+      "fund_kind": "bond",
+      "title": "易方达稳健收益债券A 2026-Q2 季度报告",
+      "period": "2026-Q2",
+      "published_at": "2026-07-21",
+      "source_url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827164584_1.pdf",
+      "content_hash": "06d8922d7525e200fcb098123aaa6553f6f1876a4672c8e7d1c88c7550a3d405",
+      "pdf_path": "pdfs/110007_2026-Q2.pdf",
+      "facts": [
+        {
+          "label": "权益投资",
+          "amount_yuan": "5574201889.52",
+          "ratio_percent": "15.69",
+          "denominator": "基金总资产",
+          "page": 11,
+          "quote": "1 权益投资 5,574,201,889.52 15.69"
+        },
+        {
+          "label": "固定收益投资",
+          "amount_yuan": "29285147764.38",
+          "ratio_percent": "82.43",
+          "denominator": "基金总资产",
+          "page": 11,
+          "quote": "2 固定收益投资 29,285,147,764.38 82.43"
+        },
+        {
+          "label": "银行存款和结算备付金合计",
+          "amount_yuan": "15089880.43",
+          "ratio_percent": "0.04",
+          "denominator": "基金总资产",
+          "page": 11,
+          "quote": "6 银行存款和结算备付金合计 15,089,880.43 0.04"
+        },
+        {
+          "label": "其他资产",
+          "amount_yuan": "651495509.58",
+          "ratio_percent": "1.83",
+          "denominator": "基金总资产",
+          "page": 11,
+          "quote": "7 其他资产 651,495,509.58 1.83"
+        }
+      ]
+    }
+  ]
+}

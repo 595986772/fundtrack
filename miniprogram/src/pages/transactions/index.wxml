@@ -1,0 +1,50 @@
+<view class="page"><view class="row"><view class="heading grow">交易记账</view><button class="icon-button" bindtap="refreshFunds" disabled="{{loading||saving}}" aria-label="刷新基金与流水"><image class="icon" src="/assets/refresh.png" /></button></view><view class="muted">{{name}}</view><view wx:if="{{error}}" class="notice error">{{error}}</view><view wx:if="{{loading}}" class="footnote">正在读取基金与流水…</view><view wx:if="{{locked && !error}}" class="notice">请先在资产页补录实际持仓。</view>
+  <view wx:if="{{!locked && !loading}}"><view class="segments"><button class="segment {{form.transaction_type === 'buy' ? 'active' : ''}}" data-value="buy" bindtap="type" disabled="{{saving}}">买入</button><button class="segment {{form.transaction_type === 'sell' ? 'active' : ''}}" data-value="sell" bindtap="type" disabled="{{saving}}">卖出</button></view>
+    <view class="field"><text class="label">{{form.transaction_type === 'buy' ? '买入基金 · 已导入基金库' : '卖出基金 · 当前持仓'}}（{{funds.length}}）</text><picker range="{{funds}}" range-key="optionLabel" value="{{fundIndex}}" bindchange="choose" disabled="{{saving||!funds.length}}" aria-label="交易基金"><view class="select">{{funds[fundIndex] ? funds[fundIndex].optionLabel : '暂无可选基金'}}</view></picker></view>
+    <button wx:if="{{form.transaction_type==='buy'}}" class="link" bindtap="library" disabled="{{saving}}">从基金库选择／导入</button>
+    <view wx:if="{{form.transaction_type==='sell'&&!funds.length}}" class="notice">当前组合没有可卖出的持仓。</view>
+    <view class="section">
+      <view class="row"><view class="section-title">收益时间</view><text class="small muted">选填下单时间</text></view>
+      <view class="field"><text class="label">交易渠道</text><picker range="{{channels}}" value="{{form.channel==='exchange'?1:0}}" bindchange="channel" disabled="{{saving}}" aria-label="交易渠道"><view class="select">{{form.channel==='exchange'?'场内买卖':'场外申购／赎回'}}</view></picker></view>
+      <view class="metrics">
+        <view class="field"><text class="label">下单日期</text><picker mode="date" value="{{form.submitted_date}}" data-field="submitted_date" bindchange="field" disabled="{{saving}}" aria-label="下单日期"><view class="select">{{form.submitted_date || '选择日期'}}</view></picker></view>
+        <view class="field"><text class="label">下单时间 · 北京时间</text><picker mode="time" value="{{form.submitted_time}}" data-field="submitted_time" bindchange="field" disabled="{{saving}}" aria-label="下单时间"><view class="select">{{form.submitted_time || '选择时间'}}</view></picker></view>
+      </view>
+      <view class="actions timing-actions"><button bindtap="previewTiming" disabled="{{saving||timingLoading||!funds.length}}">{{timingLoading?'正在计算…':'计算收益日期'}}</button><button wx:if="{{form.submitted_date||form.submitted_time}}" class="icon-button" bindtap="clearOrderTime" disabled="{{saving}}" aria-label="清除下单时间"><image class="icon" src="/assets/trash.png" /></button></view>
+      <view wx:if="{{timingError}}" class="notice error">{{timingError}}</view>
+      <view wx:if="{{timing}}" class="report-block">
+        <view class="notice">{{timing.reason}}</view>
+        <view wx:if="{{timing.status==='estimated'}}">
+          <view class="report-block metric"><text class="muted">预计成交净值日</text><text class="numeric">{{timing.nav_date}}</text></view>
+          <view class="report-block metric"><text class="muted">预计份额确认日</text><text class="numeric">{{timing.confirmation_date}}</text></view>
+          <view class="report-block metric"><text class="muted">{{form.transaction_type==='buy'?'首个收益净值日':'最后收益净值日'}}</text><text class="numeric accent">{{timing.first_return_nav_date||timing.last_return_nav_date}}</text></view>
+          <view class="footnote">{{timing.visibility}}</view>
+          <button wx:if="{{timing.nav_date<=today && timing.nav_date!==form.trade_date}}" class="link" bindtap="applyNavDate" disabled="{{saving}}">按此净值日填写</button>
+          <view wx:if="{{timing.nav_date>today}}" class="footnote">尚未到预计成交净值日，等待平台确认后再记账。</view>
+        </view>
+        <view wx:for="{{timing.warnings}}" wx:for-item="warning" wx:key="*this" class="footnote">{{warning}}</view>
+      </view>
+    </view>
+    <view class="section"><view class="section-title">已确认成交</view></view>
+    <view class="field"><text class="label">成交净值日（按成交回单）</text><picker mode="date" value="{{form.trade_date}}" end="{{today}}" data-field="trade_date" bindchange="field" disabled="{{saving}}" aria-label="成交净值日"><view class="select">{{form.trade_date}}</view></picker></view>
+    <view wx:if="{{timing && timing.nav_date && timing.nav_date!==form.trade_date && form.units && form.unit_price}}" class="notice">实际填写的净值日与估算不同，请核对成交回单。</view>
+    <view class="field"><text class="label">成交份额</text><input type="digit" value="{{form.units}}" data-field="units" bindinput="field" disabled="{{saving}}" /></view><view class="field"><text class="label">成交净值 / 元</text><input type="digit" value="{{form.unit_price}}" data-field="unit_price" bindinput="field" disabled="{{saving}}" /></view><view class="field"><text class="label">手续费 / 元</text><input type="digit" value="{{form.fee}}" data-field="fee" bindinput="field" disabled="{{saving}}" /></view><view class="field"><text class="label">备注（选填）</text><input value="{{form.note}}" data-field="note" bindinput="field" maxlength="200" disabled="{{saving}}" /></view><view class="actions"><button class="primary" bindtap="save" disabled="{{saving || !funds.length}}">{{saving ? '正在记账…' : '确认记账'}}</button></view>
+  </view>
+  <view class="section">
+    <view class="section-title">交易流水</view>
+    <view wx:for="{{trades}}" wx:key="id" class="item">
+      <view class="row"><view class="grow"><view class="item-title">{{item.label}} · {{item.short_name}}</view><view class="small muted">净值日 {{item.trade_date}}</view></view><button class="icon-button" bindtap="remove" data-id="{{item.id}}" disabled="{{saving}}" aria-label="删除交易"><image class="icon" src="/assets/trash.png" /></button></view>
+      <view class="fund-meta"><text>{{item.unitsText}} 份 × {{item.price}}</text><text>费用 {{item.feeText}}</text></view>
+      <view class="row small"><text class="muted">现金流 {{item.flow}}</text><text class="{{item.tone}}">已实现 {{item.pnl}}</text></view>
+      <!-- 旧流水不知道下单时间，因此只显示回单净值日，不生成假时间轴。 -->
+      <view wx:if="{{item.timing}}">
+        <view class="footnote">下单 {{item.submittedText}}</view>
+        <view wx:if="{{item.returnDate}}" class="footnote">通用估算{{item.transaction_type==='buy'?'首个':'最后'}}收益净值日 {{item.returnDate}}</view>
+        <view class="footnote">{{item.timing.reason}}</view>
+        <view wx:if="{{item.timing.recorded_nav_date && item.timing.nav_date && item.timing.recorded_nav_date!==item.timing.nav_date}}" class="footnote">回单净值日与估算不同，收益计算以回单日为准。</view>
+      </view>
+      <view wx:if="{{item.note}}" class="footnote">{{item.note}}</view>
+    </view>
+    <view wx:if="{{!trades.length && !loading}}" class="empty">暂无交易流水</view>
+  </view>
+</view>

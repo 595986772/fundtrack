@@ -1,0 +1,38 @@
+{
+  "fixture_version": 1,
+  "purpose": "FundScope deterministic market context and offline tests",
+  "generated_at": "2026-08-25T23:37:19+08:00",
+  "data_date": "2026-08-25",
+  "broad_market_proxy": {
+    "fund_code": "110020",
+    "name": "易方达沪深300ETF联接A",
+    "tracking_target": "沪深300指数",
+    "source": "AKShare / Eastmoney Fund",
+    "source_url": "https://fundf10.eastmoney.com/jbgk_110020.html"
+  },
+  "breadth": {
+    "advancing_count": 3966,
+    "declining_count": 1177,
+    "flat_count": 65,
+    "suspended_count": 4,
+    "limit_up_count": 70,
+    "limit_down_count": 4,
+    "market_activity_pct": 76.09,
+    "observed_at": "2026-08-25T15:00:00+08:00",
+    "source": "LeGuLeGu via AKShare",
+    "source_url": "https://legulegu.com/stockdata/market-activity"
+  },
+  "turnover_proxy": {
+    "benchmark_code": "000300",
+    "benchmark_name": "沪深300指数",
+    "source": "Eastmoney Index via AKShare",
+    "source_url": "https://quote.eastmoney.com/zs000300.html",
+    "daily_amounts": [
+      {"date": "2026-08-19", "amount_cny": 705253500000},
+      {"date": "2026-08-20", "amount_cny": 554021100000},
+      {"date": "2026-08-21", "amount_cny": 505501100000},
+      {"date": "2026-08-24", "amount_cny": 590425600000},
+      {"date": "2026-08-25", "amount_cny": 480421600000}
+    ]
+  }
+}

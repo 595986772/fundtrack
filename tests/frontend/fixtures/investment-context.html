@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>投资背景组件验证 · 固定测试样例</title>
+    <link rel="stylesheet" href="../../../app/static/styles.css" />
+    <link rel="stylesheet" href="../../../app/static/design-system.css" />
+    <link rel="stylesheet" href="../../../app/static/terminal.css" />
+    <script src="../../../app/static/investment-context.js"></script>
+  </head>
+  <body>
+    <main style="width:100%;max-width:800px;margin:24px auto;padding:0 20px;box-sizing:border-box">
+      <h1 style="font-size:19px">投资背景组件验证</h1>
+      <p>固定测试样例，不是个人投资档案。</p>
+      <article class="message-row assistant"><div class="message-body">
+        <div class="message-content"><p>已将可接受亏损更新为 5%，其余条件保持不变。</p></div>
+        <div id="updated"></div>
+      </div></article>
+      <article class="message-row assistant"><div class="message-body">
+        <div class="message-content"><p>本次更新未能确认，请重新说明你的投资条件。</p></div>
+        <div id="unconfirmed"></div>
+      </div></article>
+      <article class="message-row assistant"><div class="message-body">
+        <div class="message-content"><p>本会话投资背景已清除。</p></div>
+        <div id="cleared"></div>
+      </div></article>
+    </main>
+    <script>
+      // 复用正式渲染器与样式；测试页不加载业务 app.js，也不发起网络或模型请求。
+      const sample = {facts: {
+        horizon: {text: '这笔钱三年不用'},
+        loss_tolerance: {text: '更正一下，最多只接受亏损5%'},
+        liquidity: {text: '未来三年没有预计的大额支出，临时用款另有储备金'},
+        purpose: {text: '为将来的养老支出准备，不与近期买房款混用'},
+      }, update_status: 'updated'};
+      document.querySelector('#updated').innerHTML = FundScopeInvestmentContext.render(sample);
+      document.querySelector('#unconfirmed').innerHTML = FundScopeInvestmentContext.render({...sample, needs_confirmation: true});
+      document.querySelector('#cleared').innerHTML = FundScopeInvestmentContext.render({facts: {}, update_status: 'cleared'});
+    </script>
+  </body>
+</html>

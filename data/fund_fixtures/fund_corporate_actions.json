@@ -1,0 +1,52 @@
+{
+  "fixture_version": 1,
+  "purpose": "FundScope offline total-return and drawdown tests",
+  "generated_at": "2026-08-31T20:00:00+08:00",
+  "coverage_start": "2023-08-25",
+  "coverage_end": "2026-08-25",
+  "source": "AKShare / Eastmoney Fund Corporate Actions",
+  "source_url": "https://fund.eastmoney.com/",
+  "funds": [
+    {
+      "fund_code": "110020",
+      "actions": []
+    },
+    {
+      "fund_code": "161725",
+      "actions": []
+    },
+    {
+      "fund_code": "110007",
+      "actions": [
+        {
+          "action_date": "2023-11-23",
+          "action_type": "cash_dividend",
+          "cash_dividend_per_unit": 0.033,
+          "split_ratio": null,
+          "description": "每10份派现金0.3300元"
+        },
+        {
+          "action_date": "2023-12-21",
+          "action_type": "cash_dividend",
+          "cash_dividend_per_unit": 0.028,
+          "split_ratio": null,
+          "description": "每10份派现金0.2800元"
+        },
+        {
+          "action_date": "2025-01-14",
+          "action_type": "cash_dividend",
+          "cash_dividend_per_unit": 0.03,
+          "split_ratio": null,
+          "description": "每10份派现金0.3000元"
+        },
+        {
+          "action_date": "2026-01-13",
+          "action_type": "cash_dividend",
+          "cash_dividend_per_unit": 0.039,
+          "split_ratio": null,
+          "description": "每10份派现金0.3900元"
+        }
+      ]
+    }
+  ]
+}

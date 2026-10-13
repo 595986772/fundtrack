@@ -1,0 +1,51 @@
+# 本机专用的独立 Compose，不要与 docker-compose.yml 叠加；不启动 API/Worker。
+# 启动: docker compose -f docker-compose.openfga.yml up -d --wait
+# 初始化: python -m scripts.setup_openfga
+# 重启不丢数据；停止时用同一 -f 参数，不要加 -v，以免删除授权数据。
+name: fundscope-openfga-local
+
+services:
+  openfga-migrate:
+    # 固定官方稳定版，迁移和运行必须使用相同版本。
+    image: openfga/openfga:v1.20.0
+    command: migrate
+    user: nonroot
+    restart: "no"
+    environment:
+      OPENFGA_DATASTORE_ENGINE: sqlite
+      OPENFGA_DATASTORE_URI: file:/home/nonroot/openfga.db
+    volumes:
+      - openfga_data:/home/nonroot
+
+  openfga:
+    image: openfga/openfga:v1.20.0
+    command: run
+    user: nonroot
+    restart: unless-stopped
+    depends_on:
+      openfga-migrate:
+        condition: service_completed_successfully
+    environment:
+      OPENFGA_DATASTORE_ENGINE: sqlite
+      OPENFGA_DATASTORE_URI: file:/home/nonroot/openfga.db
+      OPENFGA_PLAYGROUND_ENABLED: "false"
+      OPENFGA_METRICS_ENABLED: "false"
+      OPENFGA_LOG_FORMAT: json
+      OPENFGA_LOG_LEVEL: warn
+      # 本机可不开鉴权；如启用 preshared，两项必须同时设置。
+      OPENFGA_AUTHN_METHOD: ${OPENFGA_AUTHN_METHOD:-none}
+      OPENFGA_AUTHN_PRESHARED_KEYS: ${OPENFGA_TOKEN:-}
+    ports:
+      # 只绑定本机，不公开 gRPC、Playground 或数据存储端口。
+      - "127.0.0.1:${OPENFGA_PORT:-8091}:8080"
+    volumes:
+      - openfga_data:/home/nonroot
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=127.0.0.1:8081"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  # 由本 Compose 项目名隔离，不复用其他项目的卷或容器。
+  openfga_data:

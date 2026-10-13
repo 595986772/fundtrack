@@ -1,0 +1,24 @@
+/* 继承压力沙盘的表格、图表与状态样式，仅定义约束表单的布局。 */
+.allocation-workbench { max-width: 1200px; margin-inline: auto; }
+.allocation-request label, .allocation-fields label { display: grid; gap: 8px; min-width: 0; font-size: 12px; color: #b0b1bb; }
+.allocation-request textarea { resize: vertical; width: 100%; min-height: 88px; max-height: 280px; box-sizing: border-box; padding: 12px; border: 1px solid #464751; border-radius: 4px; color: #e9e9ee; background: #191a1e; font: inherit; font-size: 14px; line-height: 1.7; caret-color: #edc85b; }
+.allocation-workbench ::placeholder { color: #b0b1bb; opacity: 1; }
+.allocation-request-actions { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; margin-block: 12px 20px; }
+.allocation-request-actions label { flex: 1 1 240px; }
+.allocation-request input, .allocation-fields input { width: 100%; box-sizing: border-box; min-width: 0; }
+.allocation-section { padding-block: 20px; border-bottom: 1px solid #303138; }
+.allocation-section p, .allocation-section li { overflow-wrap: anywhere; line-height: 1.7; }
+.allocation-original { color: #b0b1bb; font-size: 12px; max-width: 75ch; }
+.allocation-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-top: 20px; }
+.allocation-confirm { display: flex; align-items: start; gap: 10px; margin-block: 16px; font-size: 14px; line-height: 1.7; cursor: pointer; }
+.allocation-confirm input { accent-color: #edc85b; width: 18px; height: 18px; min-height: 18px; flex: 0 0 18px; margin-top: 3px; }
+.allocation-questions { color: #edc85b; padding-left: 20px; }
+.allocation-sources { padding-left: 20px; color: #b0b1bb; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+.allocation-section .stress-table-scroll + .stress-table-scroll { margin-top: 20px; }
+.allocation-workbench .stress-section-heading > span { overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .allocation-fields { grid-template-columns: 1fr; gap: 12px; }
+  .allocation-request-actions button { width: 100%; justify-content: center; }
+  .allocation-workbench table { min-width: 440px; }
+  .allocation-workbench .stress-section-heading { align-items: start; }
+}

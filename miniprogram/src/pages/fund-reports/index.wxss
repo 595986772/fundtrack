@@ -1,0 +1,6 @@
+.report-selectors{display:grid;grid-template-columns:1fr;gap:12px;margin:20px 0}
+.allocation-row,.document-row{padding:16px 0;border-bottom:1px solid #303138}
+.allocation-row .row{gap:12px;flex-wrap:wrap}.inline-actions{display:flex;gap:12px}
+.source-text{white-space:pre-wrap;word-break:break-word;line-height:1.8;font-size:16px;margin:20px 0;user-select:text}
+.reports-page .toolbar{flex-wrap:wrap}.reports-page .numeric{font-variant-numeric:tabular-nums}
+.reports-page .heading{font-size:22px}.reports-page .link{min-height:44px;display:inline-flex;align-items:center;justify-content:center;color:#8ab5f5}

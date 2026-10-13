@@ -1,0 +1,269 @@
+/*
+ * 研究终端的布局层。中性石墨底色保持长期阅读舒适，黄色只用于选中与主曲线。
+ * 红涨绿跌是 A 股显示约定，始终同时保留正负号，不能只靠颜色识别方向。
+ */
+:root { color-scheme: dark; --market-up: #fa828c; --market-down: #69cbb0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+* { scrollbar-width: thin; scrollbar-color: #45464f transparent; }
+input, textarea { caret-color: var(--accent); }
+input::placeholder, textarea::placeholder { color: var(--faint); }
+:where(button, a, input, select, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+a { text-underline-offset: 3px; }
+.t-up { color: var(--market-up) !important; }
+.t-down { color: var(--market-down) !important; }
+.t-flat { color: var(--ink); }
+
+/* 外壳与自选列表：在固定宽度内换行，不能让基金长名称挤掉数值。 */
+.brand-bar { min-height: 66px; padding: 14px 16px; gap: 10px; }
+.brand-mark { width: 32px; height: 32px; border-radius: 4px; }
+.brand-copy strong { font-size: 17px; }
+.brand-copy span { font-size: 9px; }
+.product-switcher { display: grid; grid-template-columns: 1fr 1fr; padding: 8px 10px 14px; gap: 4px; }
+.navigation-label { display: none; }
+.product-tab { min-height: 37px; padding: 8px; gap: 7px; font-size: 12px; border-radius: 3px; }
+.product-tab svg { width: 15px; height: 15px; }
+.fund-search-shell { padding: 14px 12px 4px; }
+.fund-search { min-height: 34px; border-radius: 4px; padding: 0 9px; }
+.fund-search input { font-size: 11px; }
+.section-label { padding: 14px 14px 7px; font-size: 11px; }
+.fund-nav-list { padding: 0 8px; gap: 0; }
+.fund-nav-button { display: grid; grid-template-columns: minmax(0, 1fr); padding: 13px 9px; gap: 9px; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
+.fund-nav-button.active { background: #27251e; box-shadow: inset 2px 0 var(--accent); }
+.fund-nav-copy { gap: 5px; }
+.fund-nav-copy strong { font-size: 12px; line-height: 1.6; white-space: normal; overflow: visible; color: var(--ink); }
+.fund-nav-copy > span { font-size: 10px; color: var(--faint); }
+.terminal-watch-quote, .terminal-watch-periods { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums; }
+.terminal-watch-quote { font-size: 13px; }
+.terminal-watch-periods { color: var(--faint); font-size: 10px; }
+.terminal-watch-periods b { margin-left: 4px; font-weight: 500; }
+.fund-source-note { margin: auto 10px 12px; padding: 12px 6px 0; background: none; border: 0; border-top: 1px solid var(--border); }
+.fund-source-note strong { font-size: 10px; }
+.fund-source-note span { font-size: 9px; }
+.fund-header, .chat-header { min-height: 62px; padding: 10px 20px; background: var(--canvas); }
+.conversation-heading h1 { font-size: 16px; }
+.conversation-heading > span { font-size: 11px; }
+.connection-status { font-size: 10px; }
+.fund-content { padding: 0 20px 28px; background: var(--canvas); }
+.workspace-view { width: 100%; max-width: none; }
+body[data-active-workspace="overview"] .fund-content { padding: 0 16px 20px; }
+.terminal-dashboard { width: 100%; margin: 0; padding: 0; }
+
+/* 报价带和主体使用确定的网格，不做浮动卡片；边界只用一条细分隔线。 */
+.terminal-dashboard button, .terminal-dashboard select { cursor: pointer; }
+.terminal-dashboard button { color: var(--muted); border: 0; background: none; }
+.terminal-dashboard button:hover { color: var(--ink); background: var(--surface-muted); }
+.terminal-dashboard button:disabled { cursor: not-allowed; }
+.terminal-dashboard .icon-button { width: 30px; height: 30px; flex-shrink: 0; border-radius: 3px; }
+.terminal-dashboard svg { width: 15px; height: 15px; flex-shrink: 0; }
+.terminal-market-bar { min-height: 35px; display: flex; align-items: center; gap: 10px; color: var(--faint); font-size: 10px; border-top: 1px solid var(--border); }
+.terminal-market-bar > span:first-child { display: flex; align-items: center; gap: 7px; color: var(--ink); margin-right: auto; }
+.terminal-market-bar svg { color: var(--accent); width: 13px; height: 13px; }
+.terminal-ticker { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--surface); }
+.terminal-tick { min-width: 0; padding: 12px; text-align: left; border-right: 1px solid var(--border) !important; }
+.terminal-tick:last-child { border-right: 0 !important; }
+.terminal-tick.is-selected { box-shadow: inset 0 -2px var(--accent); background: #26241d; }
+.terminal-tick > span:first-child { display: flex; align-items: center; justify-content: space-between; gap: 4px; font-size: 11px; color: var(--ink); }
+.terminal-tick small { font-size: 9px; color: var(--faint); font-weight: 400; }
+.terminal-tick > strong { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px; font-size: 19px; font-weight: 600; margin: 8px 0; font-variant-numeric: tabular-nums; }
+.terminal-tick > strong small { font-size: 11px; color: inherit; }
+.terminal-tick-periods { display: grid; grid-template-columns: 1fr; gap: 4px; font-size: 10px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.terminal-tick-periods > span { display: flex; justify-content: space-between; }
+.terminal-tick-periods b { font-weight: 500; }
+.terminal-grid { display: grid; grid-template-columns: minmax(0, 1fr) 304px; margin-top: 14px; border-top: 1px solid var(--border); }
+.terminal-main { min-width: 0; border-right: 1px solid var(--border); }
+.terminal-instrument { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 19px 18px 10px 0; }
+.terminal-instrument h2 { font-size: 19px; margin: 0; line-height: 1.55; color: var(--ink); }
+.terminal-instrument p { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 7px 0 0; font-size: 10px; color: var(--faint); }
+.terminal-code { color: var(--accent); font-variant-numeric: tabular-nums; }
+.terminal-subject-actions { display: flex; gap: 2px; flex-shrink: 0; }
+.terminal-quotes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 8px 18px 18px 0; margin: 0; }
+.terminal-quotes dt, .terminal-risk-metrics dt { font-size: 10px; color: var(--faint); }
+.terminal-quotes dd { font-variant-numeric: tabular-nums; font-size: 20px; font-weight: 550; margin: 7px 0 0; }
+.terminal-chart-section { border-top: 1px solid var(--border); background: var(--surface); padding-bottom: 10px; }
+.terminal-chart-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 10px 12px 2px; }
+.terminal-segments, .terminal-periods { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
+.terminal-segments button, .terminal-periods button { font-size: 11px; min-height: 30px; padding: 6px 9px; border-radius: 3px; white-space: nowrap; }
+.terminal-segments button[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); }
+.terminal-periods button[aria-pressed="true"] { color: var(--ink); background: var(--surface-muted); }
+.terminal-chart-legend { display: flex; align-items: center; gap: 8px; padding: 4px 12px; font-size: 10px; color: var(--faint); }
+#terminal-chart-basis { margin-right: auto; }
+.terminal-dashboard select { min-width: 0; max-width: 210px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 3px; font-size: 10px; padding: 5px 6px; height: 29px; }
+.terminal-chart-stage { position: relative; height: 310px; }
+#terminal-chart { width: 100%; height: 100%; }
+.terminal-chart-empty { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; color: var(--muted); padding: 24px; font-size: 12px; }
+.terminal-caption { margin: 7px 14px; color: var(--faint); font-size: 10px; line-height: 1.7; overflow-wrap: anywhere; }
+.terminal-warning { margin: 8px 14px; color: var(--accent); font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+.terminal-research { border-top: 1px solid var(--border); margin-top: 0; }
+.terminal-research-heading, .terminal-side-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 46px; padding-right: 10px; border-bottom: 1px solid var(--border); }
+.terminal-tabs { display: flex; gap: 0; min-width: 0; }
+.terminal-tabs button { display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 12px 16px; font-size: 12px; white-space: nowrap; }
+.terminal-tabs [aria-selected="true"] { color: var(--accent); box-shadow: inset 0 -2px var(--accent); }
+#terminal-research-body { min-height: 230px; padding: 14px 18px 14px 0; }
+.terminal-section-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px; font-size: 10px; line-height: 1.7; color: var(--faint); margin-bottom: 15px; }
+.terminal-risk-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+.terminal-risk-metrics dd { font-size: 19px; font-weight: 550; font-variant-numeric: tabular-nums; margin: 8px 0 0; }
+.terminal-research-summary { max-width: 75ch; margin: 12px 0 14px; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.terminal-evidence-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: var(--faint); font-size: 10px; }
+.terminal-evidence-footer a, .terminal-evidence-footer button { display: inline-flex; align-items: center; gap: 4px; color: var(--accent); font-size: 11px; text-decoration: none; min-height: 28px; }
+.terminal-table-scroll { max-width: 100%; overflow-x: auto; }
+.terminal-table { border-collapse: collapse; width: 100%; text-align: right; font-size: 11px; font-variant-numeric: tabular-nums; }
+.terminal-table th, .terminal-table td { padding: 10px 6px; border-bottom: 1px solid var(--border); font-weight: 400; white-space: nowrap; }
+.terminal-table th:first-child { text-align: left; }
+.terminal-table thead { color: var(--faint); font-size: 10px; }
+.terminal-headlines { list-style: none; margin: 0; padding: 0; }
+.terminal-headlines li { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.terminal-headlines li:first-child { padding-top: 0; }
+.terminal-headlines li > div { display: flex; flex-wrap: wrap; gap: 12px; color: var(--faint); font-size: 10px; margin-bottom: 6px; }
+.terminal-headlines a { display: flex; justify-content: space-between; gap: 10px; color: var(--ink); font-size: 12px; line-height: 1.8; text-decoration: none; }
+.terminal-headlines a:hover { color: var(--accent); }
+.terminal-headlines b { color: var(--accent); font-weight: 400; }
+
+/* 资讯和助手同一位置切换，输入框常驻，长内容只在自己的内容区滚动。 */
+.terminal-aside { min-width: 0; display: flex; flex-direction: column; max-height: 820px; background: #16171b; }
+.terminal-side-heading { padding-left: 5px; }
+.terminal-aside [role="tabpanel"] { min-height: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.terminal-news-filter { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+#terminal-news-list { overflow-y: auto; min-height: 0; }
+.terminal-news-item { padding: 15px 16px 12px; border-bottom: 1px solid var(--border); }
+.terminal-news-item > div { display: flex; justify-content: space-between; gap: 5px; flex-wrap: wrap; color: var(--faint); font-size: 10px; }
+.terminal-news-item h3 { margin: 9px 0 7px; font-size: 12px; line-height: 1.8; font-weight: 550; }
+.terminal-news-item h3 a { color: var(--ink); text-decoration: none; }
+.terminal-news-item h3 a:hover { color: var(--accent); }
+.terminal-news-item h3 svg { width: 11px; height: 11px; margin-left: 3px; vertical-align: middle; }
+.terminal-news-item > p { margin: 0; color: var(--faint); line-height: 1.8; font-size: 11px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.terminal-news-item footer { display: flex; gap: 10px; color: var(--faint); font-size: 9px; margin-top: 8px; }
+.terminal-empty { padding: 30px 18px; font-size: 12px; line-height: 1.8; text-align: center; color: var(--faint); margin: 0; }
+.terminal-text-action { margin: 0 16px; padding: 10px; font-size: 12px; color: var(--accent) !important; }
+.terminal-ai-subject { color: var(--muted); font-size: 11px; line-height: 1.7; padding: 12px 16px; margin: 0; border-bottom: 1px solid var(--border); }
+.terminal-ai-content { flex: 1; overflow-y: auto; padding: 16px; min-height: 250px; }
+.terminal-ai-empty > svg { width: 23px; height: 23px; color: var(--accent); margin: 14px 0 5px; }
+.terminal-ai-empty h3 { font-size: 14px; font-weight: 500; line-height: 1.8; margin: 8px 0 20px; }
+.terminal-ai-empty button { display: flex; justify-content: space-between; width: 100%; align-items: center; text-align: left; min-height: 44px; font-size: 11px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.terminal-ai-message { margin-bottom: 22px; overflow-wrap: anywhere; }
+.terminal-ai-message > span { color: var(--accent); font-size: 10px; }
+.terminal-ai-message[data-role="user"] > span { color: var(--faint); }
+.terminal-ai-message .markdown-body { color: var(--ink); font-size: 12px; line-height: 1.9; }
+.terminal-ai-message :is(h1,h2,h3) { font-size: 14px; }
+.terminal-ai-message pre { overflow-x: auto; }
+.terminal-ai-message table { width: 100%; display: block; overflow-x: auto; }
+.terminal-ai-message a { color: var(--blue); }
+#terminal-ai-form { padding: 12px; border-top: 1px solid var(--border); background: var(--surface); }
+#terminal-ai-input { width: 100%; min-height: 74px; max-height: 150px; resize: vertical; color: var(--ink); background: transparent; border: none; font-size: 12px; line-height: 1.7; padding: 5px; }
+.terminal-ai-actions { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-top: 8px; }
+.terminal-ai-actions > button:first-child { margin-right: auto; }
+.terminal-dashboard .terminal-primary { display: inline-flex; gap: 5px; align-items: center; background: var(--accent); color: #181818; border-radius: 3px; padding: 8px 12px; min-height: 32px; font-size: 11px; }
+.terminal-dashboard .terminal-primary:hover { background: var(--accent-strong); color: #181818; }
+.terminal-statusbar { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 11px 0; color: var(--faint); font-size: 10px; border-top: 1px solid var(--border); }
+.terminal-report { margin-top: 7px; border-top: 1px solid var(--border); }
+.terminal-report > summary { cursor: pointer; min-height: 45px; padding: 14px 0; font-size: 12px; color: var(--muted); }
+.terminal-report > summary svg { height: 15px; width: 15px; vertical-align: middle; margin: 0 6px; }
+.terminal-report[open] > summary { color: var(--accent); }
+
+/* 旧业务页同样切换到深色令牌，保留表单、报告和执行过程原本的交互。 */
+.composer-area { background: var(--canvas); }
+.send-button, .fund-analyze-button, .portfolio-save-button, .primary-button { color: #181818; background: var(--accent); }
+.primary-action, .primary-action:hover, .message-row.assistant .message-avatar, .empty-mark { color: #181818; background: var(--accent); }
+.period-control button { color: var(--muted); background: transparent; border: 0; border-radius: 3px; min-height: 30px; padding: 6px 10px; font-size: 11px; cursor: pointer; }
+.period-control button.active { color: var(--accent); background: var(--accent-soft); }
+.message-content blockquote { background: var(--amber-soft); border-left-width: 1px; }
+.terminal-experience .positive { color: var(--market-up) !important; }
+.terminal-experience .negative { color: var(--market-down) !important; }
+/* 这里只统一数值方向，不把“风险证据/支持因素”的业务状态颜色一并改掉。 */
+:is(.market-index-overview, .portfolio-performance, .portfolio-value-summary, .actual-position-section, .portfolio-decision-snapshot, .portfolio-decision-outcome, .capital-topic-row, .institution-capital) [data-tone="positive"],
+:is(.market-index-overview, .portfolio-performance) [data-tone="positive"] :is(b,strong,span) { color: var(--market-up) !important; }
+:is(.market-index-overview, .portfolio-performance, .portfolio-value-summary, .actual-position-section, .portfolio-decision-snapshot, .portfolio-decision-outcome, .capital-topic-row, .institution-capital) [data-tone="negative"],
+:is(.market-index-overview, .portfolio-performance) [data-tone="negative"] :is(b,strong,span) { color: var(--market-down) !important; }
+.fund-page-error { border-color: var(--border); }
+.conversation-item.active, .user-avatar { background: var(--accent-soft); color: var(--accent); }
+.message-content code { color: var(--accent); }
+
+/* HTML 坐标文字独立于 SVG 缩放，窄组合面板仍使用固定字号。 */
+.portfolio-chart-frame { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 6px; padding: 6px 2px 0; }
+.portfolio-chart-canvas { display: block; width: 100%; height: 180px; overflow: visible; }
+.portfolio-chart-ticks { position: relative; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.portfolio-chart-ticks span { position: absolute; right: 0; transform: translateY(-50%); white-space: nowrap; }
+.portfolio-chart-dates { grid-column: 2; display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+#portfolio-workbench .portfolio-chart-frame :is(.portfolio-chart-ticks, .portfolio-chart-dates) span { font-size: 11px; }
+.portfolio-performance-chart figcaption span, .portfolio-drawdown-chart figcaption span, .portfolio-chart-legend { font-size: 11px; }
+.portfolio-return-attribution article[data-tone="positive"] .portfolio-attribution-track i { background: var(--market-up); }
+.portfolio-return-attribution article[data-tone="negative"] .portfolio-attribution-track i { background: var(--market-down); }
+
+@media (min-width: 1600px) {
+  .terminal-grid { grid-template-columns: minmax(0, 1fr) 344px; }
+  .terminal-chart-stage { height: 360px; }
+  .terminal-tick-periods { grid-template-columns: 1fr 1fr; gap: 12px; }
+}
+@media (min-width: 1081px) {
+  .terminal-experience .mobile-only { display: none; }
+}
+@media (max-width: 1279px) {
+  .terminal-grid { grid-template-columns: minmax(0, 1fr); }
+  .terminal-main { border-right: 0; }
+  .terminal-aside { border-top: 1px solid var(--border); height: 440px; max-height: none; }
+  #terminal-news-list { display: grid; grid-template-columns: 1fr 1fr; align-content: start; }
+  .terminal-news-item { border-right: 1px solid var(--border); }
+  .terminal-tick { padding: 10px 8px; }
+  .terminal-tick > strong { font-size: 16px; }
+  .terminal-tick > span:first-child small { display: none; }
+  #terminal-research-body { padding-right: 0; }
+}
+@media (max-width: 1080px) {
+  /* 显式重置主列，避免侧栏隐藏后仍留出一整列空白。 */
+  .terminal-experience .app-layout, body.developer-mode .app-layout { grid-template-columns: minmax(0, 1fr); }
+  .terminal-experience .fund-shell, .terminal-experience .chat-shell { grid-column: 1 / -1; }
+  .terminal-experience .sidebar { position: fixed; inset: 0 auto 0 0; width: 268px; transform: translateX(-100%); transition: transform 160ms ease-out; }
+  .terminal-experience.sidebar-open .sidebar { transform: translateX(0); }
+  .terminal-experience .mobile-only { display: inline-flex; }
+  .terminal-experience .fund-header, .terminal-experience .chat-header { padding: 9px 14px; }
+  .sidebar-open .panel-overlay { display: block; }
+}
+@media (max-width: 760px) {
+  .terminal-ticker { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .terminal-tick { padding: 10px; border-bottom: 1px solid var(--border) !important; }
+  .terminal-tick > strong { font-size: 18px; }
+  .terminal-tick > span:first-child small { display: inline; }
+  .terminal-tick-periods { grid-template-columns: 1fr; }
+  body[data-active-workspace="overview"] .fund-content { padding: 0 12px 20px; }
+  .terminal-chart-stage { height: 300px; }
+  .terminal-instrument h2 { font-size: 17px; }
+  .terminal-instrument { padding-right: 0; }
+  .terminal-quotes { gap: 12px; padding-right: 0; }
+  .terminal-quotes dd { font-size: 18px; }
+  .terminal-risk-metrics dd { font-size: 17px; }
+  .terminal-tabs button { min-height: 44px; padding: 12px; }
+  .terminal-periods button { min-height: 36px; padding: 6px 10px; }
+  .terminal-dashboard .icon-button { width: 36px; height: 36px; }
+  .terminal-report .fund-overview-band { gap: 16px; }
+}
+@media (max-width: 480px) {
+  /* 手机上报价带横向浏览，优先把真正的研究图表放进第一屏。 */
+  .terminal-ticker { display: flex; overflow-x: auto; scroll-snap-type: x proximity; }
+  .terminal-tick { flex: 0 0 174px; scroll-snap-align: start; }
+  .terminal-tick > strong { margin: 5px 0; font-size: 19px; }
+  .terminal-tick-periods { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .terminal-tick-periods > span { gap: 4px; }
+  .terminal-tick-periods, .terminal-tick small { font-size: 9px; }
+  .terminal-instrument h2 { font-size: 16px; }
+  .terminal-risk-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; }
+  .terminal-quotes { gap: 6px; }
+  .terminal-quotes dd { font-size: 17px; }
+  .terminal-quotes dt { font-size: 9px; }
+  .terminal-chart-toolbar { padding: 10px 8px 2px; }
+  .terminal-periods { width: 100%; justify-content: space-between; }
+  .terminal-periods button { font-size: 10px; padding: 6px 7px; }
+  .terminal-chart-legend { flex-wrap: wrap; padding: 4px 8px; gap: 5px; }
+  #terminal-chart-basis { flex-basis: 100%; padding: 4px 0; }
+  .terminal-dashboard select { max-width: 220px; font-size: 11px; }
+  .terminal-chart-stage { height: 275px; }
+  .terminal-caption, .terminal-warning { margin-left: 8px; margin-right: 8px; }
+  #terminal-news-list { display: block; }
+  .terminal-tabs button { padding: 12px 10px; gap: 5px; font-size: 11px; }
+  .terminal-header .connection-status { display: none; }
+  .terminal-table { font-size: 10px; }
+  .terminal-table th, .terminal-table td { padding: 10px 5px; }
+  .terminal-aside { height: 520px; }
+  .terminal-statusbar { font-size: 9px; line-height: 1.7; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal-experience *, .terminal-experience *::before, .terminal-experience *::after { scroll-behavior: auto !important; transition: none !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}

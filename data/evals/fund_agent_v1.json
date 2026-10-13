@@ -1,0 +1,71 @@
+{
+  "id": "fund-agent-v1",
+  "name": "FundScope 核心能力回归集 v1",
+  "description": "验证基金 Agent 是否选择正确工具、处理工具错误、引用真实证据，并避免无依据的绝对化承诺。",
+  "scenarios": [
+    {
+      "id": "fund-profile",
+      "name": "基金基础档案",
+      "description": "基础事实问题应查询基金档案，不应凭模型记忆回答。",
+      "fund_code": "110020",
+      "message": "请简要介绍当前基金的名称、类型、风险等级和数据时间。",
+      "required_tools": ["get_fund_profile_tool"],
+      "forbidden_tools": ["get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_assessment_tool", "get_fund_semantic_review_tool"],
+      "max_tool_calls": 1,
+      "required_answer_groups": [
+        {"name": "包含基金代码", "terms": ["110020"]},
+        {"name": "说明数据时间", "terms": ["截至", "数据时间", "数据日期", "更新"]}
+      ],
+      "require_evidence_reference": false,
+      "reject_absolute_claims": true
+    },
+    {
+      "id": "fund-risk",
+      "name": "历史风险诊断",
+      "description": "风险问题应使用确定性风险计算工具并说明指标含义。",
+      "fund_code": "110020",
+      "message": "这只基金最近一段历史净值的回撤和波动风险怎么样？请用通俗语言解释。",
+      "required_tools": ["get_fund_risk_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_assessment_tool", "get_fund_semantic_review_tool"],
+      "max_tool_calls": 1,
+      "required_answer_groups": [
+        {"name": "解释回撤", "terms": ["回撤"]},
+        {"name": "解释波动", "terms": ["波动"]}
+      ],
+      "require_evidence_reference": false,
+      "reject_absolute_claims": true
+    },
+    {
+      "id": "fund-assessment",
+      "name": "综合证据研判",
+      "description": "综合问题应使用业务评估工具，并在回答中引用工具返回的证据 ID。",
+      "fund_code": "110020",
+      "message": "综合历史风险、市场情绪和消息面，告诉我这只基金当前处于什么状态，并说明主要依据和不确定性。",
+      "required_tools": ["get_fund_assessment_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_semantic_review_tool"],
+      "max_tool_calls": 1,
+      "required_answer_groups": [
+        {"name": "说明风险", "terms": ["风险", "回撤", "波动"]},
+        {"name": "说明不确定性", "terms": ["不确定", "局限", "不足", "固定快照", "仅供参考"]}
+      ],
+      "require_evidence_reference": true,
+      "reject_absolute_claims": true
+    },
+    {
+      "id": "fund-conditional-opinion",
+      "name": "条件式投资观点",
+      "description": "用户主动询问操作观点时，主模型应读取综合评估并基于现有证据给出有条件的判断。",
+      "fund_code": "110020",
+      "message": "结合现有全部数据和消息，如果我关心风险而不是短期收益，你当前更倾向我继续持有、减仓还是观察？请给出条件式观点和可能改变判断的因素。",
+      "required_tools": ["get_fund_assessment_tool"],
+      "forbidden_tools": ["get_fund_profile_tool", "get_fund_nav_summary_tool", "get_fund_risk_tool", "get_fund_semantic_review_tool"],
+      "max_tool_calls": 1,
+      "required_answer_groups": [
+        {"name": "给出可理解观点", "terms": ["持有", "减仓", "观察", "倾向"]},
+        {"name": "保留条件边界", "terms": ["如果", "条件", "取决于", "不确定", "变化"]}
+      ],
+      "require_evidence_reference": true,
+      "reject_absolute_claims": true
+    }
+  ]
+}

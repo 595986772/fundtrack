@@ -1,0 +1,75 @@
+<!-- 同一份诊断在两端采用同样的阅读顺序，引用按需展开，不自动触发模型。 -->
+<template name="finding">
+  <view class="diagnosis-finding">
+    <view class="small accent">{{item.tone_label}}</view><view class="section-title">{{item.title}}</view>
+    <view class="prose">{{item.detail}}</view><view class="footnote">{{item.scope}}</view>
+    <view wx:for="{{item.holdings}}" wx:for-item="holding" wx:key="code" class="diagnosis-holding"><view>{{holding.name}}</view><view class="footnote">报告时占比 {{holding.weight}} · 绝对波动风险占比 {{holding.risk_share}}</view></view>
+    <button class="link diagnosis-disclosure" bindtap="evidence" data-group="{{group}}" data-id="{{item.id}}" aria-expanded="{{item.open}}">{{item.open?'收起依据':'查看依据与来源'}} · {{item.references.length}}项<image class="icon diagnosis-chevron {{item.open?'expanded':''}}" src="/assets/chevron.png" /></button>
+    <view wx:if="{{item.open}}">
+      <view wx:if="{{item.gap}}" class="notice">{{item.gap}}</view>
+      <view wx:for="{{item.references}}" wx:for-item="ref" wx:key="id" class="diagnosis-evidence">
+        <view>{{ref.label}}</view><view class="numeric accent">{{ref.value}}</view><view class="small prose">{{ref.explanation}}</view>
+        <view class="footnote">{{ref.date}} · {{ref.source}}</view><view class="footnote">{{ref.id}}</view>
+        <button wx:if="{{ref.url}}" class="link" bindtap="source" data-url="{{ref.url}}">复制原始来源链接</button>
+      </view>
+    </view>
+  </view>
+</template>
+<template name="blocks">
+  <view wx:for="{{blocks}}" wx:key="key" class="report-block {{item.kind}}"><view class="{{item.kind==='heading'?'':'muted small'}}">{{item.label}}</view><button wx:if="{{item.kind==='link'}}" class="link" bindtap="source" data-url="{{item.url}}">复制来源链接</button><view wx:elif="{{item.kind!=='heading'}}" class="prose">{{item.text}}</view></view>
+</template>
+<view class="page portfolio-report-page">
+  <view class="row"><button class="link" bindtap="review">收益与风险</button><text class="muted small">持仓诊断</text></view>
+  <view wx:if="{{portfolios.length>1}}" class="field"><picker range="{{portfolios}}" range-key="name" value="{{selected}}" bindchange="choose" disabled="{{busy}}"><view class="select">{{portfolios[selected].name}}</view></picker></view>
+  <view wx:if="{{loading}}" class="notice">正在读取报告…</view>
+  <view wx:if="{{error}}" class="notice error">{{error}}<button class="link" bindtap="load">重读报告</button></view>
+  <view wx:if="{{job.message}}" class="notice">{{job.message}}<button class="link" bindtap="progress">检查进度</button></view>
+  <view wx:if="{{job.error}}" class="notice error">{{job.error}}</view>
+  <view wx:if="{{diagnosis&&!loading}}">
+    <view class="heading">{{diagnosis.headline}}</view><view class="footnote accent">{{diagnosis.interpretation_label}}</view>
+    <view class="footnote">{{diagnosis.portfolio_name}} · 报告日期 {{diagnosis.report_date}} · {{record.period_months}}个月样本</view>
+    <view class="footnote">历史快照，非当前持仓实时结论 · {{diagnosis.performance_label||'业绩口径未记录'}}</view><view class="prose diagnosis-summary">{{diagnosis.summary}}</view>
+    <view wx:if="{{diagnosis.fallback_reason}}" class="notice">{{diagnosis.fallback_reason}}</view>
+    <button class="primary field" bindtap="ask">继续追问这份报告</button>
+    <view class="section"><view class="section-title">值得关注</view>
+      <view wx:if="{{!findings.length}}" class="notice">报告暂无具体发现，不能据此判断配置无风险。</view>
+      <view wx:for="{{findings}}" wx:key="id"><template is="finding" data="{{item,group:'main'}}" /></view>
+      <button wx:if="{{moreFindings.length}}" class="link diagnosis-disclosure" bindtap="toggle" data-field="moreOpen" aria-expanded="{{moreOpen}}">其余 {{moreFindings.length}} 条发现<image class="icon diagnosis-chevron {{moreOpen?'expanded':''}}" src="/assets/chevron.png" /></button>
+      <view wx:if="{{moreOpen}}"><view wx:for="{{moreFindings}}" wx:key="id"><template is="finding" data="{{item,group:'more'}}" /></view></view>
+    </view>
+    <view class="section"><view class="section-title">与我的持仓有什么关系</view><view class="footnote">{{diagnosis.risk_period}}</view>
+      <view wx:if="{{diagnosis.top_risk}}" class="prose">报告中的最大历史波动风险来源：{{diagnosis.top_risk.name}}，绝对风险占比 {{diagnosis.top_risk.risk_share}}。</view>
+      <view wx:else class="notice">报告未提供可确认的最大风险贡献基金。</view>
+      <button class="link diagnosis-disclosure" bindtap="toggle" data-field="holdingsOpen" aria-expanded="{{holdingsOpen}}">报告时的持仓与风险贡献<image class="icon diagnosis-chevron {{holdingsOpen?'expanded':''}}" src="/assets/chevron.png" /></button>
+      <view wx:if="{{holdingsOpen}}"><view wx:for="{{diagnosis.holdings}}" wx:key="code" class="item"><view>{{item.name}} <text class="muted small">{{item.code}}</text></view><view class="row small field"><text>报告时占比 {{item.weight}}</text><text>绝对风险占比 {{item.risk_share}}</text></view></view><view class="footnote">风险占比不等于持仓占比、亏损概率或未来亏损比例。</view></view>
+    </view>
+    <view class="section"><view class="section-title">分歧与信息缺口</view>
+      <view wx:for="{{diagnosis.conflicts}}" wx:key="*this" class="prose">{{item}}</view>
+      <view wx:if="{{!diagnosis.conflicts.length}}" class="footnote">报告未记录明确反对理由，不代表不存在反对证据。</view>
+      <view wx:for="{{diagnosis.uncertainties}}" wx:key="*this" class="prose">{{item}}</view>
+      <view wx:if="{{!diagnosis.uncertainties.length}}" class="footnote">报告未列出其他信息缺口。</view>
+    </view>
+    <view class="section"><view class="section-title">接下来关注什么</view><view class="prose">{{diagnosis.conditional_view||'报告尚未给出条件式观点。'}}</view>
+      <view wx:for="{{diagnosis.follow_ups}}" wx:key="*this" class="prose">{{item}}</view>
+      <view class="field"><button wx:for="{{diagnosis.questions}}" wx:key="*this" class="link diagnosis-question" bindtap="ask" data-index="{{index}}">{{item}}</button></view>
+    </view>
+    <view class="section"><button class="link diagnosis-disclosure" bindtap="toggle" data-field="metricsOpen" aria-expanded="{{metricsOpen}}">完整指标与计算口径<image class="icon diagnosis-chevron {{metricsOpen?'expanded':''}}" src="/assets/chevron.png" /></button>
+      <view wx:if="{{metricsOpen}}"><template is="blocks" data="{{blocks}}"/><view wx:for="{{diagnosis.limitations}}" wx:key="*this" class="footnote">{{item}}</view></view>
+    </view>
+  </view>
+  <view wx:if="{{!diagnosis&&!loading&&!error}}" class="empty">{{portfolio?'当前还没有已完成的配置报告。':'请先在持仓页创建账本。'}}</view>
+  <view wx:if="{{portfolio&&!loading}}" class="section">
+    <button class="link diagnosis-disclosure" bindtap="toggle" data-field="historyOpen" aria-expanded="{{historyOpen}}">历史报告与后续研究<image class="icon diagnosis-chevron {{historyOpen?'expanded':''}}" src="/assets/chevron.png" /></button>
+    <view wx:if="{{historyOpen||!diagnosis}}">
+      <view wx:if="{{historyNotice}}" class="footnote">{{historyNotice}}</view>
+      <view class="field"><text class="label">新报告样本区间</text><picker range="{{periodLabels}}" value="{{periodIndex}}" bindchange="period" disabled="{{busy||job.busy}}"><view class="select">{{periodLabels[periodIndex]}}</view></picker></view>
+      <view class="actions"><button class="primary" bindtap="generate" disabled="{{busy||job.busy||!!error}}">{{job.busy?'正在分析':diagnosis?'重新生成报告':'分析当前配置'}}</button><button wx:if="{{diagnosis}}" bindtap="compare" disabled="{{busy||!canCompare}}">{{busy?'处理中':'与上次比较'}}</button></view>
+      <view class="field"><button wx:for="{{history}}" wx:key="job_id" class="link diagnosis-history" bindtap="selectReport" data-id="{{item.job_id}}" disabled="{{busy}}"><view>{{item.headline}}</view><view class="footnote">{{item.assessment_date}} · {{item.period_months}}个月样本 {{item.job_id===id?'· 当前报告':''}}</view></button></view>
+      <template is="blocks" data="{{blocks:comparison}}"/>
+      <button wx:if="{{diagnosis}}" class="link field" bindtap="adjust">基于报告研究调整方案</button>
+    </view>
+  </view>
+  <view wx:if="{{diagnosis&&!loading}}" class="section"><button class="link diagnosis-disclosure" bindtap="toggle" data-field="technicalOpen" aria-expanded="{{technicalOpen}}">技术详情<image class="icon diagnosis-chevron {{technicalOpen?'expanded':''}}" src="/assets/chevron.png" /></button>
+    <view wx:if="{{technicalOpen}}"><view wx:for="{{diagnosis.technical}}" wx:key="label" class="item"><view class="small muted">{{item.label}}</view><view class="small prose">{{item.value}}</view></view></view>
+  </view>
+</view>

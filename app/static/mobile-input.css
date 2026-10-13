@@ -1,0 +1,9 @@
+/* 手机输入字号统一下限。旧组件含 ID 级字号覆盖，因此仅在触屏/窄屏表单上兜底。
+   不限制 maximum-scale 或 user-scalable，保留用户主动放大页面的能力。 */
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

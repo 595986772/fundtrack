@@ -1,0 +1,82 @@
+/* 原生小程序的全局设计令牌：石墨灰底、克制黄色、可扫描的金额与分隔线。 */
+page { background:#111215; color:#e9e9ee; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif; font-size:14px; line-height:1.5; letter-spacing:0; }
+view, text, button, input { box-sizing:border-box; }
+button { margin:0; font-size:14px; line-height:1.4; border-radius:6px; background:#24252b; color:#e9e9ee; padding:12px 16px; border:1px solid #393a42; font-weight:500; }
+button::after { border:0; }
+button[disabled] { opacity:.45; color:#b0b1bb; background:#24252b; }
+input { width:100%; min-height:46px; padding:10px 12px; background:#191a1e; border:1px solid #393a42; border-radius:4px; color:#e9e9ee; font-size:16px; }
+.page { padding:24px 20px 32px; }
+.eyebrow { color:#edc85b; font-size:11px; font-weight:600; }
+.heading { font-size:26px; font-weight:600; margin:6px 0 0; }
+.subtitle, .muted { color:#b0b1bb; }
+.small { font-size:12px; }
+.row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.wrap { flex-wrap:wrap; }
+.grow { flex:1; min-width:0; }
+.right { text-align:right; }
+.numeric { font-variant-numeric:tabular-nums; }
+.primary { background:#edc85b; border-color:#edc85b; color:#181818; }
+.link { background:transparent; border:0; color:#edc85b; padding:8px 0; }
+.icon-button { padding:11px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.icon { width:20px; height:20px; }
+.section { margin-top:28px; padding-top:20px; border-top:1px solid #303138; }
+.section-title { font-size:17px; font-weight:600; }
+.hero-value { font-size:34px; line-height:1.25; font-weight:600; margin:10px 0 22px; overflow-wrap:anywhere; }
+.metrics { display:grid; grid-template-columns:1fr 1fr; gap:20px 12px; }
+.value { font-size:20px; font-weight:500; margin-top:4px; overflow-wrap:anywhere; }
+.up { color:#fa828c; }
+.down { color:#69cbb0; }
+.accent { color:#edc85b; }
+.item { padding:18px 0; border-bottom:1px solid #303138; }
+.item-title { font-size:15px; font-weight:500; word-break:break-word; }
+.fund-mark { width:4px; height:32px; background:#8ab5f5; flex-shrink:0; border-radius:2px; }
+.mark-1 { background:#c0a1dd; } .mark-2 { background:#edc85b; } .mark-3 { background:#9db6bd; }
+.holding-numbers { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+.fund-meta { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; color:#b0b1bb; font-size:12px; }
+.toolbar { margin-top:22px; display:flex; gap:10px; align-items:center; }
+.toolbar picker { flex:1; min-width:0; }
+.select { min-height:44px; padding:11px 12px; border:1px solid #393a42; border-radius:4px; background:#191a1e; word-break:break-word; }
+.segments { display:flex; gap:16px; border-bottom:1px solid #303138; margin-top:24px; }
+.segment { flex:1; background:transparent; border:0; border-bottom:2px solid transparent; border-radius:0; padding:12px 0; color:#b0b1bb; }
+.segment.active { border-color:#edc85b; color:#edc85b; }
+.notice { margin-top:18px; padding:12px 0 12px 12px; border-left:2px solid #edc85b; color:#b0b1bb; font-size:13px; }
+.notice .link { display:block; text-align:left; }
+.error { border-color:#fa828c; color:#fa828c; word-break:break-word; }
+.empty { padding:32px 0; color:#b0b1bb; }
+.field { margin-top:18px; }
+.label { display:block; margin-bottom:8px; color:#b0b1bb; font-size:13px; }
+.actions { display:flex; gap:12px; margin-top:24px; }
+.actions button { flex:1; }
+.timing-actions .icon-button { flex:0 0 44px; }
+.chart { display:block; width:100%; height:240px; }
+.periods { display:flex; gap:8px; margin:18px 0 4px; }
+.periods button { flex:1; padding:8px 0; font-size:12px; border-radius:4px; }
+.periods .active { background:#edc85b; color:#181818; border-color:#edc85b; }
+.footnote { color:#989aa7; font-size:11px; margin-top:18px; }
+.catalog-action { flex-shrink:0; min-width:64px; max-width:96px; }
+/* 新增研究工作区沿用已有字体和配色，段落可以完整换行，输入仍保持16px。 */
+textarea { box-sizing:border-box; width:100%; min-height:108px; padding:12px; background:#191a1e; border:1px solid #393a42; border-radius:4px; color:#e9e9ee; font:inherit; font-size:16px; line-height:1.6; }
+.prose { display:block; margin-top:8px; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere; line-height:1.75; }
+.report-block { padding:12px 0; }
+.report-block.heading { font-size:17px; border-top:1px solid #303138; margin-top:22px; padding-top:20px; }
+.report-block.metric { display:flex; justify-content:space-between; align-items:baseline; gap:16px; border-bottom:1px solid #24252b; }
+.report-block.metric .prose { font-variant-numeric:tabular-nums; text-align:right; margin:0; }
+.report-block.link { text-align:left; }
+.evidence-image { width:100%; margin-top:16px; border-radius:4px; }
+.message { padding:22px 0; border-bottom:1px solid #303138; }
+.message.user { color:#edc85b; }
+.composer { margin-top:28px; padding-top:20px; border-top:1px solid #393a42; padding-bottom:env(safe-area-inset-bottom); }
+.research-page .toolbar button { padding:10px 12px; }
+/* 持仓诊断用全宽段落和展开行分层，不再把报告首屏变成逐字段的调试输出。 */
+.portfolio-report-page .heading { font-size:22px; line-height:1.5; word-break:break-word; }
+.portfolio-report-page .footnote { font-size:12px; line-height:1.6; margin-top:10px; overflow-wrap:anywhere; word-break:break-word; }
+.portfolio-report-page .diagnosis-summary { margin-top:18px; }
+.portfolio-report-page .diagnosis-finding { padding:22px 0 12px; border-bottom:1px solid #303138; }
+.portfolio-report-page .diagnosis-finding .section-title { margin-top:6px; font-size:16px; }
+.portfolio-report-page .diagnosis-holding { margin-top:14px; font-size:13px; }
+.portfolio-report-page .diagnosis-disclosure { display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; min-height:46px; text-align:left; font-size:14px; }
+.portfolio-report-page .diagnosis-chevron { flex-shrink:0; }
+.portfolio-report-page .diagnosis-chevron.expanded { transform:rotate(90deg); }
+.portfolio-report-page .diagnosis-evidence { padding:18px 0; border-top:1px solid #303138; font-size:14px; overflow-wrap:anywhere; }
+.portfolio-report-page .diagnosis-question, .portfolio-report-page .diagnosis-history { display:block; width:100%; min-height:44px; text-align:left; white-space:normal; word-break:break-word; line-height:1.6; }
+.portfolio-report-page .diagnosis-history { border-bottom:1px solid #303138; padding:16px 0; color:#e9e9ee; }

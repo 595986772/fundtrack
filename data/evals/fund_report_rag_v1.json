@@ -1,0 +1,191 @@
+{
+  "id": "fund_report_rag_v1",
+  "name": "基金季报 RAG · 三类基金",
+  "description": "六份固定公开季报、20 个场景。自动检查检索、数字和引用；观点支持性另行人工复核。",
+  "version": "1",
+  "data_profile": "fund-report-fixture-v1",
+  "reference_status": "已由编码助手对照原文整理，待项目所有者人工验收",
+  "defaults": {
+    "required_tools": ["get_fund_report_research_tool"],
+    "max_tool_calls": 2,
+    "max_tool_rounds": 3,
+    "require_evidence_reference": false,
+    "reject_absolute_claims": false,
+    "report_periods": ["2026-Q1", "2026-Q2"]
+  },
+  "scenarios": [
+    {
+      "id": "report-index-allocation", "name": "联接基金配置变化", "category": "numeric",
+      "fund_code": "110020", "tags": ["smoke"], "description": "同一口径的百分比与百分点。",
+      "message": "对比两期季报，基金投资占总资产比例分别是多少，变化多少个百分点？引用原文。",
+      "gold_evidence": [{"period":"2026-Q1","page":12,"quote":"18,815,536,054.29"},{"period":"2026-Q2","page":12,"quote":"20,534,910,307.09"}],
+      "gold_numeric": [{"label":"基金投资","before":"92.05","after":"92.12","delta":"0.07"}],
+      "reference_answer": "2026-Q1 为92.05%，Q2为92.12%，增加0.07个百分点，分母都是基金总资产。不能称为直接股票仓位或净资产占比。",
+      "review_criteria": ["数值对应正确季度和基金总资产口径", "增加0.07个百分点不等于增长0.07%"]
+    },
+    {
+      "id":"report-index-bonds", "name":"固定收益比例下降", "category":"numeric", "fund_code":"110020",
+      "description":"不能把占比变化直接解释为交易流水。",
+      "message":"这两期季报的固定收益投资比例下降了多少？能据此确定基金经理主动卖债吗？",
+      "gold_evidence":[{"period":"2026-Q1","page":12,"quote":"511,019,726.03"},{"period":"2026-Q2","page":12,"quote":"512,897,534.25"}],
+      "gold_numeric":[{"label":"固定收益投资","before":"2.50","after":"2.30","delta":"-0.20"}],
+      "reference_answer":"比例从2.50%降至2.30%，下降0.20个百分点；披露金额反而从511,019,726.03元升至512,897,534.25元。期末比例不能证明主动卖债，申赎、价格、规模变化都可能影响比例。",
+      "review_criteria":["不能把比例下降断言为主动减仓", "没有虚构买卖日期或卖出数量"]
+    },
+    {
+      "id":"report-index-cash", "name":"跨页表格与零变化", "category":"numeric", "fund_code":"110020",
+      "description":"Q2表格跨到第13页，比例相同不代表金额相同。",
+      "message":"两期季报中的银行存款和结算备付金比例变了吗？没变是不是说明金额也没变？",
+      "gold_evidence":[{"period":"2026-Q1","page":12,"quote":"855,398,496.48"},{"period":"2026-Q2","page":13,"quote":"931,320,786.88"}],
+      "gold_numeric":[{"label":"银行存款和结算备付金合计","before":"4.18","after":"4.18","delta":"0.00"}],
+      "reference_answer":"两期占比都是4.18%，变化0.00个百分点；金额分别855,398,496.48元和931,320,786.88元，因此占比相同不代表金额相同。",
+      "review_criteria":["Q2引用第13物理页", "区分金额、比例与变化量"]
+    },
+    {
+      "id":"report-index-strategy", "name":"指数策略是否改变", "category":"interpretation", "fund_code":"110020",
+      "description":"两期原文都要召回，不能只凭一期推断变化。",
+      "message":"对比基金经理运作分析，这只基金从一季度到二季度改变指数化投资策略了吗？",
+      "gold_evidence":[{"period":"2026-Q1","page":11,"quote":"坚持既定的指数化投资策略"},{"period":"2026-Q2","page":12,"quote":"坚持既定的指数化投资策略"}],
+      "reference_answer":"两期均明确坚持既定的指数化投资策略，依据申赎进行日常组合管理并控制跟踪误差。市场回顾不同不等于改变核心投资策略。",
+      "review_criteria":["两期均提供依据", "将经理历史表述与自己的推断区分"]
+    },
+    {
+      "id":"report-index-today", "name":"季报不能回答今日交易", "category":"unanswerable", "fund_code":"110020",
+      "description":"识别数据时间边界，不用历史披露冒充实时信息。",
+      "message":"只根据这两份季报，告诉我基金今天买入了哪些股票、每只多少股。不要联网。",
+      "gold_evidence":[],
+      "reference_answer":"两份报告是2026年一、二季度披露，不包含今天逐笔交易，不能确定今日买入股票及数量。可说明需要交易披露等额外证据，不虚构结果。",
+      "review_criteria":["明确无法从季报得出今日交易", "不编造股票名、成交时间、股数", "不自动同步或调用其他数据来源"]
+    },
+    {
+      "id":"report-index-lookthrough", "name":"联接基金与穿透持仓", "category":"scope", "fund_code":"110020",
+      "description":"避免误读0.69%的直接权益比例。",
+      "message":"季报只有0.69%的权益投资，是不是它几乎没有股票市场风险？说明联接基金和目标ETF的关系。",
+      "gold_evidence":[{"period":"2026-Q2","page":11,"quote":"主要通过投资易方达沪深"},{"period":"2026-Q2","page":12,"quote":"20,534,910,307.09"}],
+      "reference_answer":"0.69%是直接权益投资占总资产比例，另有92.12%的基金投资。它通过目标沪深300ETF获得市场敞口，不能用直接股票比例判断总体股票风险，也不能把该表当成目标ETF全部穿透持仓。",
+      "review_criteria":["区分直接权益与间接ETF敞口", "不把92.12%直接声称为逐股穿透结果"]
+    },
+    {
+      "id":"report-index-followup", "name":"追问固定两期版本", "category":"multi_turn", "fund_code":"110020",
+      "description":"第二轮不再发送基金代码和文档ID，检验真实会话恢复。",
+      "message":"比较所选两期季报的基金投资占比，引用原文。",
+      "follow_up":"继续沿用刚才两期，基金投资到底增加了多少个百分点？",
+      "gold_evidence":[{"period":"2026-Q1","page":12,"quote":"18,815,536,054.29"},{"period":"2026-Q2","page":12,"quote":"20,534,910,307.09"}],
+      "gold_numeric":[{"label":"基金投资","before":"92.05","after":"92.12","delta":"0.07"}],
+      "reference_answer":"第二轮仍比较2026-Q1与Q2的同一对文档，92.05%至92.12%，增加0.07个百分点。",
+      "review_criteria":["第二轮没有更换季度或基金", "回答延续上一轮问题，而不是重新泛泛介绍RAG"]
+    },
+    {
+      "id":"report-active-equity", "name":"主动权益比例与金额", "category":"numeric", "fund_code":"015789", "tags":["smoke"],
+      "description":"比例上升与金额下降可以同时出现。",
+      "message":"永赢高端装备两期季报的权益投资占总资产比例变了多少？是否能据此判断主动加仓？",
+      "gold_evidence":[{"period":"2026-Q1","page":8,"quote":"16,498,259,507.92"},{"period":"2026-Q2","page":8,"quote":"11,580,088,645.99"}],
+      "gold_numeric":[{"label":"权益投资","before":"86.00","after":"88.19","delta":"2.19"}],
+      "reference_answer":"比例由86.00%升至88.19%，增加2.19个百分点，但金额由16,498,259,507.92元下降到11,580,088,645.99元。不能仅根据期末占比断言主动加仓。",
+      "review_criteria":["区分比例上升和主动净买入", "没有把基金份额净值或净资产口径混入总资产表"]
+    },
+    {
+      "id":"report-active-cash", "name":"主动基金现金比例", "category":"numeric", "fund_code":"015789",
+      "description":"负变化量与下降方向一致。",
+      "message":"两期季报银行存款和结算备付金合计占比各是多少，下降多少个百分点？",
+      "gold_evidence":[{"period":"2026-Q1","page":8,"quote":"2,291,350,931.34"},{"period":"2026-Q2","page":8,"quote":"1,285,199,570.17"}],
+      "gold_numeric":[{"label":"银行存款和结算备付金合计","before":"11.94","after":"9.79","delta":"-2.15"}],
+      "reference_answer":"从11.94%降至9.79%，下降2.15个百分点。",
+      "review_criteria":["变化方向、单位、季度对应正确"]
+    },
+    {
+      "id":"report-active-missing", "name":"横杠不是解析出的零", "category":"missing_data", "fund_code":"015789",
+      "description":"保留原表横杠，不从缺失值制造清仓结论。",
+      "message":"固定收益投资在一季度和二季度各怎么披露？二季度没提取到比例，就能直接算成清仓吗？",
+      "gold_evidence":[{"period":"2026-Q1","page":8,"quote":"132,232,324.93"},{"period":"2026-Q2","page":8,"quote":"3 固定收益投资 - -"}],
+      "gold_numeric":[{"label":"固定收益投资","before":"0.69","after":null,"delta":null}],
+      "reference_answer":"一季度披露0.69%，二季度表中金额和比例为横杠。系统未提取数值，应保留缺失并说明原表表示；不能将解析缺失直接填0计算下降0.69个百分点，更不能推导具体清仓交易。",
+      "review_criteria":["说明原文确实是横杠，区分未持有/未列示与解析失败", "未把null补0或编造清仓日期"]
+    },
+    {
+      "id":"report-active-theme", "name":"经理关注方向变化", "category":"interpretation", "fund_code":"015789",
+      "description":"主动基金的章节标题包含“基金的投资策略”，检验召回覆盖。",
+      "message":"对比两期基金经理运作分析，商业航天的关注重点有哪些延续，哪些发生变化？",
+      "gold_evidence":[{"period":"2026-Q1","page":7,"quote":"展望2026 年二季度"},{"period":"2026-Q2","page":7,"quote":"可回收火箭技术实现关键突破"}],
+      "reference_answer":"两期都关注商业航天。Q1展望重点包含星座招标和发射、可回收火箭、终端需求、IPO；Q2展望更集中于可回收火箭商业化和终端应用。许多方向有延续，不能把Q2每个主题都说成首次新增。",
+      "review_criteria":["能支持延续与变化的逐项比较", "只有单期依据时承认无法确认首次提出", "不把经理展望当成已发生事实"]
+    },
+    {
+      "id":"report-active-risk", "name":"经理风险表述", "category":"interpretation", "fund_code":"015789",
+      "description":"原文风险与模型投资建议分开。",
+      "message":"两期季报中经理对集中持仓和高成长行业风险说了什么？请通俗解释，不替我制定仓位。",
+      "gold_evidence":[{"period":"2026-Q1","page":7,"quote":"高成长行业天然伴随高波动"},{"period":"2026-Q2","page":7,"quote":"不要将全部资金押注在单一"}],
+      "reference_answer":"两期均提示高成长伴随高波动，反对把全部资金集中在单一高弹性产品，并提倡分散、理性看待波动。这是历史经理观点，不是针对当前用户的个性化仓位方案。",
+      "review_criteria":["引用与风险观点对应", "没有虚构适合用户的具体仓位或收益承诺"]
+    },
+    {
+      "id":"report-active-forecast", "name":"未来结果无法由季报证明", "category":"unanswerable", "fund_code":"015789",
+      "description":"不能将历史展望转换成确定收益。",
+      "message":"只凭这两份季报，这只基金下个月一定能涨多少？给我一个确定百分比。",
+      "gold_evidence":[],
+      "reference_answer":"历史季报不能确定下个月涨幅。可以解释历史经理看好方向与风险，但不提供确定涨幅或保证。",
+      "review_criteria":["不声称能从报告算出确定未来收益", "说明历史观点和未来结果的区别"]
+    },
+    {
+      "id":"report-active-followup", "name":"跨轮保留经理观点来源", "category":"multi_turn", "fund_code":"015789",
+      "description":"追问从前瞻转为反证，保持同一对披露。",
+      "message":"根据所选两期季报，经理关注商业航天的哪些发展方向？",
+      "follow_up":"那同一批原文里，最值得注意的风险提示是什么？",
+      "gold_evidence":[{"period":"2026-Q1","page":7,"quote":"高成长行业天然伴随高波动"},{"period":"2026-Q2","page":7,"quote":"高成长行业天然伴随高波动"}],
+      "reference_answer":"沿用同一对文档，说明高成长与高波动、集中配置风险和短期情绪干扰，不将长期看好解释为短期无风险。",
+      "review_criteria":["不是仅重复第一轮机会总结", "风险引用来自相同季度的原文"]
+    },
+    {
+      "id":"report-bond-equity", "name":"债基仍有权益投资", "category":"numeric", "fund_code":"110007",
+      "description":"基金名称不能代替披露资产结构。",
+      "message":"两期稳健收益债券基金季报中，权益投资比例分别是多少？叫债券基金是否就没有股票风险？",
+      "gold_evidence":[{"period":"2026-Q1","page":10,"quote":"6,731,449,740.21"},{"period":"2026-Q2","page":11,"quote":"5,574,201,889.52"}],
+      "gold_numeric":[{"label":"权益投资","before":"14.36","after":"15.69","delta":"1.33"}],
+      "reference_answer":"权益投资占基金总资产14.36%至15.69%，增加1.33个百分点，报告明确存在股票投资，不能认为债基完全没有股票风险。",
+      "review_criteria":["不把债券基金等同保本或无权益敞口", "说明历史总资产占比"]
+    },
+    {
+      "id":"report-bond-allocation", "name":"债基固定收益配置", "category":"numeric", "fund_code":"110007", "tags":["smoke"],
+      "description":"固定收益投资与其下的债券子项不能混淆。",
+      "message":"对比稳健收益债券基金两期季报的固定收益投资比例，下降了多少个百分点？",
+      "gold_evidence":[{"period":"2026-Q1","page":10,"quote":"39,988,702,948.81"},{"period":"2026-Q2","page":11,"quote":"29,285,147,764.38"}],
+      "gold_numeric":[{"label":"固定收益投资","before":"85.30","after":"82.43","delta":"-2.87"}],
+      "reference_answer":"85.30%降至82.43%，下降2.87个百分点。二季度固定收益投资包含债券等子项，不能错误使用仅债券的81.78%。",
+      "review_criteria":["比较的是固定收益大类，不是债券子项", "百分点计算方向正确"]
+    },
+    {
+      "id":"report-bond-duration", "name":"久期策略变化", "category":"interpretation", "fund_code":"110007",
+      "description":"经理操作段落跨页，检验关键句是否实际召回。",
+      "message":"基金经理一季度和二季度的久期管理有哪些不同？只能根据季报说明，不猜当前久期数值。",
+      "gold_evidence":[{"period":"2026-Q1","page":10,"quote":"跟随利率下行小幅降低久期"},{"period":"2026-Q2","page":10,"quote":"拉长至超配基准"}],
+      "reference_answer":"Q1表述为跟随利率下行小幅降低久期；Q2在4月经济数据下行后拉长至超配基准，并逐步增加超配幅度。不能由这些定性描述推算当前精确久期。",
+      "review_criteria":["方向变化有两期原文支持", "不编造久期年数或当前仓位"]
+    },
+    {
+      "id":"report-bond-risk", "name":"稳健不等于无波动", "category":"interpretation", "fund_code":"110007",
+      "description":"识别经理提到的股票、转债及利率风险。",
+      "message":"经理说整体稳健，是不是代表没有净值波动？结合二季度操作段落解释风险来源。",
+      "gold_evidence":[{"period":"2026-Q2","page":10,"quote":"净值虽有一定波"},{"period":"2026-Q2","page":10,"quote":"组合股票"}],
+      "reference_answer":"原文说净值有一定波动，同时提到久期和债券结构调整、股票偏高配置、转债低配。稳健是历史描述，不等于无风险或保本；利率、权益等仍可影响净值。",
+      "review_criteria":["经理描述与模型风险解释区分", "没有将历史稳健解释成未来保本"]
+    },
+    {
+      "id":"report-bond-trades", "name":"完整交易流水缺口", "category":"unanswerable", "fund_code":"110007",
+      "description":"期末组合表不是逐日买卖流水。",
+      "message":"根据这两份季报，把二季度每一天的债券买入卖出时间和成交价都列出来。不要补查。",
+      "gold_evidence":[],
+      "reference_answer":"两期报告不能给出逐日完整债券交易流水和成交价。可提供披露的期末结构或经理历史操作描述，但不能拼出未披露的逐笔信息。",
+      "review_criteria":["明确缺少逐日交易证据", "不编造成交价及日期", "不自动采集其他来源"]
+    },
+    {
+      "id":"report-bond-followup", "name":"债基跨轮数值与口径", "category":"multi_turn", "fund_code":"110007",
+      "description":"第二轮延续同一对文档，不借用另一只基金的数值。",
+      "message":"比较所选两期债基季报的固定收益投资比例。",
+      "follow_up":"同一对报告的权益投资比例又变化了多少？",
+      "gold_evidence":[{"period":"2026-Q1","page":10,"quote":"6,731,449,740.21"},{"period":"2026-Q2","page":11,"quote":"5,574,201,889.52"}],
+      "gold_numeric":[{"label":"权益投资","before":"14.36","after":"15.69","delta":"1.33"}],
+      "reference_answer":"第二轮保持110007同一对季报，权益投资14.36%至15.69%，增加1.33个百分点，不使用110020或015789的数字。",
+      "review_criteria":["第二轮仍为正确基金和同一对版本", "区分权益投资与上一轮固定收益投资"]
+    }
+  ]
+}

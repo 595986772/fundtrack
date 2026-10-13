@@ -92,8 +92,8 @@ python -m scripts.check_release
 pnpm --dir miniprogram install --frozen-lockfile
 node --test tests/frontend/*.test.cjs
 cd miniprogram
-pnpm test
 pnpm build
+pnpm test
 ```
 
 `check_release` 在临时数据库运行账本、Agent Loop、RAG 排序、任务恢复和授权等确定性测试，屏蔽外部网络调用。它不能替代真实模型质量评测或 PostgreSQL / Redis / OpenFGA 集成验收；后者需要隔离环境显式开启，入口见 [测试说明](docs/测试与验收.md)。
